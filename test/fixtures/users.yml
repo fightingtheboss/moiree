@@ -1,6 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-lazaro_nixon:
-  email: lazaronixon@hotmail.com
+admin_user:
+  email: admin@moire.reviews
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
+  userable: base_admin (Admin)

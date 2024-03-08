@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_07_212641) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_08_212329) do
+  create_table "admins", force: :cascade do |t|
+    t.string "username"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "critics", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "publication"
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "user_agent"
@@ -31,7 +46,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_07_212641) do
     t.boolean "verified", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "userable_type", null: false
+    t.integer "userable_id", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["userable_type", "userable_id"], name: "index_users_on_userable"
   end
 
   add_foreign_key "sessions", "users"
