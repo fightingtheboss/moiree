@@ -105,7 +105,9 @@ GEM
   specs:
     addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
+    authentication-zero (3.0.2)
     base64 (0.2.0)
+    bcrypt (3.1.19)
     bigdecimal (3.1.6)
     bindex (0.8.1)
     bootsnap (1.18.3)
@@ -273,6 +275,8 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  authentication-zero (~> 3.0)
+  bcrypt (~> 3.1.7)
   bootsnap
   capybara
   debug
