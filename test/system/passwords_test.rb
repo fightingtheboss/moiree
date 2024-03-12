@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class PasswordsTest < ApplicationSystemTestCase
   setup do
-    @user = sign_in_as(users(:admin_user))
+    @user = sign_in_as(users(:admin))
   end
 
   test "updating the password" do

@@ -1,7 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-admin_user:
+admin:
   email: admin@moire.reviews
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
-  userable: base_admin (Admin)
+  userable: base (Admin)
+
+critic:
+  email: critic@moire.reviews
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  userable: base (Critic)

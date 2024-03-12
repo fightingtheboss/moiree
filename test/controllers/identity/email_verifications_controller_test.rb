@@ -2,7 +2,7 @@ require "test_helper"
 
 class Identity::EmailVerificationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = sign_in_as(users(:admin_user))
+    @user = sign_in_as(users(:admin))
     @user.update! verified: false
   end
 
