@@ -5,5 +5,7 @@ module Userable
 
   included do
     has_one :user, as: :userable, touch: true
+
+    delegate :email, to: :user
   end
 end

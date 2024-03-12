@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   include Passwordable, Verifiable
 
   has_many :sessions, dependent: :destroy
   has_many :sign_in_tokens, dependent: :destroy
 
-  delegated_type :userable, types: %w[ Admin, Critic ]
+  delegated_type :userable, types: ["Admin", "Critic"]
   delegate :name, :initials, to: :userable
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }

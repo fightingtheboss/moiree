@@ -4,10 +4,10 @@ class Admin < ApplicationRecord
   include Userable
 
   def name
-    username
+    username || email
   end
 
   def initials
-    username[0]
+    username ? username[0].upcase : email.split("@").first[0].upcase
   end
 end
