@@ -2,7 +2,7 @@
 
 <h1>Send invitation</h1>
 
-<%= form_with(url: invitation_path) do |form| %>
+<%= form_with(model: @user, url: admin_invitation_path) do |form| %>
   <% if @user.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -19,6 +19,15 @@
     <%= form.label :email, style: "display: block" %>
     <%= form.email_field :email, required: true, autofocus: true %>
   </div>
+
+  <%= form.fields_for :userable do |userable_form| %>
+
+  <div>
+    <%= userable_form.label :username, style: "display: block" %>
+    <%= userable_form.text_field :username %>
+  </div>
+
+  <% end %>
 
   <div>
     <%= form.submit "Send an invitation" %>

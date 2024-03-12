@@ -1,0 +1,56 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Send invitation to a Critic</h1>
+
+<%= form_with(model: @user, url: admin_critics_invitation_path) do |form| %>
+  <% if @user.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this Critic from being saved:</h2>
+
+      <ul>
+        <% @user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :email, style: "display: block" %>
+    <%= form.email_field :email, required: true, autofocus: true %>
+  </div>
+
+  <%= form.fields_for :userable do |userable_form| %>
+
+  <div>
+    <%= userable_form.label :first_name, style: "display: block" %>
+    <%= userable_form.text_field :first_name, required: true %>
+  </div>
+
+  <div>
+    <%= userable_form.label :last_name, style: "display: block" %>
+    <%= userable_form.text_field :last_name, required: true %>
+  </div>
+
+  <div>
+    <%= userable_form.label :publication, style: "display: block" %>
+    <%= userable_form.text_field :publication, required: true %>
+  </div>
+
+  <div>
+    <%= userable_form.label :country, style: "display: block" %>
+    <%= userable_form.text_field :country, required: true %>
+  </div>
+  <% end %>
+
+  <div>
+    <%= form.hidden_field :userable_type, value: "Critic" %>
+    <%= form.submit "Send an invitation" %>
+  </div>
+<% end %>
+
+<br>
+
+<div>
+  <%= link_to "Back", root_path %>
+</div>

@@ -3,12 +3,17 @@
 Rails.application.routes.draw do
   get  "sign_in", to: "sessions#new"
   post "sign_in", to: "sessions#create"
-  get  "sign_up", to: "registrations#new"
-  post "sign_up", to: "registrations#create"
 
-  resource :invitation, only: [:new, :create]
   resource  :password, only: [:edit, :update]
   resources :sessions, only: [:index, :show, :destroy]
+
+  namespace :admin do
+    resource :invitation, only: [:new, :create]
+
+    namespace :critics do
+      resource :invitation, only: [:new, :create]
+    end
+  end
 
   namespace :sessions do
     resource :passwordless, only: [:new, :edit, :create]
