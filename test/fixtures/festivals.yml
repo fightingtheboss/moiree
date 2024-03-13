@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+base:
+  name: Toronto International Film Festival
+  short_name: TIFF
+  url: https://tiff.net
+  code: TIFF24
+  year: 2024
+  country: CA
+  start_date: 2024-09-09
+  end_date: 2024-09-19
