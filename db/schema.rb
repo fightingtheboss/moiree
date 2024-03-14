@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_12_133149) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_13_211245) do
   create_table "admins", force: :cascade do |t|
     t.string "username"
     t.datetime "created_at", null: false
@@ -26,15 +26,23 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_12_133149) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "editions", force: :cascade do |t|
+    t.integer "festival_id", null: false
+    t.integer "year"
+    t.string "code"
+    t.string "url"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["festival_id"], name: "index_editions_on_festival_id"
+  end
+
   create_table "festivals", force: :cascade do |t|
     t.string "name"
     t.string "short_name"
     t.string "url"
-    t.string "code"
-    t.integer "year"
     t.string "country"
-    t.date "start_date"
-    t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -65,6 +73,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_12_133149) do
     t.index ["userable_type", "userable_id"], name: "index_users_on_userable"
   end
 
+  add_foreign_key "editions", "festivals"
   add_foreign_key "sessions", "users"
   add_foreign_key "sign_in_tokens", "users"
 end

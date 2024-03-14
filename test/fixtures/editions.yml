@@ -1,0 +1,8 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+base:
+  festival: base
+  year: 2024
+  code: TIFF24
+  start_date: 2024-09-09
+  end_date: 2024-09-19

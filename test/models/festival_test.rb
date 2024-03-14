@@ -1,14 +1,6 @@
 require "test_helper"
 
 class FestivalTest < ActiveSupport::TestCase
-  test "should not be valid if end_date is before start_date" do
-    festival = festivals(:base)
-    festival.end_date = festival.start_date - 1.day
-
-    assert_not(festival.valid?)
-    assert(festival.errors.full_messages.first.include?("must be greater than"))
-  end
-
   test "should not be valid if given an invalid country code" do
     festival = festivals(:base)
     festival.country = "INVALID"
@@ -25,22 +17,6 @@ class FestivalTest < ActiveSupport::TestCase
     assert(festival.errors.full_messages.first.include?("is not a valid URL"))
   end
 
-  test "should not be valid if year is not an integer" do
-    festival = festivals(:base)
-    festival.year = 2023.5
-
-    assert_not(festival.valid?)
-    assert(festival.errors.full_messages.first.include?("must be an integer"))
-  end
-
-  test "should not be valid if year is less than 2023" do
-    festival = festivals(:base)
-    festival.year = 2022
-
-    assert_not(festival.valid?)
-    assert(festival.errors.full_messages.first.include?("must be greater than"))
-  end
-
   test "should not be valid if required fields are not present" do
     festival = Festival.new
 
@@ -53,24 +29,30 @@ class FestivalTest < ActiveSupport::TestCase
     assert(festival.valid?)
   end
 
-  test "::current should return current festival" do
+  test "#current_edition should return current festival edition" do
     festival = festivals(:base)
-    festival.update(start_date: Date.current - 1.day, end_date: Date.current + 1.day)
+    edition = editions(:base)
 
-    assert(Festival.current == festival)
+    edition.update(start_date: Date.current - 1.day, end_date: Date.current + 1.day)
+
+    assert(festival.current_edition == edition)
   end
 
-  test "::upcoming should return all upcoming festivals" do
+  test "#upcoming_editions should return all upcoming festival editions" do
     festival = festivals(:base)
-    festival.update(start_date: Date.current + 1.day, end_date: Date.current + 2.days)
+    edition = editions(:base)
 
-    assert(Festival.upcoming.include?(festival))
+    edition.update(start_date: Date.current + 1.day, end_date: Date.current + 2.days)
+
+    assert(festival.upcoming_editions.include?(edition))
   end
 
-  test "::past should return all past festivals" do
+  test "#past_editions should return all past festival editions" do
     festival = festivals(:base)
-    festival.update(end_date: Date.current - 1.day, start_date: Date.current - 2.days)
+    edition = editions(:base)
 
-    assert(Festival.past.include?(festival))
+    edition.update(end_date: Date.current - 1.day, start_date: Date.current - 2.days)
+
+    assert(festival.past_editions.include?(edition))
   end
 end

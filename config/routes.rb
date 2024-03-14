@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   resources :sessions, only: [:index, :show, :destroy]
 
   namespace :admin do
+    resources :festivals do
+      resources :editions, shallow: true
+    end
+
     resource :invitation, only: [:new, :create]
 
     namespace :critics do
