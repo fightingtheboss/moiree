@@ -6,6 +6,10 @@ class Admin
       @festivals = Festival.all
     end
 
+    def show
+      @festival = Festival.find(params[:id])
+    end
+
     def new
       @festival = Festival.new
     end
@@ -14,7 +18,10 @@ class Admin
       @festival = Festival.new(festival_params)
 
       if @festival.save
-        redirect_to(admin_festivals_path, notice: "#{@festival.name} created")
+        respond_to do |format|
+          format.html { redirect_to(admin_festivals_path, notice: "#{@festival.name} created") }
+          format.turbo_stream
+        end
       else
         render(:new)
       end

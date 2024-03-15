@@ -1,0 +1,39 @@
+<div class="mt-4 mb-8 max-w-md">
+  <% if edition.errors.any? %>
+    <div class="text-red-600 p-4 border-red-600 border rounded bg-red-100 mb-4">
+      <h2 class="mb-4"><%= pluralize(edition.errors.count, "error") %> prohibited this Edition from being saved:</h2>
+
+      <ul class="my-4">
+        <% edition.errors.each do |error| %>
+          <li class="font-medium">❌&nbsp;<%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with(model: [:admin, :festival, edition]) do |form| %>
+    <div class="mb-4">
+      <%= form.label :code, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.text_field :code, placeholder: "e.g. TIFF24", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+    </div>
+    <div class="mb-4">
+      <%= form.label :year, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.number_field :year, step: 1, min: 2023, value: 2024, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+    </div>
+    <div class="mb-4">
+      <%= form.label :start_date, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.date_field :start_date, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+    </div>
+    <div class="mb-4">
+      <%= form.label :end_date, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.date_field :end_date, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+    </div>
+    <div class="mb-4">
+      <%= form.label :url, "URL", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.url_field :url, placeholder: "e.g. https://tiff.net", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+    </div>
+    <div class="flex items-center justify-between">
+      <%= form.submit class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+    </div>
+<% end %>
+</div>

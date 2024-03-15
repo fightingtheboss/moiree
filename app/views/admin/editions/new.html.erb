@@ -1,0 +1,5 @@
+<h1 class="text-3xl font-extrabold mb-8">Add an Edition to <%= @edition.festival.short_name %></h1>
+
+<%= turbo_frame_tag "new_edition" do %>
+  <%= render partial: "form", locals: { edition: @edition } %>
+<% end %>

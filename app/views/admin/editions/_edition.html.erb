@@ -1,0 +1,8 @@
+<li class="mb-4">
+  <h2 class="font-semibold text-xl"><%= edition.code %></h2>
+  <div>
+    <time datetime="<%= edition.start_date.to_date %>"><%= edition.start_date.strftime("%b %d, %Y") %></time>
+    <span> --> </span>
+    <time datetime="<%= edition.end_date.to_date %>"><%= edition.end_date.strftime("%b %d, %Y") %></time>
+  </div>
+</li>

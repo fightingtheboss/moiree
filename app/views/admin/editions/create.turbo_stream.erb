@@ -1,0 +1,4 @@
+<%= turbo_stream.append "editions" do %>
+  <%= render partial: "admin/editions/edition", locals: { edition: @edition } %>
+<% end %>
+<%= turbo_stream.update "new_edition", "" %>

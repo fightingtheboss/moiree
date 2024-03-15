@@ -1,0 +1,5 @@
+<h1 class="text-3xl font-extrabold mb-8">Edit <%= @festival.name %></h1>
+
+<%= turbo_frame_tag @festival do %>
+  <%= render partial: "form", locals: { festival: @festival } %>
+<% end %>
