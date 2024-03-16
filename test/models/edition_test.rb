@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class EditionTest < ActiveSupport::TestCase
@@ -87,5 +89,19 @@ class EditionTest < ActiveSupport::TestCase
     edition = editions(:base)
 
     assert(edition.country == edition.festival.country)
+  end
+
+  test "#films should return the Films associated with the Edition" do
+    edition = editions(:base)
+    film = films(:base)
+
+    assert edition.films.include?(film)
+  end
+
+  test "#ratings should return the Ratings associated with the Edition" do
+    edition = editions(:base)
+    rating = ratings(:base)
+
+    assert edition.ratings.include?(rating)
   end
 end

@@ -5,3 +5,8 @@ base:
   last_name: Kasman
   publication: MUBI
   country: US
+
+without_publication:
+  first_name: Blake
+  last_name: Williams
+  country: UK

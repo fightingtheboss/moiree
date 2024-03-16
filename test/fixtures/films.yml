@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+base:
+  title: Festival Film
+  original_title:
+  director: Sarah Polley
+  country: CA
+  year: 2024
+
+with_original_title:
+  title: With Original Title
+  original_title: Avec Titre Original
+  director: Spike Jones
+  country: US
+  year: 2024
+
+with_multiple_countries:
+  title: With Multiple Countries
+  original_title:
+  director: Christopher Nolan
+  country: US, UK
+  year: 2024
+
+with_multiple_directors:
+  title: With Mulitple Directors
+  original_title:
+  director: Joel Coen, Ethan Coen
+  country: US
+  year: 2024

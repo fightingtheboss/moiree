@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+base:
+  edition: base
+  film: base
+
+with_original_title:
+  edition: base
+  film: with_original_title

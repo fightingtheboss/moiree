@@ -1,0 +1,16 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+base:
+  critic: base
+  selection: base
+  score: 3.5
+
+with_original_title:
+  critic: base
+  selection: with_original_title
+  score: 4.5
+
+without_publication:
+  critic: without_publication
+  selection: base
+  score: 2.5

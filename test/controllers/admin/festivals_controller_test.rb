@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-module Admin
+class Admin
   class FestivalsControllerTest < ActionDispatch::IntegrationTest
   end
 end
