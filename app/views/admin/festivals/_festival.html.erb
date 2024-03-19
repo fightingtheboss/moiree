@@ -5,7 +5,7 @@
       <h2 class="text-sm"><%= Country[festival.country].common_name %></h2>
       <h3><%= link_to festival.url, festival.url, target: "_blank" %></h3>
 
-      <%= link_to "Edit", edit_admin_festival_path(festival), data: { turbo_frame: "modal", controller: "modal", action: "modal#show", "modal-dialog-param": "global-modal" }, class: "block text-indigo-500 hover:text-indigo-700 hover:underline my-3" %>
+      <%= link_to "Edit", edit_admin_festival_path(festival), data: { turbo_frame: "modal", controller: "modal", action: "modal#show", "modal-dialog-param": "global-modal" }, class: "inline-block mr-4 lg:mr-0 lg:block text-indigo-500 hover:text-indigo-700 hover:underline my-3" %>
 
       <% if festival.editions.any? %>
         <%= link_to "Add edition", new_admin_festival_edition_path(festival),
@@ -16,7 +16,7 @@
             "modal-dialog-param": "global-modal",
             "modal-target-param": dom_id(festival, :editions)
           },
-          class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs mt-3"
+          class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs lg:mt-3"
         %>
       <% end %>
     </header>
