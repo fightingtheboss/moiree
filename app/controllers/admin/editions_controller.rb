@@ -3,6 +3,7 @@
 class Admin
   class EditionsController < AdminController
     before_action :set_festival, only: [:index, :new, :create]
+    before_action :set_edition, only: [:show, :edit, :update, :destroy]
 
     def index
       @editions = @festival.editions
@@ -25,13 +26,13 @@ class Admin
       end
     end
 
+    def show
+    end
+
     def edit
-      @edition = Edition.find(params[:id])
     end
 
     def update
-      @edition = Edition.find(params[:id])
-
       if @edition.update(edition_params)
         redirect_to(admin_festival_editions_path(@edition.festival), notice: "Edition updated")
       else
@@ -40,7 +41,6 @@ class Admin
     end
 
     def destroy
-      @edition = Edition.find(params[:id])
       @edition.destroy
 
       redirect_to(admin_festival_editions_path(@edition.festival), notice: "Edition deleted")
@@ -54,6 +54,10 @@ class Admin
 
     def edition_params
       params.require(:edition).permit(:code, :year, :start_date, :end_date, :url, :target_collection_id)
+    end
+
+    def set_edition
+      @edition = Edition.find(params[:id])
     end
   end
 end
