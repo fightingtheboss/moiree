@@ -2,6 +2,8 @@
 
 class Admin
   class AdminController < ApplicationController
+    layout "admin"
+
     private
 
     def authenticate

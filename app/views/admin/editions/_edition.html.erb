@@ -1,8 +1,17 @@
-<li class="mb-4">
-  <h2 class="font-semibold text-xl"><%= edition.code %></h2>
-  <div>
-    <time datetime="<%= edition.start_date.to_date %>"><%= edition.start_date.strftime("%b %d, %Y") %></time>
-    <span> --> </span>
-    <time datetime="<%= edition.end_date.to_date %>"><%= edition.end_date.strftime("%b %d, %Y") %></time>
-  </div>
-</li>
+<%= link_to admin_festival_edition_path(edition.festival, edition), class: "block" do %>
+  <article class="mb-4 bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow">
+    <header class="mb-4">
+      <h1 class="font-semibold text-xl"><%= edition.code %></h1>
+      <div>
+        <time datetime="<%= edition.start_date.to_date %>" class="text-sm"><%= edition.start_date.strftime("%b %d, %Y") %></time>
+        <span class="text-sm"> --> </span>
+        <time datetime="<%= edition.end_date.to_date %>" class="text-sm"><%= edition.end_date.strftime("%b %d, %Y") %></time>
+      </div>
+    </header>
+    <ul class="text-xs flex justify-between">
+      <li class="mr-1 px-2 py-1 bg-violet-500 text-white rounded"><%= edition.categories.count %> Categories</li>
+      <li class="mr-1 px-2 py-1 bg-fuchsia-500 text-white rounded"><%= edition.films.count %> Films</li>
+      <li class="px-2 py-1 bg-teal-500 text-white rounded"><%= edition.ratings.count %> Ratings</li>
+    </ul>
+  </article>
+<% end %>

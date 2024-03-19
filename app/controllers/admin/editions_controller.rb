@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin
-  class EditionsController < ApplicationController
+  class EditionsController < AdminController
     before_action :set_festival, only: [:index, :new, :create]
 
     def index
@@ -53,7 +53,7 @@ class Admin
     end
 
     def edition_params
-      params.require(:edition).permit(:code, :year, :start_date, :end_date, :url)
+      params.require(:edition).permit(:code, :year, :start_date, :end_date, :url, :target_collection_id)
     end
   end
 end

@@ -1,16 +1,25 @@
-<div class="flex justify-between items-center mb-4 w-full">
-  <h1 class="text-2xl font-bold">Festivals</h1>
-  <%= link_to "New Festival", new_admin_festival_path, data: { turbo_frame: "new_festival" }, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+<div class="grid grid-cols-1 grid-rows-[auto_minmax(0,100vh)] h-screen">
+  <div class="flex justify-between items-center mb-4 w-full p-4 backdrop-blur-md bg-white">
+    <h1 class="text-2xl font-bold">Festivals</h1>
+    <%= link_to "New Festival", new_admin_festival_path, data: { turbo_frame: "modal", controller: "modal", action: "modal#show", "modal-dialog-param": "global-modal" }, class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-sm" %>
+  </div>
+
+  <ul id="festivals">
+    <% if @festivals.any? %>
+      <%= render partial: "festival", collection: @festivals %>
+    <% else %>
+      <li id="festivals-empty" class="flex flex-col justify-center items-center h-full">
+        <p>No festivals yet.</p>
+        <%= link_to "Add festival", new_admin_festival_path,
+          data: {
+            turbo_frame: "modal",
+            controller: "modal",
+            action: "modal#show",
+            "modal-dialog-param": "global-modal"
+          },
+          class: "mt-2 inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs"
+        %>
+      </li>
+    <% end %>
+  </ul>
 </div>
-
-<%= turbo_frame_tag "new_festival" %>
-
-<ul id="festivals" class="">
-  <% if @festivals.any? %>
-    <%= render partial: "festival", collection: @festivals %>
-  <% else %>
-    <li class="border-b border-gray-200 py-2">
-      No festivals yet. Add one!
-    </li>
-  <% end %>
-</ul>

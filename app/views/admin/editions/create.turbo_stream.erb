@@ -1,4 +1,5 @@
-<%= turbo_stream.append "editions" do %>
+<%= turbo_stream.append params[:target_collection_id] do %>
   <%= render partial: "admin/editions/edition", locals: { edition: @edition } %>
 <% end %>
-<%= turbo_stream.update "new_edition", "" %>
+<%= turbo_stream.update "modal", "" %>
+<%= turbo_stream.remove "editions-empty" %>

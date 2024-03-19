@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin
-  class FestivalsController < ApplicationController
+  class FestivalsController < AdminController
     def index
       @festivals = Festival.all
     end

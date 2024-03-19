@@ -1,3 +1,43 @@
-<li class="border-b border-gray-200 py-2">
-  <h2 class="font-medium text-lg"><%= link_to festival.name, admin_festival_path(festival) %></h2>
-</li>
+<div class="mb-4 border-b-4 border-white last:border-none">
+  <article class=" p-4 grid lg:grid-cols-3">
+    <header class="text-sm mb-4">
+      <h1 class="font-medium text-lg"><%= link_to festival.name, admin_festival_path(festival) %></h1>
+      <h2 class="text-sm"><%= Country[festival.country].common_name %></h2>
+      <h3><%= link_to festival.url, festival.url, target: "_blank" %></h3>
+
+      <%= link_to "Edit", edit_admin_festival_path(festival), data: { turbo_frame: "modal", controller: "modal", action: "modal#show", "modal-dialog-param": "global-modal" }, class: "block text-indigo-500 hover:text-indigo-700 hover:underline my-3" %>
+
+      <%= link_to "Add edition", new_admin_festival_edition_path(festival),
+        data: {
+          turbo_frame: "modal",
+          controller: "modal",
+          action: "modal#show",
+          "modal-dialog-param": "global-modal",
+          "modal-target-param": dom_id(festival, :editions)
+        },
+        class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs mt-3"
+      %>
+    </header>
+    <section class="lg:col-span-2">
+      <ul id="<%= dom_id(festival, :editions) %>" class="grid grid-cols-1 md:grid-cols-3 md:gap-2">
+        <% if festival.editions.any? %>
+          <%= render partial: "admin/editions/edition", collection: festival.editions %>
+        <% else %>
+          <li id="editions-empty">
+            No editions yet.
+            <%= link_to "Add edition", new_admin_festival_edition_path(festival),
+              data: {
+                turbo_frame: "modal",
+                controller: "modal",
+                action: "modal#show",
+                "modal-dialog-param": "global-modal",
+                "modal-target-param": dom_id(festival, :editions)
+              },
+              class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs"
+            %>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  </article>
+</div>

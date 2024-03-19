@@ -1,27 +1,34 @@
-<div>
-  <h1 class="font-semibold text-5xl"><%= @festival.name %></h1>
+<header>
+  <div>
+    <%= link_to "Festivals", admin_festivals_path, class: "block text-sm mb-1" %>
 
-  <%= turbo_frame_tag @festival do %>
-    <ul>
-      <li><%= @festival.short_name %></li>
-      <li><%= @festival.url %></li>
-      <li><%= Country[@festival.country].common_name %></li>
-    </ul>
-  <% end %>
-</div>
+    <div class="flex justify-between items-center">
+      <h1 class="font-semibold text-3xl mb-1"><%= @festival.name %></h1>
+      <%= link_to "Edit", edit_admin_festival_path(@festival), class: "bg-indigo-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm" %>
+    </div>
+
+    <%= turbo_frame_tag @festival do %>
+      <ul class="flex gap-3">
+        <li><%= @festival.short_name %></li>
+        <li><%= @festival.url %></li>
+        <li><%= Country[@festival.country].common_name %></li>
+      </ul>
+    <% end %>
+  </div>
+</header>
 
 <div class="my-8">
-  <div class="flex justify-between mb-4">
-    <h2 class="font-semibold text-3xl">Editions</h2>
-    <%= link_to "+", new_admin_festival_edition_path(@festival), data: { turbo_frame: "new_edition" }, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+  <div class="flex justify-between mb-4 items-center">
+    <h2 class="font-semibold text-lg">Editions</h2>
+    <%= link_to "New edition", new_admin_festival_edition_path(@festival), data: { turbo_frame: "new_edition" }, class: "bg-indigo-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
   </div>
 
   <%= turbo_frame_tag "new_edition" %>
 
   <% if @festival.editions.any? %>
-    <ul id="editions">
+    <div id="editions" class="flex flex-wrap">
       <%= render partial: "admin/editions/edition", collection: @festival.editions %>
-    </ul>
+    </div>
   <% else %>
     <p>No editions yet. Add one!</p>
   <% end %>

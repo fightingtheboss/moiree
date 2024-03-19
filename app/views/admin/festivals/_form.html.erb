@@ -1,4 +1,4 @@
-<div class="mt-4 mb-8 max-w-md">
+<div>
   <% if festival.errors.any? %>
     <div class="text-red-600 p-4 border-red-600 border rounded bg-red-100 mb-4">
       <h2 class="mb-4"><%= pluralize(festival.errors.count, "error") %> prohibited this Festival from being saved:</h2>
@@ -14,22 +14,22 @@
   <%= form_with(model: [:admin, festival]) do |form| %>
     <div class="mb-4">
       <%= form.label :name, class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= form.text_field :name, placeholder: "e.g. Toronto International Film Festival", class: "shadow-md appearance-none border border-slate-300 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      <%= form.text_field :name, placeholder: "e.g. Toronto International Film Festival", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
     </div>
     <div class="mb-4">
       <%= form.label :short_name, class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= form.text_field :short_name, placeholder: "e.g. TIFF", class: "shadow-md appearance-none border border-slate-300 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      <%= form.text_field :short_name, placeholder: "e.g. TIFF", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
     </div>
     <div class="mb-4">
       <%= form.label :url, "URL", class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= form.url_field :url, placeholder: "e.g. https://tiff.net", class: "shadow-md appearance-none border border-slate-300 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      <%= form.url_field :url, placeholder: "e.g. https://tiff.net", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
     </div>
     <div class="mb-4">
       <%= form.label :country, class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= form.select :country, countries_select, {}, class: "shadow-md appearance-none border border-slate-300 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      <%= form.select :country, countries_select, {}, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
     </div>
-    <div class="flex items-center justify-between">
-      <%= form.submit class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+    <div class="flex items-center justify-between mt-8">
+      <%= form.submit class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
     </div>
   <% end %>
 </div>

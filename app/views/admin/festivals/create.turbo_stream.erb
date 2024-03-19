@@ -1,2 +1,3 @@
 <%= turbo_stream.append "festivals", @festival %>
-<%= turbo_stream.update "new_festival", "" %>
+<%= turbo_stream.update "modal", "" %>
+<%= turbo_stream.remove "festivals-empty" %>
