@@ -9,7 +9,12 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :festivals do
-      resources :editions
+      resources :editions do
+        resources :films, only: [:new, :create] do
+          get :add_country, on: :collection
+          get :remove_country, on: :collection
+        end
+      end
     end
 
     resource :invitation, only: [:new, :create]
