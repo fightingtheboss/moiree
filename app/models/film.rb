@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Film < ApplicationRecord
+  include Importable
+
   has_many :categorizations, dependent: :destroy
   has_many :categories, through: :categorizations
 

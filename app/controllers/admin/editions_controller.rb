@@ -2,7 +2,9 @@
 
 class Admin
   class EditionsController < AdminController
-    before_action :set_festival, only: [:index, :new, :create]
+    layout "editions"
+
+    before_action :set_festival
     before_action :set_edition, only: [:show, :edit, :update, :destroy]
 
     def index
@@ -27,6 +29,8 @@ class Admin
     end
 
     def show
+      @films = @edition.films
+      render("admin/films/index")
     end
 
     def edit

@@ -2,7 +2,7 @@
 
 class Admin
   class FilmsController < AdminController
-    before_action :set_festival_and_edition, only: [:new, :create]
+    before_action :set_festival_and_edition, only: [:index, :new, :create, :csv, :import]
     # before_action :set_film, only: [:show, :edit, :update, :destroy]
 
     def new
@@ -36,6 +36,36 @@ class Admin
       redirect_to(admin_festival_edition_path(@festival, @edition), notice: "#{@film.title} created")
     rescue ActiveRecord::RecordInvalid
       render(:new)
+    end
+
+    def import
+      import_result = Film.import(params[:edition][:csv], @edition)
+
+      respond_to do |format|
+        format.html do
+          redirect_to(
+            admin_festival_edition_path(@festival, @edition),
+            notice: "Imported #{import_result.imported.size} films",
+          )
+        end
+
+        format.turbo_stream do
+          render(
+            turbo_stream: [
+              turbo_stream.update(
+                "modal",
+                partial: "admin/films/import_result",
+                locals: { import_result: import_result },
+              ),
+              turbo_stream.update(
+                helpers.dom_id(@edition, :films),
+                partial: "admin/films/film",
+                collection: @edition.films,
+              ),
+            ],
+          )
+        end
+      end
     end
 
     def add_country

@@ -1,0 +1,44 @@
+<div class="mx-4">
+  <header class="mb-4">
+    <h2 class="text-2xl font-semibold mt-4 mb-2">Films</h2>
+    <%= link_to "Import CSV", csv_admin_festival_edition_films_path(@festival, @edition),
+      data: {
+        turbo_frame: "modal",
+        controller: "modal",
+        action: "modal#show",
+        "modal-dialog-param": "global-modal",
+        "modal-target-param": dom_id(@edition, :import_films)
+      },
+      class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs"
+    %>
+    <%= link_to "Add film", new_admin_festival_edition_film_path(@festival, @edition),
+      data: {
+        turbo_frame: "modal",
+        controller: "modal",
+        action: "modal#show",
+        "modal-dialog-param": "global-modal",
+        "modal-target-param": dom_id(@edition, :films)
+      },
+      class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs"
+    %>
+  </header>
+  <ul id="<%= dom_id(@edition, :films) %>" class="grid grid-cols-1 md:grid-cols-3 md:gap-2 my-8">
+    <% if @films.any? %>
+      <%= render @films %>
+    <% else %>
+      <span>
+        No films in this edition yet.
+        <%= link_to "Add film", new_admin_festival_edition_film_path(@festival, @edition),
+          data: {
+            turbo_frame: "modal",
+            controller: "modal",
+            action: "modal#show",
+            "modal-dialog-param": "global-modal",
+            "modal-target-param": dom_id(@edition, :films)
+          },
+          class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs"
+        %>
+      </span>
+    <% end %>
+  </ul>
+</div>

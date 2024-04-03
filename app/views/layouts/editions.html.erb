@@ -1,0 +1,28 @@
+<% content_for :content do %>
+  <main class="grid md:grid-cols-[192px_1fr]">
+    <nav class="md:h-screen">
+      <header class="px-2 bg-indigo-500 text-white md:text-center">
+        <h1 class="font-semibold uppercase text-xs py-2"><%= @edition.code %></h1>
+      </header>
+      <ul class="flex md:flex-col md:min-h-full bg-indigo-500 text-white text-xs py-2 font-medium md:bg-transparent md:text-black ">
+        <li>
+          <%= link_to "Ratings", "#", class: "px-2 md:block md:py-2 md:hover:bg-indigo-500 md:hover:text-white" %>
+        </li>
+        <li>
+          <%= link_to "Films", "#", class: "px-2 md:block md:py-2 md:hover:bg-indigo-500 md:hover:text-white" %>
+        </li>
+        <li>
+          <%= link_to "Categories", "#", class: "px-2 md:block md:py-2 md:hover:bg-indigo-500 md:hover:text-white" %>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="md:min-h-screen">
+      <turbo-frame id="edition-detail">
+        <%= yield %>
+      </turbo-frame>
+    </section>
+  </main>
+<% end %>
+
+<%= render template: "layouts/admin" %>

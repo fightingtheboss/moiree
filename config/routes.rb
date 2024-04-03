@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :festivals do
       resources :editions do
-        resources :films, only: [:new, :create] do
+        resources :films, only: [:index, :new, :create] do
+          get :csv, on: :collection
+          post :import, on: :collection
           get :add_country, on: :collection
           get :remove_country, on: :collection
         end

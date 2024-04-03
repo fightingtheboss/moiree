@@ -1,0 +1,11 @@
+<div>
+  <h1>Import results</h1>
+  <p>Imported <%= import_result.count %> films.</p>
+  <p>Skipped <%= import_result.skipped.count %> films.</p>
+  <p>Errors: <%= import_result.errors.count %></p>
+  <ul>
+    <% import_result.errors.each do |error| %>
+      <li><%= error %></li>
+    <% end %>
+  </ul>
+</div>

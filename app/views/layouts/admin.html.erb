@@ -14,7 +14,7 @@
   </head>
 
   <body class="bg-slate-50">
-    <%= yield %>
+    <%= content_for?(:content) ? yield(:content) : yield %>
 
     <dialog id="global-modal" class="rounded-md shadow-md">
       <div class="min-w-[50vw] max-w-full md:max-w-[75vw] p-8 rounded shadow flex flex-col items-center relative">
@@ -28,7 +28,7 @@
 
           <%= turbo_frame_tag "modal" %>
 
-          <form method="dialog" class="absolute bottom-8 right-8">
+          <form method="dialog" class="absolute bottom-8 right-8" data-controller="modal" data-action="submit->modal#clearModal">
             <button type="submit" class="bg-white hover:bg-slate-50 text-black border border-slate-300 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cancel</button>
           </form>
         </div>
