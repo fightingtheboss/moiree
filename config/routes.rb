@@ -13,8 +13,8 @@ Rails.application.routes.draw do
         resources :films, only: [:index, :new, :create] do
           get :csv, on: :collection
           post :import, on: :collection
-          get :add_country, on: :collection
-          get :remove_country, on: :collection
+
+          resources :ratings, only: [:index, :new, :create]
         end
       end
     end

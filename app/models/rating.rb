@@ -10,6 +10,7 @@ class Rating < ApplicationRecord
   validates :score,
     numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 5 },
     format: { with: /\A\d(\.\d)?\z/ }
+  validates :selection_id, uniqueness: { scope: :critic_id }
 
   after_create :cache_overall_average_rating_on_film
   after_destroy :cache_overall_average_rating_on_film
