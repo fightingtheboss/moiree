@@ -1,4 +1,6 @@
-<%= turbo_frame_tag "modal" do %>
-  <h1 class="text-2xl font-semibold mb-4">Add a Festival</h1>
-  <%= render partial: "form", locals: { festival: @festival } %>
-<% end %>
+<div class="container mx-auto w-1/2 mt-8">
+  <%= turbo_frame_tag "modal" do %>
+    <h1 class="text-2xl font-semibold mb-4">Add a Festival</h1>
+    <%= render partial: "form", locals: { festival: @festival } %>
+  <% end %>
+</div>

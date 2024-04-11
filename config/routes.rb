@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :festivals do
       resources :editions do
-        resources :films, only: [:index, :new, :create] do
+        get :search_for_film_to_add, to: "films#search_for_film_to_add_to_edition"
+
+        resources :selections, only: [:index, :new, :create] do
           get :csv, on: :collection
           post :import, on: :collection
 
@@ -19,10 +21,17 @@ Rails.application.routes.draw do
       end
     end
 
+    namespace :films do
+      get :search
+      get :add_country
+      get :remove_country
+    end
+
     resource :invitation, only: [:new, :create]
 
     namespace :critics do
       resource :invitation, only: [:new, :create]
+      resources :ratings, only: [:index]
     end
   end
 

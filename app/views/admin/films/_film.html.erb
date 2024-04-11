@@ -1,11 +1,3 @@
-<li class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow hover:cursor-pointer">
-  <article>
-    <h3 class="font-semibold mb-1"><%= film.title %></h3>
-    <p class="text-sm my-0.5"><%= film.director %></p>
-    <p class="text-sm my-0.5"><%= film.year %></p>
-    <p class="text-sm my-0.5"><%= film.countries.join(", ") %></p>
-  </article>
-  <aside>
-    <%= link_to "Rate", edit_admin_festival_edition_film_path(@festival, @edition, film), class: "text-indigo-500 hover:text-indigo-700" %>
-  </aside>
+<li class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow hover:cursor-pointer my-1 md:my-0">
+  <%= render partial: "admin/films/film_detail", locals: { film: film } %>
 </li>

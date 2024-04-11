@@ -3,5 +3,5 @@
 
 <div id="<%= country_select_id %>" class="flex">
   <%= select_tag "film[country][]", options_for_select(countries_select), class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 mb-2" %>
-  <%= link_to "&times;".html_safe, remove_country_admin_festival_edition_films_path(params[:festival_id], params[:edition_id], country_select_id: country_select_id), data: { turbo_stream: true }, class: "align-middle font-semibold text-lg inline-block ml-4 text-indigo-400 hover:text-indigo-500" %>
+  <%= link_to "&times;".html_safe, admin_films_remove_country_path(country_select_id: country_select_id), data: { turbo_stream: true }, class: "align-middle font-semibold text-lg inline-block ml-4 text-indigo-400 hover:text-indigo-500" %>
 </div>

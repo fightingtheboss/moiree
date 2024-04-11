@@ -1,9 +1,9 @@
-<div>
-  <h1>Import results</h1>
+<div class="container mx-auto my-8">
+  <h1 class="text-2xl font-semibold mb-4">Import results</h1>
   <p>Imported <%= import_result.count %> films.</p>
   <p>Skipped <%= import_result.skipped.count %> films.</p>
   <p>Errors: <%= import_result.errors.count %></p>
-  <ul>
+  <ul class="my-2">
     <% import_result.errors.each do |error| %>
       <li><%= error %></li>
     <% end %>

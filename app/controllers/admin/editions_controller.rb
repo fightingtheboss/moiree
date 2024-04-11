@@ -2,7 +2,7 @@
 
 class Admin
   class EditionsController < AdminController
-    layout "editions"
+    layout "editions", only: [:show]
 
     before_action :set_festival
     before_action :set_edition, only: [:show, :edit, :update, :destroy]
@@ -29,8 +29,9 @@ class Admin
     end
 
     def show
-      @films = @edition.films
-      render("admin/films/index")
+      @selections = @edition.selections_with_categories
+      @films = @selections.map(&:film)
+      render("admin/selections/index")
     end
 
     def edit
