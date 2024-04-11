@@ -7,4 +7,6 @@ class Selection < ApplicationRecord
   has_one :rating, dependent: :destroy
 
   validates :edition_id, uniqueness: { scope: :film_id }
+
+  accepts_nested_attributes_for :film
 end
