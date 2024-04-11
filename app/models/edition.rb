@@ -6,6 +6,9 @@ class Edition < ApplicationRecord
   has_many :categories, dependent: :destroy
 
   has_many :selections, dependent: :destroy
+  has_many :selections_with_categories,
+    ->(edition) { includes(film: :categories).where(categories: { edition: edition }) },
+    class_name: "Selection"
   has_many :films, through: :selections
   has_many :ratings, through: :selections
 
