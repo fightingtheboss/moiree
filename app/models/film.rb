@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Film < ApplicationRecord
-  include Importable
+  include Importable, Searchable
 
   has_many :categorizations, dependent: :destroy
   has_many :categories, through: :categorizations
@@ -26,7 +26,10 @@ class Film < ApplicationRecord
     country.split(",").map(&:strip).map { |c| Country[c].common_name }
   end
 
-  def category(edition)
+  def category(edition: nil)
+    return if categories.empty?
+    return categories.first if edition.nil? || categories.one?
+
     categories.find_by(edition: edition)
   end
 end
