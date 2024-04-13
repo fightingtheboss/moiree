@@ -1,0 +1,9 @@
+<%= turbo_frame_tag "search-results" do %>
+  <% if selections.any? %>
+    <%= render selections %>
+  <% else %>
+    <li>
+      <p>No films found.</p>
+    </li>
+  <% end %>
+<% end %>

@@ -8,11 +8,16 @@ class Admin
       if params[:edition_id].present?
         @edition = Edition.find(params[:edition_id])
         @festival = @edition.festival
+        @selections = @edition.selections_with_categories.where(film: @films)
 
-        render(partial: "admin/films/search_results", locals: { festival: @festival, edition: @edition, films: @films })
+        render(
+          partial: "admin/selections/search_results",
+          locals: { festival: @festival, edition: @edition, selections: @selections },
+        )
+        return
       end
 
-      render(partial: "admin/films/search_results", locals: { festival: @festival, edition: @edition, films: @films })
+      render(partial: "admin/films/search_results", locals: { films: @films })
     end
 
     def search_for_film_to_add_to_edition
