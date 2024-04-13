@@ -11,14 +11,11 @@ class Admin
     end
 
     def create
-      if params[:film_id]
-        @film = Film.find(params[:film_id]).assign_attributes(film_params_without_new_category)
-        @selection = Selection.new(film: @film, edition: @edition)
-      else
-        @film = Film.new(film_params_without_new_category)
-        @selection = Selection.new(film: @film, edition: @edition)
-        # @film = @edition.films.build(film_params_without_new_category)
+      @selection = Selection.new(selection_params_without_new_category)
+      @selection.edition = @edition
+      @film = @selection.film
 
+      unless @film.persisted?
         # Flatten countries into a string
         @film.country = params[:film][:country].join(",") if params[:film][:country].present?
       end
@@ -29,31 +26,10 @@ class Admin
         new_category = new_category_for(edition: @edition)
         @film.categories << new_category if new_category
 
-        new_category.save! if new_category&.new_record?
-        @film.save!
+        @selection.save!
       end
 
       redirect_to(admin_festival_edition_path(@festival, @edition), notice: "#{@film.title} created")
-    rescue ActiveRecord::RecordInvalid
-      render(:new)
-    end
-
-    def edit
-      @film = Film.find(params[:id])
-    end
-
-    def update
-      @film = Film.find(params[:id])
-
-      ActiveRecord::Base.transaction do
-        new_category = new_category_for(edition: @edition)
-
-        @film.editions << @edition unless @film.editions.include?(@edition)
-        @film.categories << new_category if new_category
-        @film.update!(film_params_without_new_category)
-      end
-
-      redirect_to(admin_festival_edition_path(@festival, @edition), notice: "#{@film.title} added to #{@edition.name}")
     rescue ActiveRecord::RecordInvalid
       render(:new)
     end
@@ -90,10 +66,10 @@ class Admin
 
     private
 
-    def film_params
+    def selection_params
       params.require(:selection).permit(
         film_attributes: [
-          :film_id,
+          :id,
           :title,
           :original_title,
           :director,
@@ -106,11 +82,13 @@ class Admin
       )
     end
 
-    def film_params_without_new_category
+    def selection_params_without_new_category
       # Check for category with value -1 (new category) and remove from params
-      film_params.delete_if do |k, v|
-        k == "categorizations_attributes" && v["0"]["category_id"] == "-1"
+      if params[:selection][:film_attributes][:categorizations_attributes]["0"][:category_id] == "-1"
+        params[:selection][:film_attributes].delete(:categorizations_attributes)
       end
+
+      selection_params
     end
 
     def new_category_for(edition:)

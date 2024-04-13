@@ -18,7 +18,7 @@
       <%= turbo_frame_tag "new-film-search-results", class: "grid grid-cols-1 md:grid-cols-2 md:gap-2 my-4" %>
     </ul>
 
-    <%= turbo_frame_tag "add-film-to-edition" do %>
+    <%= turbo_frame_tag "add-film-to-edition", target: "search-results" do %>
       <%# Clear out any search results when this Turbo Frame is re-rendered %>
       <%= turbo_stream.update "new-film-search-results", "" %>
 
@@ -39,7 +39,6 @@
           <% if @film.persisted? %>
             <div class="mb-4">
               <%= render partial: "admin/films/film_detail", locals: { film: @film } %>
-              <%= form.hidden_field :film_id, value: @film.id %>
             </div>
           <% else %>
             <div class="mb-4">
@@ -72,7 +71,7 @@
             <%= field_set_tag do %>
               <legend class="block text-gray-700 text-sm font-bold mb-2">Category</legend>
 
-              <%= form.fields_for :categorizations do |category_form| %>
+              <%= form.fields_for :categorizations, @film.categorizations.build do |category_form| %>
                 <% if @edition.categories.any? %>
                   <% @edition.categories.order(:name).all.each do |category| %>
                     <%= category_form.label :category_id, value: category.id, class: "block text-gray-700 text-sm font-semibold mb-3" do %>
