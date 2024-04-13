@@ -41,7 +41,7 @@ class RatingTest < ActiveSupport::TestCase
   end
 
   test "should call Film#overall_average_rating when a new Rating is created" do
-    rating = Rating.new(score: 5, critic: critics(:base), selection: selections(:base))
+    rating = Rating.new(score: 5, critic: critics(:without_ratings), selection: selections(:base))
     rating.film.expects(:cache_overall_average_rating)
 
     rating.save

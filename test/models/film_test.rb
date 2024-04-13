@@ -21,7 +21,7 @@ class FilmTest < ActiveSupport::TestCase
     film = films(:base)
     overall_average_rating_before = film.overall_average_rating = film.ratings.average(:score).to_f # 3.0
 
-    Rating.create!(score: 5, critic: critics(:without_publication), selection: selections(:base))
+    Rating.create!(score: 5, critic: critics(:without_ratings), selection: selections(:base))
 
     assert_not_equal overall_average_rating_before, film.reload.overall_average_rating
     assert film.overall_average_rating > overall_average_rating_before
