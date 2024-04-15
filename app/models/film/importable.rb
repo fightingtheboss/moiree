@@ -11,7 +11,8 @@ module Film::Importable
 
       CSV.foreach(file.path, headers: true) do |row|
         # Find or create the category
-        category = Category.find_or_initialize_by(name: row.delete("category").last, edition: edition)
+        category_name = row.delete("category").last
+        category = Category.find_or_initialize_by(name: category_name, edition: edition)
 
         # Find or create the film, associated to category
         film = where("LOWER(title) = ? AND year = ?", row["title"].downcase, row["year"]).first_or_initialize

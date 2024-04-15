@@ -26,10 +26,7 @@ class Film < ApplicationRecord
     country.split(",").map(&:strip).map { |c| Country[c].common_name }
   end
 
-  def category(edition: nil)
-    return if categories.empty?
-    return categories.first if edition.nil? || categories.one?
-
+  def category(edition:)
     categories.find_by(edition: edition)
   end
 end

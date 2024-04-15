@@ -5,3 +5,9 @@ base:
   short_name: TIFF
   url: https://tiff.net
   country: CA
+
+with_no_films:
+  name: Cannes Film Festival
+  short_name: Cannes
+  url: https://festival-cannes.com
+  country: FR
