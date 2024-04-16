@@ -7,10 +7,6 @@ class Admin
     before_action :set_festival
     before_action :set_edition, only: [:show, :edit, :update, :destroy]
 
-    def index
-      @editions = @festival.editions
-    end
-
     def new
       @edition = @festival.editions.new
     end
@@ -46,6 +42,7 @@ class Admin
     end
 
     def destroy
+      debugger
       @edition.destroy
 
       redirect_to(admin_festival_editions_path(@edition.festival), notice: "Edition deleted")
