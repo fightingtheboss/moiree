@@ -68,6 +68,7 @@ class Admin
 
     def selection_params
       params.require(:selection).permit(
+        :film_id,
         film_attributes: [
           :id,
           :title,

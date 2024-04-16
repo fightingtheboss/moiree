@@ -39,6 +39,7 @@
           <% if @film.persisted? %>
             <div class="mb-4">
               <%= render partial: "admin/films/film_detail", locals: { film: @film } %>
+              <%= form.hidden_field :film_id, value: @film.id %>
             </div>
           <% else %>
             <div class="mb-4">
