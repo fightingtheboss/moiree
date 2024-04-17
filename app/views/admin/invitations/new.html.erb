@@ -1,37 +1,39 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Send invitation</h1>
+<%= turbo_frame_tag "modal" do %>
+  <h1 class="text-2xl font-semibold mb-4">Invite new admin</h1>
 
-<%= form_with(model: @user, url: admin_invitation_path) do |form| %>
-  <% if @user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+  <%= form_with(model: @user, url: admin_invitation_path) do |form| %>
+    <% if @user.errors.any? %>
+      <div class="text-red-600 p-4 border-red-600 border rounded bg-red-100 mb-4">
+        <h2 class="mb-4"><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
 
-      <ul>
-        <% @user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+        <ul class="my-4">
+          <% @user.errors.each do |error| %>
+            <li class="font-medium"><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-4">
+      <%= form.label :email, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.email_field :email, required: true, autofocus: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+    </div>
+
+    <%= form.fields_for :userable do |userable_form| %>
+
+    <div class="mb-4">
+      <%= userable_form.label :username, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= userable_form.text_field :username, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+    </div>
+
+    <% end %>
+
+    <div class="flex items-center justify-between mt-8">
+      <%= form.submit "Send invitation", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.email_field :email, required: true, autofocus: true %>
-  </div>
-
-  <%= form.fields_for :userable do |userable_form| %>
-
-  <div>
-    <%= userable_form.label :username, style: "display: block" %>
-    <%= userable_form.text_field :username %>
-  </div>
-
-  <% end %>
-
-  <div>
-    <%= form.submit "Send an invitation" %>
-  </div>
 <% end %>
 
 <br>

@@ -3,6 +3,7 @@
 Rails.application.routes.draw do
   get  "sign_in", to: "sessions#new"
   post "sign_in", to: "sessions#create"
+  get  "sign_out", to: "sessions#destroy"
 
   resource  :password, only: [:edit, :update]
   resources :sessions, only: [:index, :show, :destroy]
@@ -32,6 +33,13 @@ Rails.application.routes.draw do
     namespace :critics do
       resource :invitation, only: [:new, :create]
       resources :ratings, only: [:index]
+    end
+
+    resources :users, only: [:index, :destroy] do
+      collection do
+        get :critics
+        get :admins
+      end
     end
   end
 

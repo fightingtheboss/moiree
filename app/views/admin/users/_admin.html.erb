@@ -1,0 +1,13 @@
+<li>
+  <article class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow">
+    <header class="mb-4">
+      <h1 class="font-semibold"><%= admin.name %></h1>
+      <h2><%= admin.email %></h2>
+    </header>
+    <footer class="flex justify-between items-center">
+      <div>
+        <%= button_to "🗑️", admin_user_path(admin.user.id), method: :delete, data: { "turbo-confirm": "Are you sure you want to delete #{admin.email}? This action is irreversible."} %>
+      </div>
+    </footer>
+  </article>
+</li>

@@ -6,7 +6,7 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :sign_in_tokens, dependent: :destroy
 
-  delegated_type :userable, types: ["Admin", "Critic"]
+  delegated_type :userable, types: ["Admin", "Critic"], dependent: :destroy
   delegate :name, :initials, to: :userable
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }

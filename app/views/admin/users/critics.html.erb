@@ -1,0 +1,18 @@
+<div class="mx-4 md:mx-8">
+  <header class="my-4">
+    <%= link_to "Invite Critic", new_admin_critics_invitation_path,
+      data: {
+        turbo_frame: "modal",
+        controller: "modal",
+        action: "modal#show",
+        "modal-dialog-param": "global-modal",
+        "modal-target-param": "users-list"
+      },
+      class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs"
+    %>
+  </header>
+
+  <ul id="users-list" class="grid grid-cols-1 md:grid-cols-3 md:gap-2 my-8">
+    <%= render partial: "admin/users/critic", collection: @critics %>
+  </ul>
+</div>
