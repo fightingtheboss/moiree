@@ -42,7 +42,6 @@ class Admin
     end
 
     def destroy
-      debugger
       @edition.destroy
 
       redirect_to(admin_festival_editions_path(@edition.festival), notice: "Edition deleted")
