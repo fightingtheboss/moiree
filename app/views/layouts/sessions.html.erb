@@ -1,0 +1,9 @@
+<%= content_for :content do %>
+  <div class="flex w-full h-full min-h-screen flex-col justify-center items-center">
+    <div class="md:max-w-[33%] md:min-w-[25%] bg-white rounded-md shadow-md p-8">
+      <%= yield %>
+    </div>
+  </div>
+<% end %>
+
+<%= render template: "layouts/application" %>

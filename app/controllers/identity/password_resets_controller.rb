@@ -6,6 +6,8 @@ module Identity
 
     before_action :set_user, only: [:edit, :update]
 
+    layout "sessions", only: [:new, :edit]
+
     def new
     end
 
@@ -17,7 +19,7 @@ module Identity
 
       if @user
         send_password_reset_email
-        redirect_to(sign_in_path, notice: "Check your email for reset instructions")
+        redirect_to(root_path, notice: "Check your email for reset instructions")
       else
         redirect_to(
           new_identity_password_reset_path,

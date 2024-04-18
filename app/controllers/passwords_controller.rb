@@ -3,6 +3,8 @@
 class PasswordsController < ApplicationController
   before_action :set_user
 
+  layout "sessions", only: [:edit]
+
   def edit
   end
 

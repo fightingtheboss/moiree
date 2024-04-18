@@ -15,6 +15,19 @@ module.exports = {
           { fontFeatureSettings: '"zero" 1, "ss01" 1, "ss08" 1' },
         ],
       },
+      animation: {
+        "appear-then-fade": "appear-then-fade 5s both",
+      },
+      keyframes: {
+        "appear-then-fade": {
+          "0%, 100%": {
+            opacity: 0,
+          },
+          "5%, 60%": {
+            opacity: 1,
+          },
+        },
+      },
     },
   },
   plugins: [

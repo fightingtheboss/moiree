@@ -13,9 +13,13 @@
     <meta name="turbo-refresh-method" content="morph">
   </head>
 
-  <body class="bg-slate-50">
-    <main class="container mx-auto mt-28 px-5 flex flex-col ">
-      <%= yield %>
+  <body class="relative bg-slate-50">
+    <div id="flash" class="fixed bottom-5 left-[50%] -translate-x-1/2 flex flex-col items-center gap-2 max-w-full w-max py-4">
+      <%= render "layouts/flash" %>
+    </div>
+
+    <main>
+      <%= content_for?(:content) ? yield(:content) : yield %>
     </main>
   </body>
 </html>

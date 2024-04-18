@@ -5,6 +5,8 @@ class SessionsController < ApplicationController
 
   before_action :set_session, only: :destroy
 
+  layout "sessions", only: [:new]
+
   def index
     @sessions = Current.user.sessions.order(created_at: :desc)
   end
