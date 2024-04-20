@@ -71,6 +71,8 @@ group :development do
   # gem "spring"
 
   gem "rails_live_reload"
+
+  gem "faker"
 end
 
 group :test do
