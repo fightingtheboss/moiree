@@ -4,7 +4,8 @@ class HomeController < ApplicationController
   skip_before_action :authenticate
 
   def index
-    @current = Edition.upcoming
+    @current = Edition.current
+    @upcoming = Edition.upcoming
     @past = Edition.past
   end
 end
