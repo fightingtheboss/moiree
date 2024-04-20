@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post "magic", to: "sessions/passwordlesses#create"
   get  "verify", to: "sessions/passwordlesses#edit"
 
+  resources :editions, only: [:show]
   resource  :password, only: [:edit, :update]
   resources :sessions, only: [:index, :show, :destroy]
 
@@ -49,14 +50,14 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :sessions do
-    resource :passwordless, only: [:new, :edit, :create]
-  end
-
   namespace :identity do
     resource :email,              only: [:edit, :update]
     resource :email_verification, only: [:show, :create]
     resource :password_reset,     only: [:new, :edit, :create, :update]
+  end
+
+  namespace :sessions do
+    resource :passwordless, only: [:new, :edit, :create]
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

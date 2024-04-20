@@ -15,8 +15,14 @@ module.exports = {
           { fontFeatureSettings: '"zero" 1, "ss01" 1, "ss08" 1' },
         ],
       },
+      backgroundImage: {
+        "logo-radial-gradient":
+          "repeating-radial-gradient(circle at 45% 45%, #fff, #777 0.05rem, #fff 0.4rem)",
+        "logo-radial-gradient-overlay":
+          "repeating-radial-gradient(circle at 45% 45%, #4f46e5, #fff 0.1em, #4f46e5 0.3em)",
+      },
       animation: {
-        "appear-then-fade": "appear-then-fade 5s both",
+        "appear-then-fade": "appear-then-fade 7s both",
       },
       keyframes: {
         "appear-then-fade": {

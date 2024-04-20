@@ -1,0 +1,41 @@
+<div class="overflow-x-auto overflow-y-scroll h-[calc(100vh-2rem)] w-full">
+  <header class="p-4 md:px-8 text-left w-screen sticky top-0 left-0">
+    <h2 class="font-normal text-xs uppercase"><%= @edition.name %></h2>
+    <h1 class="font-semibold text-2xl"><%= @edition.code %></h1>
+  </header>
+
+  <table class="border-separate border-spacing-0 bg-white table-fixed w-max md:w-full overflow-clip">
+    <thead class="">
+      <tr class="">
+        <th scope="col" class="border border-indigo-100 p-2 sticky top-0 left-0 z-20 bg-white w-[25vw] md:w-36">Film</th>
+        <th scope="col" class="border border-indigo-100 p-2 sticky top-0 z-10 bg-white md:w-24">Avg</th>
+        <% @critics.each do |critic| %>
+          <th scope="col" class="border border-indigo-100 p-2 sticky top-0 z-10 bg-white w-24 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10">
+            <div class="flex flex-col justify-between items-stretch max-h-48 w-full">
+              <div class="[writing-mode:vertical-rl] text-left basis-full">
+                <p><%= critic.name %></p>
+                <p class="text-sm font-light italic"><%= critic.publication %></p>
+              </div>
+              <p class="text-sm"><%= Country[critic.country].emoji_flag %></p>
+            </div>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody class="text-sm">
+      <% @selections.each do |selection| %>
+        <tr class=" hover:bg-indigo-600/10">
+          <th scope="row" class="border p-2 sticky left-0 z-10 bg-white"><%= selection.film.title %></th>
+          <td class="border p-2 text-center"><%= number_with_precision(selection.film.ratings.average(:score), precision: 1) %></td>
+          <% @critics.each do |critic| %>
+            <% if (rating = @ratings[critic][selection]) %>
+              <td class="border p-2 text-center relative hover:border-indigo-600 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10"><%= rating.score %></td>
+            <% else %>
+              <td class="border p-2 text-center relative hover:border-indigo-600 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10">&nbsp;</td>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
