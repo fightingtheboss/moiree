@@ -18,14 +18,13 @@ class Edition < ApplicationRecord
 
   delegate :name, :short_name, :country, to: :festival
 
-  scope :upcoming, -> { where("start_date >= ?", Date.current).order(:start_date) }
-  scope :past, -> { where("end_date < ?", Date.current).order(start_date: :desc) }
-
-  class << self
-    def current
-      where("start_date <= ? AND end_date >= ?", Date.current, Date.current).first
-    end
-  end
+  scope :upcoming, -> { includes(:festival).where("start_date >= ?", Date.current).order(:start_date) }
+  scope :past, -> { includes(:festival).where("end_date < ?", Date.current).order(start_date: :desc) }
+  scope :current, -> {
+                    includes(:festival)
+                      .where("start_date <= ? AND end_date >= ?", Date.current, Date.current)
+                      .order(:start_date)
+                  }
 
   def url
     super || festival.url

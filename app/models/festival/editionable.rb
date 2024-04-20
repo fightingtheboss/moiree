@@ -5,6 +5,10 @@ module Festival::Editionable
 
   included do
     has_many :editions, dependent: :destroy
+
+    scope :upcoming, -> { joins(:editions).merge(Edition.upcoming).distinct }
+    scope :past, -> { joins(:editions).merge(Edition.past).distinct }
+    scope :current, -> { joins(:editions).merge(Edition.current).distinct }
   end
 
   def current_edition

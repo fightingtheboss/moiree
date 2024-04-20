@@ -8,12 +8,12 @@ class Admin
       sign_in_as(users(:critic))
 
       get new_admin_invitation_url
-      assert_redirected_to sign_in_url
+      assert_redirected_to magic_url
     end
 
     test "should redirect to sign in if not signed in" do
       get new_admin_invitation_url
-      assert_redirected_to sign_in_url
+      assert_redirected_to magic_url
     end
 
     test "should sign in successfully if an admin" do

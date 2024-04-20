@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class FestivalTest < ActiveSupport::TestCase
@@ -35,7 +37,7 @@ class FestivalTest < ActiveSupport::TestCase
 
     edition.update(start_date: Date.current - 1.day, end_date: Date.current + 1.day)
 
-    assert(festival.current_edition == edition)
+    assert(festival.current_edition.first == edition)
   end
 
   test "#upcoming_editions should return all upcoming festival editions" do

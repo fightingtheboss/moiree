@@ -43,7 +43,7 @@ class EditionTest < ActiveSupport::TestCase
     edition = editions(:base)
     edition.update(start_date: Date.current - 1.day, end_date: Date.current + 1.day)
 
-    assert(Edition.current == edition)
+    assert(Edition.current.first == edition)
   end
 
   test "::upcoming should return all upcoming editions" do
