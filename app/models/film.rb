@@ -6,7 +6,7 @@ class Film < ApplicationRecord
   has_many :categorizations, dependent: :destroy
   has_many :categories, through: :categorizations
 
-  has_many :selections, dependent: :destroy
+  has_many :selections, dependent: :destroy, inverse_of: :film
   has_many :editions, through: :selections
   has_many :ratings, through: :selections
 

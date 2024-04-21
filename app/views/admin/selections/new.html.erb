@@ -35,11 +35,11 @@
       <% end %>
 
       <%= form_with(model: [:admin, @festival, @edition, @selection]) do |selection_form| %>
-        <%= selection_form.fields_for :film do |form| %>
+        <%= selection_form.fields_for :film, include_id: false do |form| %>
           <% if @film.persisted? %>
             <div class="mb-4">
               <%= render partial: "admin/films/film_detail", locals: { film: @film } %>
-              <%= form.hidden_field :film_id, value: @film.id %>
+              <%= hidden_field_tag :film_id, @film.id %>
             </div>
           <% else %>
             <div class="mb-4">

@@ -11,21 +11,22 @@ class Admin
     end
 
     def create
-      @selection = Selection.new(selection_params_without_new_category)
-      @selection.edition = @edition
-      @film = @selection.film
+      @selection = @edition.selections.build(selection_params_without_new_category)
 
-      unless @film.persisted?
-        # Flatten countries into a string
+      if params[:film_id].present?
+        @film = Film.find(params[:film_id])
+        @selection.film = @film
+      else
+        @film = @selection.film
         @film.country = params[:film][:country].join(",") if params[:film][:country].present?
       end
 
       # Save film and new category in a transaction
       ActiveRecord::Base.transaction do
-        # Create new category if present in params
-        new_category = new_category_for(edition: @edition)
-        @film.categories << new_category if new_category
+        category = category_for(edition: @edition)
+        @film.categories << category if category
 
+        @film.save!
         @selection.save!
       end
 
@@ -92,8 +93,18 @@ class Admin
       selection_params
     end
 
-    def new_category_for(edition:)
-      Category.find_or_initialize_by(name: params[:new_category], edition: edition) if params[:new_category].present?
+    def existing_category_id
+      if params[:new_category].blank?
+        params[:selection][:film_attributes][:categorizations_attributes]["0"][:category_id]
+      end
+    end
+
+    def category_for(edition:)
+      if params[:new_category].present?
+        Category.find_or_initialize_by(name: params[:new_category], edition: edition)
+      else
+        Category.find_by(id: existing_category_id)
+      end
     end
 
     def set_festival_and_edition
