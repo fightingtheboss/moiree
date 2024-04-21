@@ -6,16 +6,38 @@ class Admin
     before_action :set_selection
 
     def new
-      @rating = @selection.build_rating
+      @rating = @selection.ratings.build
     end
 
     def create
-      @rating = @selection.build_rating(rating_params)
+      @rating = @selection.ratings.build(rating_params)
 
       if @rating.save
-        redirect_to(admin_festival_edition_path(@festival, @edition), notice: "Rating created")
+        respond_to do |format|
+          format.html { redirect_to(admin_festival_edition_path(@festival, @edition), notice: "Rating created") }
+          format.turbo_stream do
+            flash.now[:notice] = "#{@rating.critic.name} rated #{@rating.film.title} #{@rating.score} stars"
+            render(turbo_stream: turbo_stream.prepend("flash", partial: "layouts/flash"))
+          end
+        end
       else
-        render(:new)
+        respond_to do |format|
+          format.html { render(:new) }
+          format.turbo_stream do
+            flash.now[:alert] = @rating.errors.full_messages.join(", ")
+            render(
+              turbo_stream: [
+                turbo_stream.update(
+                  "modal",
+                  template: "admin/ratings/new",
+                  locals: { festival: @festival, edition: @edition, selection: @selection, rating: @rating },
+                ),
+                turbo_stream.prepend("flash", partial: "layouts/flash"),
+              ],
+              status: :unprocessable_entity,
+            )
+          end
+        end
       end
     end
 

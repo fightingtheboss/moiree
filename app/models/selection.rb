@@ -5,6 +5,7 @@ class Selection < ApplicationRecord
   belongs_to :film, inverse_of: :selections
 
   has_many :ratings, dependent: :destroy
+  has_many :critics, through: :ratings
 
   validates :edition_id, uniqueness: { scope: :film_id }
 
