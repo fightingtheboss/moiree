@@ -77,13 +77,15 @@ if Rails.env.development?
     print "--> Creating films"
     # Create up to 20 films
     (1..20).each do |j|
-      edition.films.find_or_create_by!(title: Faker::Movie.title) do |film|
+      film = edition.films.find_or_create_by!(title: Faker::Movie.title) do |film|
         film.original_title = [Faker::Movie.title, nil].sample
         film.director = Faker::Name.name
         film.country = ISO3166::Country.codes.sample
         film.year = rand(1900..edition.year)
         film.overall_average_rating = rand(1.0..5.0)
       end
+
+      film.categories << edition.categories.sample unless film.category(edition: edition)
 
       print "."
     end
