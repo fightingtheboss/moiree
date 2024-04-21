@@ -1,15 +1,5 @@
 <div class="min-w-full max-w-md">
-  <% if edition.errors.any? %>
-    <div class="text-red-600 p-4 border-red-600 border rounded bg-red-100 mb-4">
-      <h2 class="mb-4"><%= pluralize(edition.errors.count, "error") %> prohibited this Edition from being saved:</h2>
-
-      <ul class="my-4">
-        <% edition.errors.each do |error| %>
-          <li class="font-medium">❌&nbsp;<%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render partial: "shared/errors", locals: { model: edition } %>
 
   <%= form_with(model: [:admin, :festival, edition]) do |form| %>
     <div class="mb-4">

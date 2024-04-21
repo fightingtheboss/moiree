@@ -1,17 +1,7 @@
 <h1 class="font-semibold text-2xl mb-4">Change your password</h1>
 
 <%= form_with(url: password_path, method: :patch) do |form| %>
-  <% if @user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-      <ul>
-        <% @user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render partial: "shared/errors", locals: { model: @user } %>
 
   <div class="mb-4">
     <%= form.label :password_challenge, class: "block text-gray-700 text-sm font-bold mb-2" %>

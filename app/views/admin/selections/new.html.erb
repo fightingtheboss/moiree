@@ -22,17 +22,7 @@
       <%# Clear out any search results when this Turbo Frame is re-rendered %>
       <%= turbo_stream.update "new-film-search-results", "" %>
 
-      <% if @film.errors.any? %>
-        <div class="text-red-600 p-4 border-red-600 border rounded bg-red-100 mb-4">
-          <h2 class="mb-4"><%= pluralize(@film.errors.count, "error") %> prohibited this Film from being saved:</h2>
-
-          <ul class="my-4">
-            <% @film.errors.each do |error| %>
-              <li class="font-medium">❌&nbsp;<%= error.full_message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
+      <%= render partial: "shared/errors", locals: { model: @film } %>
 
       <%= form_with(model: [:admin, @festival, @edition, @selection]) do |selection_form| %>
         <%= selection_form.fields_for :film, include_id: false do |form| %>
