@@ -69,10 +69,9 @@ class Admin::SelectionsControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Selection.count") do
       assert_no_difference("Film.count") do
         post admin_festival_edition_selections_url(@edition.festival, @edition, params: {
+          film_id: films(:with_multiple_countries).id,
           selection: {
-            film_id: films(:with_multiple_countries).id,
             film_attributes: {
-              id: films(:with_multiple_countries).id,
               categorizations_attributes: {
                 "0" => {
                   category_id: categories(:base).id,
