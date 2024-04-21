@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EditionsController < ApplicationController
-  skip_before_action :authenticate
+  # skip_before_action :authenticate
 
   layout "application"
 

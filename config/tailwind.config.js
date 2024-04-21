@@ -17,9 +17,9 @@ module.exports = {
       },
       backgroundImage: {
         "logo-radial-gradient":
-          "repeating-radial-gradient(circle at 45% 45%, #fff, #777 0.05rem, #fff 0.4rem)",
+          "repeating-radial-gradient(circle at 46% 45%, #fff, #777 0.05rem, #fff 0.4rem)",
         "logo-radial-gradient-overlay":
-          "repeating-radial-gradient(circle at 45% 45%, #4f46e5, #fff 0.1em, #4f46e5 0.3em)",
+          "repeating-radial-gradient(circle at 46% 45%, #4f46e5, #fff 0.1em, #4f46e5 0.3em)",
       },
       animation: {
         "appear-then-fade": "appear-then-fade 7s both",

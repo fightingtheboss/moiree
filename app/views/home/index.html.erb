@@ -1,19 +1,23 @@
-<header class="bg-white relative mb-4">
+<header class="bg-white relative mb-4 shadow">
   <div class="grid place-content-center bg-logo-radial-gradient contrast-[2000] after:bg-logo-radial-gradient-overlay after:absolute after:top-0 after:left-0 after:right-0 after:bottom-0 after:mix-blend-lighten">
     <h1 class="font-black uppercase text-7xl md:text-8xl pt-8 pb-8 md:pb-12 px-4">
       <span class="inline-block">Moirée</span>
     </h1>
   </div>
-  <p class="hidden md:block font-normal text-indigo-700 md:text-2xl text-center pb-4 z-10 -my-10 absolute left-[50%] -translate-x-1/2">Critic ratings from film festivals around the world</p>
+  <p class="hidden md:block font-normal text-indigo-700 md:text-2xl text-center pb-4 z-10 -my-12 absolute left-[50%] -translate-x-1/2">Critic ratings from film festivals around the world</p>
 </header>
 
 <section class="mx-4 md:mx-8">
-  <% [["Current", @current], ["Upcoming", @upcoming], ["Past", @past]].each do |(label, festivals)| %>
-    <% if festivals.any? %>
-      <h2 class="font-semibold mb-4"><%= label %> festivals</h2>
-      <ul class="grid grid-cols-1 md:grid-cols-3 md:gap-2">
-        <%= render festivals %>
-      </ul>
+  <% if @current.any? || @upcoming.any? || @past.any? %>
+    <% [["Current", @current], ["Upcoming", @upcoming], ["Past", @past]].each do |(label, festivals)| %>
+      <% if festivals.any? %>
+        <h2 class="font-semibold mb-4"><%= label %> festivals</h2>
+        <ul class="grid grid-cols-1 md:grid-cols-3 md:gap-2">
+          <%= render festivals %>
+        </ul>
+      <% end %>
     <% end %>
+  <% else %>
+    <p class="p-8 bg-white rounded shadow-md text-xl text-center md:w-1/2 mx-auto mt-24">We're just getting set up, we'll be adding festivals shortly!</p>
   <% end %>
 </section>
