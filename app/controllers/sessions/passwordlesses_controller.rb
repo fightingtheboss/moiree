@@ -18,7 +18,7 @@ module Sessions
       revoke_tokens
 
       # This should take the Critic to the Festival listing
-      redirect_to(root_path, notice: "Signed in successfully")
+      redirect_to(admin_root_path, notice: "Signed in successfully")
     end
 
     def create
