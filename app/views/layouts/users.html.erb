@@ -5,9 +5,11 @@
         <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if current_page?(controller: :users, action: :critics) %>">
           <%= link_to "Critics", critics_admin_users_path, class: "inline-block" %>
         </li>
-        <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if current_page?(controller: :users, action: :admins) %>">
-          <%= link_to "Admins", admins_admin_users_path, class: "inline-block" %>
-        </li>
+        <% if policy(Admin).create? %>
+          <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if current_page?(controller: :users, action: :admins) %>">
+            <%= link_to "Admins", admins_admin_users_path, class: "inline-block" %>
+          </li>
+        <% end %>
       </ul>
       <div>
         <%= link_to "Logout", sign_out_path, class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-sm" %>

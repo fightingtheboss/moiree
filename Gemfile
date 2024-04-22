@@ -52,6 +52,8 @@ gem "bootsnap", require: false
 
 gem "countries", "~> 6.0", require: "countries/global"
 
+gem "pundit", "~> 2.3"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: [:mri, :windows]

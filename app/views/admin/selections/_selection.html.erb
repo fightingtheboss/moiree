@@ -1,4 +1,4 @@
-<li class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow hover:cursor-pointer my-1 md:my-0">
+<li class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow my-1 md:my-0">
   <article>
     <h2 class="text-xs uppercase tracking-wide font-light"><%= selection.film.categories.first.name %></h2>
     <h1 class="font-semibold my-2 leading-tight"><%= selection.film.title %></h1>
@@ -24,9 +24,10 @@
     <% end %>
 
     <% if critic_already_rated?(selection) %>
-      <%= link_to(
+      <p class="px-2 py-1 bg-teal-500 text-white rounded mt-4 text-xs inline-block">Your rating: <strong><%= Current.user.userable.ratings.find_by(selection: selection).score %></strong></p>
+      <%#= link_to(
         "View rating",
-        admin_festival_edition_selection_rating_path(@festival, @edition, selection, selection.rating),
+        admin_festival_edition_selection_rating_path(@festival, @edition, selection, Current.user.userable.ratings.find_by(selection: selection)),
         data: {
           turbo_frame: "modal",
           controller: "modal",

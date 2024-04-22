@@ -2,6 +2,7 @@
 
 <%= turbo_frame_tag "modal" do %>
   <h1 class="text-2xl font-semibold mb-4">Invite a critic</h1>
+  <p>Once you submit this form, an account will be created for the critic and an invitation email will be sent to them to get them started.</p>
 
   <%= form_with(model: @user, url: admin_critics_invitation_path) do |form| %>
     <%= render partial: "shared/errors", locals: { model: @user } %>
