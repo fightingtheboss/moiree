@@ -11,7 +11,7 @@ class Admin
         @user = User.create_with(user_params).find_or_initialize_by(email: params[:user][:email])
 
         if @user.save
-          send_passwordless_email
+          send_critic_invitation_email
           redirect_to(new_admin_critics_invitation_path, notice: "An invitation email has been sent to #{@user.email}")
         else
           render(:new, status: :unprocessable_entity)
@@ -36,8 +36,8 @@ class Admin
         )
       end
 
-      def send_passwordless_email
-        UserMailer.with(user: @user).passwordless.deliver_later
+      def send_critic_invitation_email
+        UserMailer.with(user: @user, inviting_user: Current.user).critic_invitation_instructions.deliver_later
       end
 
       def temporary_username(email)
