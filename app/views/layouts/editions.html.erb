@@ -18,13 +18,10 @@
     <nav>
       <ul class="flex bg-white text-slate-500 px-4 md:px-8 font-medium ">
         <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if controller_name == "editions" || controller_name == "films" %>">
-          <%= link_to "Films", "#", class: "inline-block" %>
+          <%= link_to "Films", admin_festival_edition_path(@festival, @edition), class: "inline-block" %>
         </li>
         <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if controller_name == "ratings" %>">
-          <%= link_to "Ratings", "#", class: "inline-block" %>
-        </li>
-        <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if controller_name == "categories" %>">
-          <%= link_to "Categories", "#", class: "inline-block" %>
+          <%= link_to "Ratings", edition_path(@edition), class: "inline-block" %>
         </li>
       </ul>
     </nav>

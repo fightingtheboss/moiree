@@ -26,7 +26,7 @@ Rails.application.routes.draw do
           get :csv, on: :collection
           post :import, on: :collection
 
-          resources :ratings, only: [:index, :new, :create]
+          resources :ratings, only: [:new, :create, :edit, :update]
         end
       end
     end
@@ -41,7 +41,6 @@ Rails.application.routes.draw do
 
     namespace :critics do
       resource :invitation, only: [:new, :create]
-      resources :ratings, only: [:index]
     end
 
     resources :users, only: [:index, :destroy] do

@@ -1,0 +1,4 @@
+<%= turbo_frame_tag "modal" do %>
+  <h1 class="text-2xl font-semibold mb-4">Rate <%= @selection.film.title %></h1>
+  <%= render partial: "form", locals: { festival: @festival, edition: @edition, selection: @selection, rating: @rating } %>
+<% end %>

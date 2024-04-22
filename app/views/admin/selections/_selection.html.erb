@@ -9,34 +9,11 @@
 
   <aside id="<%= dom_id(selection) %>">
     <% unless critic_already_rated?(selection) || defined?(hide_rate_button) %>
-      <%= link_to(
-        "Rate",
-        new_admin_festival_edition_selection_rating_path(@festival, @edition, selection),
-        data: {
-          turbo_frame: "modal",
-          controller: "modal",
-          action: "modal#show",
-          "modal-dialog-param": "global-modal",
-          "modal-target-param": dom_id(@edition, :films)
-        },
-        class: "mt-4 inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs"
-      ) %>
+      <%= render partial: "admin/ratings/new_rating_button", locals: { festival: @festival, edition: @edition, selection: selection } %>
     <% end %>
 
     <% if critic_already_rated?(selection) %>
-      <p class="px-2 py-1 bg-teal-500 text-white rounded mt-4 text-xs inline-block">Your rating: <strong><%= Current.user.userable.ratings.find_by(selection: selection).score %></strong></p>
-      <%#= link_to(
-        "View rating",
-        admin_festival_edition_selection_rating_path(@festival, @edition, selection, Current.user.userable.ratings.find_by(selection: selection)),
-        data: {
-          turbo_frame: "modal",
-          controller: "modal",
-          action: "modal#show",
-          "modal-dialog-param": "global-modal",
-          "modal-target-param": dom_id(@edition, :films)
-        },
-        class: "mt-4 inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs"
-      ) %>
+      <%= render partial: "admin/ratings/edit_rating_button", locals: { festival: @festival, edition: @edition, selection: selection, rating: Current.user.userable.ratings.find_by(selection: selection) } %>
     <% end %>
   </aside>
 </li>

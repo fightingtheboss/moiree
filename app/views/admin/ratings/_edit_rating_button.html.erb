@@ -1,0 +1,14 @@
+<%= link_to(
+  edit_admin_festival_edition_selection_rating_path(festival, edition, selection, rating),
+  data: {
+    turbo_frame: "modal",
+    controller: "modal",
+    action: "modal#show",
+    "modal-dialog-param": "global-modal",
+    "modal-target-param": dom_id(edition, :films)
+  },
+  class: "mt-4 inline-block bg-teal-500 hover:bg-teal-700 text-white font-semibold py-1 px-2 rounded text-xs",
+  id: dom_id(rating)
+) do %>
+  Your rating: <strong><%= rating.score %></strong>
+<% end %>
