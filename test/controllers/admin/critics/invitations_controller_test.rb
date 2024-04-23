@@ -34,9 +34,10 @@ class Admin
       end
 
       test "should send invitation instructions email to new admin" do
+        admin = users(:admin)
         critic = users(:critic)
 
-        assert_enqueued_email_with UserMailer, :passwordless, params: { user: critic } do
+        assert_enqueued_email_with UserMailer, :critic_invitation_instructions, params: { user: critic, inviting_user: admin } do
           post admin_critics_invitation_url, params: { user: { email: critic.email } }
         end
 
