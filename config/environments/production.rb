@@ -68,7 +68,7 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { host: "moire.fly.dev", protocol: "https" }
+  config.action_mailer.default_url_options = { host: "moiree.fly.dev", protocol: "https" }
 
   if Rails.application.credentials.sendgrid
     ActionMailer::Base.smtp_settings = {
