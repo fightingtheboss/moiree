@@ -1,17 +1,19 @@
-<p>Hey <%= @user.first_name %>,</p>
+<p>Hey <%= @user.name %>,</p>
 
 <p>
-  You were invited to be a Critic on Moirée by <%= inviting_user.name %>.
+  You were invited to be a Critic on Moirée by <%= @inviting_user.name %>.
   This allows you to add your ratings to films you see at film festivals.
-  These ratings will be displayed in the critics grid alongside those of other Critics.
+  These ratings will be displayed in the critics grid alongside those of other critics.
 </p>
 
 <p>
   Clicking the link below will create your account and log you in, no need for a password.
 </p>
 
-<p><%= link_to "Sign in without password", verify_url(sid: @signed_id) %></p>
+<p style="text-align: center; margin: 32px 0;"><%= link_to "Sign in without a password", verify_url(sid: @signed_id), style: "padding: 8px 12px; background-color: #4f46e5; border-radius: 4px; color: white; font-weight: 600; text-decoration: none;" %></p>
 
 <hr>
 
 <p>If you want to log in later on a different device (or if you log out), <%= link_to "follow this link to get a new magic sign-in link", magic_url %>.</p>
+
+<p style="font-size: 0.75rem; margin-top: 32px;">Here's the sign in link, in case the button above doesn't work: <%= link_to verify_url(sid: @signed_id), verify_url(sid: @signed_id), style: "word-break: break-all;" %></p>

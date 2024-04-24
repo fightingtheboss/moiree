@@ -4,7 +4,7 @@ class Admin < ApplicationRecord
   include Userable
 
   def name
-    username || email
+    username&.capitalize || email
   end
 
   def initials
