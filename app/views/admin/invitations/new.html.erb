@@ -11,15 +11,6 @@
       <%= form.email_field :email, required: true, autofocus: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
     </div>
 
-    <%= form.fields_for :userable do |userable_form| %>
-
-    <div class="mb-4">
-      <%= userable_form.label :username, class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= userable_form.text_field :username, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
-    </div>
-
-    <% end %>
-
     <div class="flex items-center justify-between mt-8">
       <%= form.submit "Send invitation", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
     </div>

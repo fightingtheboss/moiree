@@ -7,7 +7,7 @@ class Admin
     end
 
     def create
-      @user = User.create_with(user_params).find_or_initialize_by(email: params[:email])
+      @user = User.create_with(user_params).find_or_initialize_by(email: params[:user][:email])
 
       if @user.save
         send_invitation_instructions
@@ -20,10 +20,10 @@ class Admin
     private
 
     def user_params
-      params.permit(:email).merge(
+      params.require(:user).permit(:email).merge(
         password: SecureRandom.base58,
         verified: true,
-        userable: Admin.new(username: temporary_username(params[:email])),
+        userable: Admin.new(username: temporary_username(params[:user][:email])),
       )
     end
 
