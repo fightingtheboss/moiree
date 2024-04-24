@@ -11,6 +11,13 @@
     <%= javascript_importmap_tags %>
 
     <meta name="turbo-refresh-method" content="morph">
+
+    <%= favicon_link_tag "favicon.ico", sizes: "any"%>
+    <%= favicon_link_tag "moiree-logo.svg", type: "image/svg+xml" %>
+    <%= favicon_link_tag "moiree-logo.png", rel: "apple-touch-icon", type: "image/png" %>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   </head>
 
   <body class="relative bg-slate-50">
