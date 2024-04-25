@@ -1,0 +1,14 @@
+Hey <%= @user.name %>
+
+You were invited to be a Critic on Moirée by <%= @inviting_user.name %>.
+This allows you to add your ratings to films you see at film festivals.
+These ratings will be displayed in the critics grid alongside those of other critics.
+
+Clicking the link below will create your account and log you in, no need for a password.
+
+Sign in without a password:
+<%= verify_url(sid: @signed_id) %>
+
+------------------------------------------------------------
+
+If you want to log in later on a different device (or if you log out), follow this link to get a new magic sign-in link: <%= magic_url %>.
