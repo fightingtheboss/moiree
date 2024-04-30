@@ -9,4 +9,6 @@ class Categorization < ApplicationRecord
   validates :category_id, uniqueness: { scope: :film_id }
 
   accepts_nested_attributes_for :category
+
+  scope :for_edition, ->(edition) { joins(:category).where(category: { edition_id: edition.id }) }
 end
