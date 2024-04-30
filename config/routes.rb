@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       resources :editions do
         get :search_for_film_to_add, to: "films#search_for_film_to_add_to_edition"
 
-        resources :selections, only: [:index, :new, :create] do
+        resources :selections do
           get :csv, on: :collection
           post :import, on: :collection
 

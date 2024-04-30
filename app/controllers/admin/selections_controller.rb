@@ -30,9 +30,102 @@ class Admin
         @selection.save!
       end
 
-      redirect_to(admin_festival_edition_path(@festival, @edition), notice: "#{@film.title} created")
+      respond_to do |format|
+        format.html do
+          redirect_to(admin_festival_edition_path(@festival, @edition), notice: "#{@film.title} created")
+        end
+
+        format.turbo_stream do
+          flash.now[:notice] = "#{@film.title} created"
+          render(turbo_stream: [
+            turbo_stream.prepend("flash", partial: "layouts/flash"),
+            turbo_stream.prepend(
+              "search-results",
+              partial: "admin/selections/selection",
+              locals: { festival: @festival, edition: @edition, selection: @selection },
+            ),
+          ])
+        end
+      end
     rescue ActiveRecord::RecordInvalid
-      render(:new)
+      respond_to do |format|
+        format.html { render(:new) }
+        format.turbo_stream do
+          flash.now[:alert] = @rating.errors.full_messages.join(", ")
+          render(
+            turbo_stream: [
+              turbo_stream.update(
+                "modal",
+                template: "admin/ratings/edit",
+                locals: { festival: @festival, edition: @edition, selection: @selection },
+              ),
+              turbo_stream.prepend("flash", partial: "layouts/flash"),
+            ],
+            status: :unprocessable_entity,
+          )
+        end
+      end
+    end
+
+    def edit
+      @selection = Selection.find(params[:id])
+      @film = @selection.film
+    end
+
+    def update
+      @selection = Selection.find(params[:id])
+      @film = @selection.film
+
+      @film.country = params[:film][:country].join(",") if params[:film][:country].present?
+
+      ActiveRecord::Base.transaction do
+        # Handle new category
+        category = category_for(edition: @edition)
+
+        @film.categories << category if category.new_record?
+
+        @selection.update!(selection_params_without_new_category)
+      end
+
+      respond_to do |format|
+        format.html do
+          redirect_to(
+            admin_festival_edition_path(@festival, @edition),
+            notice: "#{@film.title} updated for #{@edition.code}",
+          )
+        end
+
+        format.turbo_stream do
+          flash.now[:notice] = "#{@film.title} updated for #{@edition.code}"
+          render(turbo_stream: [
+            turbo_stream.prepend("flash", partial: "layouts/flash"),
+            turbo_stream.replace(
+              helpers.dom_id(@selection),
+              partial: "admin/selections/selection",
+              locals: { festival: @festival, edition: @edition, selection: @selection },
+            ),
+          ])
+        end
+      end
+    rescue ActiveRecord::RecordInvalid
+      respond_to do |format|
+        format.html { render(:edit) }
+
+        format.turbo_stream do
+          flash.now[:alert] = @rating.errors.full_messages.join(", ")
+          render(
+            turbo_stream: [
+              turbo_stream.update(
+                "modal",
+                template: "admin/ratings/edit",
+                locals: { festival: @festival, edition: @edition, selection: @selection },
+              ),
+              turbo_stream.prepend("flash", partial: "layouts/flash"),
+            ],
+            status: :unprocessable_entity,
+          )
+        end
+      end
     end
 
     def import
@@ -79,6 +172,7 @@ class Admin
           country: [],
           categorizations_attributes: [
             :category_id,
+            :id,
           ],
         ],
       )

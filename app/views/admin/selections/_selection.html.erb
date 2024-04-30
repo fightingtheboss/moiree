@@ -1,11 +1,26 @@
-<li class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow my-1 md:my-0">
-  <article>
-    <h2 class="text-xs uppercase tracking-wide font-light"><%= selection.film.categories.first.name %></h2>
-    <h1 class="font-semibold my-2 leading-tight"><%= selection.film.title %></h1>
-    <p class="text-sm my-0.5"><%= selection.film.director %></p>
-    <p class="text-sm my-0.5"><%= selection.film.countries.join(", ") %></p>
-    <p class="text-sm my-0.5"><%= selection.film.year %></p>
-  </article>
+<li id="<%= dom_id(selection) %>" class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow my-1 md:my-0 group">
+  <div class="flex justify-between">
+    <article class="basis-full">
+      <h2 class="text-xs uppercase tracking-wide font-light"><%= selection.film.categories.first.name %></h2>
+      <h1 class="font-semibold my-2 leading-tight"><%= selection.film.title %></h1>
+      <p class="text-sm my-0.5"><%= selection.film.director %></p>
+      <p class="text-sm my-0.5"><%= selection.film.countries.join(", ") %></p>
+      <p class="text-sm my-0.5"><%= selection.film.year %></p>
+    </article>
+    <% if policy(selection).edit? %>
+      <div class="opacity-0 group-hover:opacity-100">
+        <%= link_to "Edit", edit_admin_festival_edition_selection_path(@festival, @edition, selection),
+            data: {
+              turbo_frame: "modal",
+              controller: "modal",
+              action: "modal#show",
+              "modal-dialog-param": "global-modal"
+            },
+            class: "inline-block text-xs text-indigo-500 hover:text-indigo-700 hover:underline"
+        %>
+      </div>
+    <% end %>
+  </div>
 
   <aside id="<%= dom_id(selection) %>">
     <% unless critic_already_rated?(selection) || defined?(hide_rate_button) %>
