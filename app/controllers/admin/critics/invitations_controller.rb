@@ -12,9 +12,39 @@ class Admin
 
         if @user.save
           send_critic_invitation_email
-          redirect_to(new_admin_critics_invitation_path, notice: "An invitation email has been sent to #{@user.email}")
+
+          respond_to do |format|
+            format.html do
+              redirect_to(
+                new_admin_critics_invitation_path,
+                notice: "An invitation email has been sent to #{@user.email}",
+              )
+            end
+
+            format.turbo_stream do
+              flash.now[:notice] = "An invitation email has been sent to #{@user.email}"
+              render(turbo_stream: [
+                turbo_stream.prepend("flash", partial: "layouts/flash"),
+                turbo_stream.prepend("users-list", partial: "admin/users/critic", locals: { critic: @user.userable }),
+              ])
+            end
+          end
         else
-          render(:new, status: :unprocessable_entity)
+          respond_to do |format|
+            format.html { render(:new, status: :unprocessable_entity) }
+
+            format.turbo_stream do
+              flash.now[:alert] = @user.errors.full_messages.join(", ")
+
+              render(
+                turbo_stream: [
+                  turbo_stream.update("modal", template: "admin/critics/new"),
+                  turbo_stream.prepend("flash", partial: "layouts/flash"),
+                ],
+                status: :unprocessable_entity,
+              )
+            end
+          end
         end
       end
 
