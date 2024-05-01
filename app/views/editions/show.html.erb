@@ -25,7 +25,7 @@
               <div class="flex flex-col justify-between items-stretch max-h-44 w-full relative z-10">
                 <div class="[writing-mode:vertical-rl] text-left basis-full">
                   <p class="text-sm leading-tight ml-1"><%= critic.name %></p>
-                  <p class="text-xs font-light leading-tight"><%= critic.publication %></p>
+                  <p class="text-sm font-light leading-tight"><%= critic.publication %></p>
                 </div>
                 <p class="font-normal text-xs opacity-0 group-hover:opacity-100"><%= link_to "Hide", edition_path(@edition, request.query_parameters.merge("critics[]" => critic.id)), data: { "turbo-action": "advance" } %></p>
                 <p class="text-sm mt-2"><%= Country[critic.country].emoji_flag %></p>
