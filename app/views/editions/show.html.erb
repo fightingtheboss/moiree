@@ -22,20 +22,28 @@
         <% end %>
       </tr>
     </thead>
-    <tbody class="text-sm">
-      <% @selections.each do |selection| %>
-        <tr class=" hover:bg-indigo-600/10">
-          <th scope="row" class="border p-2 sticky left-0 z-10 bg-white"><%= selection.film.title %></th>
-          <td class="border p-2 text-center font-semibold"><%= number_with_precision(selection.film.ratings.average(:score), precision: 1) %></td>
-          <% @critics.each do |critic| %>
-            <% if (rating = @ratings[critic][selection]) %>
-              <td class="border p-2 text-center relative hover:border-indigo-600 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10"><%= rating.score %></td>
-            <% else %>
-              <td class="border p-2 text-center relative hover:border-indigo-600 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10">&nbsp;</td>
-            <% end %>
-          <% end %>
+    <% @selections_by_category.each do |category, selections| %>
+      <tbody class="text-sm">
+        <tr>
+          <th class="sticky left-0 top-52 z-30 bg-indigo-700 text-white">
+            <h3 class="px-4 py-1 text-xs uppercase text-left"><%= category.name %></h3>
+          </th>
+          <th colspan="1000" class="bg-indigo-700 text-white sticky top-52 z-20">&nbsp;</th>
         </tr>
-      <% end %>
-    </tbody>
+        <% selections.each do |selection| %>
+          <tr class=" hover:bg-indigo-600/10">
+            <th scope="row" class="border p-2 sticky left-0 z-10 bg-white"><%= selection.film.title %></th>
+            <td class="border p-2 text-center font-semibold"><%= number_with_precision(selection.ratings.average(:score), precision: 1) %></td>
+            <% @critics.each do |critic| %>
+              <% if (rating = @ratings[critic][selection]) %>
+                <td class="border p-2 text-center relative hover:border-indigo-600 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10"><%= rating.score %></td>
+              <% else %>
+                <td class="border p-2 text-center relative hover:border-indigo-600 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10">&nbsp;</td>
+              <% end %>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    <% end %>
   </table>
 </div>
