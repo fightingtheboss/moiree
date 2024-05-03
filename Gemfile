@@ -54,6 +54,8 @@ gem "countries", "~> 6.0", require: "countries/global"
 
 gem "pundit", "~> 2.3"
 
+gem "positioning"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: [:mri, :windows]
@@ -84,4 +86,4 @@ group :test do
   gem "mocha"
 end
 
-gem "dockerfile-rails", ">= 1.6", :group => :development
+gem "dockerfile-rails", ">= 1.6", group: :development
