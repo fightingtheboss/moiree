@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_15_193319) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_03_185949) do
   create_table "admins", force: :cascade do |t|
     t.string "username"
     t.datetime "created_at", null: false
@@ -22,6 +22,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_15_193319) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "position"
+    t.index ["edition_id", "position"], name: "index_categories_on_edition_id_and_position", unique: true
     t.index ["edition_id"], name: "index_categories_on_edition_id"
   end
 
