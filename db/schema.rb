@@ -22,7 +22,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_03_185949) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "position"
+    t.integer "position", null: false
     t.index ["edition_id", "position"], name: "index_categories_on_edition_id_and_position", unique: true
     t.index ["edition_id"], name: "index_categories_on_edition_id"
   end
