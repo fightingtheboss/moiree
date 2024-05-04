@@ -3,7 +3,9 @@
 base:
   edition: base
   name: Base Category
+  position: 1
 
 midnight:
   edition: base
   name: Midnight Madness
+  position: 2
