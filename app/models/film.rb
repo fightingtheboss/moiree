@@ -8,7 +8,15 @@ class Film < ApplicationRecord
 
   has_many :selections, dependent: :destroy, inverse_of: :film
   has_many :editions, through: :selections
-  has_many :ratings, through: :selections
+  has_many :ratings, through: :selections do
+    def for(edition)
+      where(selections: { edition_id: edition.id })
+    end
+
+    def by(critic)
+      where(ratings: { critic: critic })
+    end
+  end
 
   validates :title, :director, :country, :year, presence: true
 

@@ -46,7 +46,9 @@
           <% selections.each do |selection| %>
             <tr class=" hover:bg-indigo-600/10">
               <th scope="row" class="border p-2 sticky left-0 z-10 bg-white text-left">
-                <h4 class="text-sm leading-tight"><%= selection.film.title %></h4>
+                <h4 class="text-sm leading-tight">
+                  <%= link_to selection.film.title, film_url(selection.film), target: "_top", class: "hover:italic hover:text-indigo-700" %>
+                </h4>
                 <h5 class="mt-1 font-light text-sm leading-tight"><%= selection.film.directors.join(", ") %></h5>
               </th>
               <td class="border p-2 text-center font-semibold"><%= number_with_precision(selection.ratings.where(critic: @critics).average(:score), precision: 1) %></td>
