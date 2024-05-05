@@ -1,5 +1,8 @@
 # Changelog
 
+## 2024-05-05
+- Add detail view for Film showing all of the ratings across Editions, as well as overall
+
 ## 2024-05-04
 - Category ordering
   - A drag-and-drop view for defining the order categories will be displayed in grid

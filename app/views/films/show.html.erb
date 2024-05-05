@@ -4,8 +4,9 @@
       <h1 class="font-semibold text-4xl"><%= @film.title %></h1>
       <h2><%= @film.director %></h2>
       <h3><%= @film.country.split(",").map(&:strip).map { |c| "#{Country[c].emoji_flag} #{Country[c].common_name}" }.join(", ") %></h3>
+      <h4><%= @film.year %></h4>
     </div>
-    <div class="flex justify-between items-center text-center mt-4 md:block md:mt-0 md:px-8 py-2 px-4 md:pt-0">
+    <div class="flex justify-between items-center text-center mt-4 md:my-4 md:block md:mt-0 md:px-8 py-2 px-4 md:pt-0">
       <h3 class="font-semibold text-xl md:text-base uppercase">Overall rating</h3>
       <p class="font-black text-3xl md:text-6xl"><%= number_with_precision(@film.overall_average_rating, precision: 1) %></p>
       <p class="text-xs hidden md:block">across <%= pluralize(@film.editions.size, "festival") %></p>
