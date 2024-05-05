@@ -1,0 +1,34 @@
+<article>
+  <header class="bg-white pt-4 mb-4 px-4 md:px-8">
+    <h1 class="font-semibold text-2xl"><%= @critic.name %></h1>
+    <h2><%= @critic.publication %></h2>
+    <h3><%= "#{Country[@critic.country].emoji_flag} #{Country[@critic.country].common_name}" %></h3>
+  </header>
+  <section>
+    <% @editions.each do |edition| %>
+      <h3 class="sticky top-0 left-0 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
+      <table class="border-collapse border-spacing-0 w-full mb-4">
+        <thead>
+          <tr class="sticky top-7 left-0">
+            <th class="border border-indigo-100 border-l-0 p-2 pl-4 text-left bg-indigo-700 text-white w-7/12">Film</th>
+            <th class="border border-indigo-100 p-2 pl-4 bg-indigo-700 text-white w-3/12">Category</th>
+            <th class="border border-indigo-100 border-r-0 p-2 bg-indigo-700 text-white w-2/12">Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @ratings.for(edition).each do |rating| %>
+            <tr class="hover:bg-indigo-50">
+              <td class="border border-indigo-100 border-l-0 p-2 pl-4">
+                <h1 class="font-semibold"><%= link_to rating.film.title, film_url(rating.film), target: "_top", class: "hover:italic hover:text-indigo-700" %></h1>
+                <h2><%= rating.film.director %></h2>
+                <h3><%= rating.film.year %></h3>
+              </td>
+              <td class="border border-indigo-100 p-2 text-center"><%= rating.film.category(edition: edition).name %></td>
+              <td class="border border-indigo-100 border-r-0 p-2 text-center"><%= rating.score %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </section>
+</article>

@@ -4,6 +4,7 @@ class Rating < ApplicationRecord
   belongs_to :critic
   belongs_to :selection
 
+  has_one :edition, through: :selection
   has_one :film, through: :selection
 
   validates :score, presence: true

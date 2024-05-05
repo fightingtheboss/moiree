@@ -3,8 +3,13 @@
 class Critic < ApplicationRecord
   include Userable
 
-  has_many :ratings, dependent: :destroy
+  has_many :ratings, dependent: :destroy do
+    def for(edition)
+      joins(:selection).where(ratings: { selections: { edition_id: edition.id } })
+    end
+  end
   has_many :selections, through: :ratings
+  has_many :editions, through: :selections
   has_many :films, through: :selections
 
   validates :first_name, :last_name, presence: true

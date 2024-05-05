@@ -15,7 +15,7 @@
 
   <section>
     <% @film.editions.order("editions.start_date DESC").each do |edition| %>
-      <h3 class="text-xl font-semibold px-4 py-4 bg-indigo-900 text-white"><%= edition.name %></h3>
+      <h3 class="text-xl font-semibold px-4 py-4 bg-indigo-900 text-white"><%= edition.code %></h3>
       <table class="border-collapse border-spacing-0 w-full mb-4">
         <thead>
           <tr>
