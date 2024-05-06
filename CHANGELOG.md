@@ -3,6 +3,8 @@
 ## 2024-05-05
 - Add detail view for Film showing all of the ratings across Editions, as well as overall
 - Add detail view for Critic showing all of their ratings, per Edition
+- Wire up links to Films and Critics everywhere
+- Standardize the layout padding across public and admin pages
 
 ## 2024-05-04
 - Category ordering

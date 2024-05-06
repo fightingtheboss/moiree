@@ -21,9 +21,6 @@ When an Admin is invited, their account is created and they're sent a link to re
 
 
 ## Roadmap
-- Individual views
-  - Ratings by Film
-  - Ratings by Critic
 - Grid sorting and filtering
   - Need to show film country
   - Add a filtering toolbar

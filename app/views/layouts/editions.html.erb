@@ -1,6 +1,6 @@
 <% content_for :content do %>
   <main>
-    <header class="flex justify-between items-center w-full px-4 pt-4 md:px-8 backdrop-blur-md bg-white">
+    <header class="flex justify-between items-center w-full px-4 pt-4 backdrop-blur-md bg-white">
       <div>
         <nav>
           <ul class="flex text-xs font-medium">
@@ -16,7 +16,7 @@
       <% end %>
     </header>
     <nav>
-      <ul class="flex bg-white text-slate-500 px-4 md:px-8 font-medium ">
+      <ul class="flex bg-white text-slate-500 px-4 font-medium ">
         <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if controller_name == "editions" || controller_name == "films" %>">
           <%= link_to "Films", admin_festival_edition_path(@festival, @edition), class: "inline-block" %>
         </li>

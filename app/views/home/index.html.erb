@@ -7,7 +7,7 @@
   <p class="hidden md:block font-normal text-indigo-700 md:text-2xl text-center pb-4 z-10 -my-12 absolute left-[50%] -translate-x-1/2">Critic ratings from film festivals around the world</p>
 </header>
 
-<section class="mx-4 md:mx-8">
+<section class="mx-4">
   <% if @current.any? || @upcoming.any? || @past.any? %>
     <% [["Current", @current], ["Upcoming", @upcoming], ["Past", @past]].each do |(label, festivals)| %>
       <% if festivals.any? %>
