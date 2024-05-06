@@ -5,6 +5,7 @@
 - Add detail view for Critic showing all of their ratings, per Edition
 - Wire up links to Films and Critics everywhere
 - Standardize the layout padding across public and admin pages
+- Fix missing logo in transactional emails
 
 ## 2024-05-04
 - Category ordering

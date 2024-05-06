@@ -8,7 +8,9 @@
   </head>
 
   <body style="font-family: sans-serif; max-width: 512px; margin: 2rem auto; line-height: 1.5; background-color: #f8fafc;">
-    <header style="margin: 0; text-align: center; background-color: #4338ca; padding: 16px 0; border-top-right-radius: 6px; border-top-left-radius: 6px;"><%= image_tag "moiree-logo.png", width: 84, height: 84, style: "display: inline-block; margin: 0; padding: 0" %></header>
+    <header style="margin: 0; text-align: center; background-color: #4338ca; padding: 16px 0; border-top-right-radius: 6px; border-top-left-radius: 6px;">
+      <%= image_tag attachments["moiree-logo.png"].url, width: 84, height: 84, style: "display: inline-block; margin: 0; padding: 0" %>
+    </header>
     <div style="background-color: white; border-radius: 6px; padding: 16px 32px;">
       <%= yield %>
     </div>
