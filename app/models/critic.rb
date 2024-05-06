@@ -3,6 +3,9 @@
 class Critic < ApplicationRecord
   include Userable
 
+  has_many :attendances, dependent: :destroy
+  has_many :editions_attended, through: :attendances, class_name: "Edition", source: :edition
+
   has_many :ratings, dependent: :destroy do
     def for(edition)
       joins(:selection).where(ratings: { selections: { edition_id: edition.id } })

@@ -10,11 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_03_185949) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_06_160049) do
   create_table "admins", force: :cascade do |t|
     t.string "username"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "attendances", force: :cascade do |t|
+    t.integer "critic_id", null: false
+    t.integer "edition_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["critic_id"], name: "index_attendances_on_critic_id"
+    t.index ["edition_id"], name: "index_attendances_on_edition_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -122,6 +131,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_03_185949) do
     t.index ["userable_type", "userable_id"], name: "index_users_on_userable"
   end
 
+  add_foreign_key "attendances", "critics"
+  add_foreign_key "attendances", "editions"
   add_foreign_key "categories", "editions"
   add_foreign_key "categorizations", "categories"
   add_foreign_key "categorizations", "films"

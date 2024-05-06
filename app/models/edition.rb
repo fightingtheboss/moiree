@@ -3,6 +3,9 @@
 class Edition < ApplicationRecord
   belongs_to :festival
 
+  has_many :attendances, dependent: :destroy
+  has_many :critics, through: :attendances
+
   has_many :categories, dependent: :destroy
 
   has_many :selections, dependent: :destroy
