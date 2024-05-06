@@ -1,18 +1,20 @@
 <article>
-  <header class="bg-white pt-4 mb-4 px-4 md:px-8">
-    <h1 class="font-semibold text-2xl"><%= @critic.name %></h1>
-    <h2><%= @critic.publication %></h2>
-    <h3><%= "#{Country[@critic.country].emoji_flag} #{Country[@critic.country].common_name}" %></h3>
+  <header class="sticky top-0 left-0 z-30 bg-white py-1 overflow-y-scroll whitespace-nowrap px-4">
+    <div class="flex items-center gap-2">
+      <h1 class="font-semibold text-sm"><%= @critic.name %></h1>•
+      <h2 class="text-sm"><%= @critic.publication %></h2>•
+      <h3 class="text-sm"><%= "#{Country[@critic.country].emoji_flag}" %></h3>
+    </div>
   </header>
   <section>
     <% @editions.each do |edition| %>
-      <h3 class="sticky top-0 left-0 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
+      <h3 class="sticky top-8 left-0 z-20 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
       <table class="border-collapse border-spacing-0 w-full mb-4">
         <thead>
-          <tr class="sticky top-7 left-0">
-            <th class="border border-indigo-100 border-l-0 p-2 pl-4 text-left bg-indigo-700 text-white w-7/12">Film</th>
-            <th class="border border-indigo-100 p-2 pl-4 bg-indigo-700 text-white w-3/12">Category</th>
-            <th class="border border-indigo-100 border-r-0 p-2 bg-indigo-700 text-white w-2/12">Rating</th>
+          <tr class="sticky top-14 left-0 z-10">
+            <th class="border border-indigo-100 border-l-0 p-2 pl-4 text-left bg-indigo-700 text-white w-7/12 text-sm">Film</th>
+            <th class="border border-indigo-100 p-2 pl-4 bg-indigo-700 text-white w-3/12 text-sm">Category</th>
+            <th class="border border-indigo-100 border-r-0 p-2 bg-indigo-700 text-white w-2/12 text-sm">Rating</th>
           </tr>
         </thead>
         <tbody>

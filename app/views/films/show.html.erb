@@ -1,40 +1,43 @@
 <article>
-  <header class="md:flex md:justify-between bg-white pt-4 mb-4">
-    <div class="px-4 md:px-8">
-      <h1 class="font-semibold text-4xl"><%= @film.title %></h1>
-      <h2><%= @film.director %></h2>
-      <h3><%= @film.country.split(",").map(&:strip).map { |c| "#{Country[c].emoji_flag} #{Country[c].common_name}" }.join(", ") %></h3>
-      <h4><%= @film.year %></h4>
-    </div>
-    <div class="flex justify-between items-center text-center mt-4 md:my-4 md:block md:mt-0 md:px-8 py-2 px-4 md:pt-0">
-      <h3 class="font-semibold text-xl md:text-base uppercase">Overall rating</h3>
-      <p class="font-black text-3xl md:text-6xl"><%= number_with_precision(@film.overall_average_rating, precision: 1) %></p>
-      <p class="text-xs hidden md:block">across <%= pluralize(@film.editions.size, "festival") %></p>
+  <header class="sticky top-0 left-0 bg-white py-1 overflow-y-scroll whitespace-nowrap px-4">
+    <div class="flex items-center gap-2">
+      <h1 class="font-semibold text-sm"><%= @film.title %></h1>•
+      <h2 class="text-sm"><%= @film.director %></h2>•
+      <h4 class="text-sm"><%= @film.year %></h4>•
+      <h3 class="text-sm"><%= @film.country.split(",").map(&:strip).map { |c| "#{Country[c].emoji_flag}" }.join(" ") %></h3>
     </div>
   </header>
 
+  <div class="flex justify-between items-center text-center md:my-4 md:block md:px-8 py-2 px-4 md:mx-auto md:max-w-96 md:rounded-md md:shadow-md">
+    <h3 class="font-semibold text-xl md:text-base uppercase">Overall rating</h3>
+    <p class="font-black text-3xl md:text-6xl"><%= number_with_precision(@film.overall_average_rating, precision: 1) %></p>
+    <p class="text-xs hidden md:block">across <%= pluralize(@film.editions.size, "festival") %></p>
+  </div>
+
   <section>
     <% @film.editions.order("editions.start_date DESC").each do |edition| %>
-      <h3 class="text-xl font-semibold px-4 py-4 bg-indigo-900 text-white"><%= edition.code %></h3>
+      <h3 class="sticky top-7 left-0 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
       <table class="border-collapse border-spacing-0 w-full mb-4">
         <thead>
-          <tr>
-            <th class="border border-indigo-100 p-2 pl-4 text-left bg-indigo-700 text-white">Average rating</th>
-            <th class="border border-indigo-100 p-2 bg-indigo-700 text-white"><%= number_with_precision(@film.ratings.for(edition).average(:score), precision: 1) %></th>
+          <tr class="sticky top-[3.4rem] left-0">
+            <th class="border border-indigo-100 border-l-0 px-2 pl-4 py-1 text-left bg-indigo-700 text-white text-sm">Average rating</th>
+            <th class="border border-indigo-100 border-r-0 px-2 py-1 bg-indigo-700 text-white text-sm"><%= number_with_precision(@film.ratings.for(edition).average(:score), precision: 1) %></th>
           </tr>
-          <tr>
-            <th class="border border-indigo-100 text-left p-4 bg-indigo-50">Critic</th>
-            <th class="border border-indigo-100 p-4 bg-indigo-50">Rating</th>
+          <tr class="sticky top-[5.1rem] left-0 shadow">
+            <th class="border border-indigo-100 border-l-0 text-left px-4 py-1 bg-indigo-50 text-sm">Critic</th>
+            <th class="border border-indigo-100 border-r-0 px-4 py-1 bg-indigo-50 text-sm">Rating</th>
           </tr>
         </thead>
         <tbody>
           <% @film.ratings.includes(:critic).for(edition).each do |rating| %>
             <tr class="hover:bg-indigo-50">
-              <td class="border border-indigo-100 p-2 pl-4">
-                <h1 class="font-semibold"><%= rating.critic.name %></h1>
+              <td class="border border-indigo-100 border-l-0 p-2 pl-4">
+                <h1 class="font-semibold">
+                  <%= link_to rating.critic.name, critic_path(rating.critic), target: "_top", class: "hover:italic hover:text-indigo-700" %>
+                </h1>
                 <h2><%= rating.critic.publication %></h2>
               </td>
-              <td class="border border-indigo-100 p-2 text-center"><%= rating.score %></td>
+              <td class="border border-indigo-100 border-r-0 p-2 text-center"><%= rating.score %></td>
             </tr>
           <% end %>
         </tbody>
