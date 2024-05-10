@@ -1,6 +1,6 @@
 <% content_for :content do %>
   <main>
-    <nav class="flex justify-between bg-white text-slate-500 px-4 md:px-8 font-medium items-center">
+    <nav class="flex justify-between bg-white text-slate-500 px-4 font-medium items-center">
       <ul class="flex">
         <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if current_page?(controller: :users, action: :critics) %>">
           <%= link_to "Critics", critics_admin_users_path, class: "inline-block" %>
