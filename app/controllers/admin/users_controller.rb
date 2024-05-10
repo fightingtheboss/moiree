@@ -9,7 +9,7 @@ class Admin
     end
 
     def critics
-      @critics = Critic.all
+      @critics = Critic.includes(:user, :ratings, :edition_attendances).all
     end
 
     def admins
