@@ -4,6 +4,12 @@ import { patch } from "@rails/request.js";
 
 // Connects to data-controller="sortable"
 export default class extends Controller {
+  static values = {
+    sort: { type: Boolean, default: true },
+    group: String,
+    url: String,
+  };
+
   connect() {
     const options = {
       onEnd: this.onEnd.bind(this),
@@ -16,7 +22,7 @@ export default class extends Controller {
   }
 
   onEnd(event) {
-    const body = { position: event.newIndex };
+    const body = { position: event.newIndex + 1 };
 
     patch(event.item.dataset.sortableUrl, {
       body: JSON.stringify(body),
