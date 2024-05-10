@@ -4,7 +4,7 @@ class Critic < ApplicationRecord
   include Userable
 
   has_many :attendances, dependent: :destroy
-  has_many :editions_attended, through: :attendances, class_name: "Edition", source: :edition
+  has_many :edition_attendances, through: :attendances, class_name: "Edition", source: :edition
 
   has_many :ratings, dependent: :destroy do
     def for(edition)
@@ -17,6 +17,8 @@ class Critic < ApplicationRecord
 
   validates :first_name, :last_name, presence: true
   validates :country, inclusion: { in: ISO3166::Country.all.map(&:alpha2) }
+
+  accepts_nested_attributes_for :attendances
 
   def name
     "#{first_name} #{last_name}"
