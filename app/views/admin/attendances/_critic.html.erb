@@ -1,0 +1,12 @@
+<li id="<%= dom_id(critic) %>" data-critic-id="<%= critic.id %>" <%= "data-attendance-id=#{attendance.id}" if defined?(attendance) %>>
+  <article class="bg-white mb-2 p-4 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow hover:cursor-grab active:cursor-grabbing">
+    <header class="">
+      <h1 class="font-semibold">
+        <%= link_to critic.name, critic_url(critic), class: "hover:italic hover:text-indigo-700", target: "_top" %>
+      </h1>
+      <h2 class="text-sm font-mono leading-relaxed hidden md:block"><%= critic.email %></h2>
+      <h4 class="text-sm leading-relaxed hidden md:block"><%= critic.publication %></h4>
+      <h3 class="text-sm leading-relaxed hidden md:block"><%= "#{Country[critic.country].emoji_flag} #{Country[critic.country].common_name}" %></h3>
+    </header>
+  </article>
+</li>

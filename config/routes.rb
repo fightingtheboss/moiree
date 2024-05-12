@@ -24,6 +24,8 @@ Rails.application.routes.draw do
       resources :editions do
         get :search_for_film_to_add, to: "films#search_for_film_to_add_to_edition"
 
+        resources :attendances, only: [:index, :create, :destroy]
+
         resources :categories, only: [:index] do
           patch :reorder, on: :member
         end
@@ -44,6 +46,10 @@ Rails.application.routes.draw do
     end
 
     resource :invitation, only: [:new, :create]
+
+    resources :critics, only: [] do
+      resources :attendances, only: [:new, :create], module: "critics"
+    end
 
     namespace :critics do
       resource :invitation, only: [:new, :create]

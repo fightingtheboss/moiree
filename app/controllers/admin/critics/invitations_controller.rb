@@ -38,7 +38,7 @@ class Admin
 
               render(
                 turbo_stream: [
-                  turbo_stream.update("modal", template: "admin/critics/new"),
+                  turbo_stream.update("modal", template: "admin/critics/invitations/new"),
                   turbo_stream.prepend("flash", partial: "layouts/flash"),
                 ],
                 status: :unprocessable_entity,

@@ -1,0 +1,41 @@
+<header class="m-4">
+  <h1 class="font-semibold">Manage Critics for <%= @edition.code %></h1>
+  <p class="text-sm md:text-xs">Drag and drop critics to add and remove them from the edition. The order of the critics in the list isn't significant.</p>
+</header>
+
+<div class="md:fixed md:top-52 md:h-[calc(100%-13rem)] md:w-full md:overflow-hidden md:grid md:grid-cols-[minmax(0,1fr),24px,minmax(0,1fr)]">
+  <div class="h-full overflow-y-scroll bg-slate-50 md:ml-4">
+    <h2 class="sticky top-0 left-0 mb-2 px-4 py-1 font-semibold bg-indigo-700 text-white">Attending Critics</h2>
+    <ul id="attending-critics"
+      data-controller="sortable"
+      data-sortable-sort-value="false"
+      data-sortable-group-value="attendances"
+      data-sortable-source-list-value
+      data-sortable-url-value="<%= admin_festival_edition_attendances_path(@festival, @edition) %>"
+      class="min-h-28 [&:not(:has(>li))]:bg-indigo-50">
+      <% @attendances.each do |attendance| %>
+        <%= render partial: "admin/attendances/critic", locals: { critic: attendance.critic, attendance: attendance } %>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="hidden md:block place-content-center place-items-center">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 8h14M5 8l4 4M5 8l4-4"/>
+      <path d="M19 16H5M19 16l-4 4M19 16l-4-4"/>
+    </svg>
+  </div>
+
+  <div class="h-full overflow-y-scroll bg-slate-50 md:mr-4">
+    <h2 class="sticky top-0 left-0 mb-2 px-4 py-1 font-semibold bg-indigo-700 text-white">Remaining Critics</h2>
+    <ul id="other-critics"
+      data-controller="sortable"
+      data-sortable-sort-value="false"
+      data-sortable-group-value="attendances"
+      class="">
+      <% @remaining_critics.each do |critic| %>
+        <%= render partial: "admin/attendances/critic", locals: { critic: critic } %>
+      <% end %>
+    </ul>
+  </div>
+</div>

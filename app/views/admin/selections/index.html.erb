@@ -1,4 +1,10 @@
 <div class="mx-4">
+  <% if Current.user.critic? && !@edition.critics.include?(Current.user.userable) %>
+    <p class="mt-1 p-2 font-semibold text-center bg-[repeating-linear-gradient(-45deg,#c7d2fe_0px,#c7d2fe_4px,#eef2ff_4px,#eef2ff_8px)]">
+      If you're attending this festival, ask an admin to add you as a critic to be able to rate films
+    </p>
+  <% end %>
+
   <% if policy(Film).create? %>
     <header class="my-4">
       <%= link_to "Import CSV", csv_admin_festival_edition_selections_path(@festival, @edition),

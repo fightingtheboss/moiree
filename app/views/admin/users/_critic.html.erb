@@ -1,14 +1,21 @@
 <li>
   <article class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow">
     <header class="mb-4">
-      <h1 class="font-semibold"><%= critic.name %></h1>
-      <h2><%= critic.email %></h2>
-      <h3><%= Country[critic.country].common_name %></h3>
-      <h4><%= critic.publication %></h4>
+      <h1 class="font-semibold">
+        <%= link_to critic.name, critic_url(critic), class: "hover:italic hover:text-indigo-700", target: "_top" %>
+      </h1>
+      <h2 class="text-sm font-mono leading-relaxed"><%= critic.email %></h2>
+      <h4 class="text-sm leading-relaxed"><%= critic.publication %></h4>
+      <h3 class="text-sm leading-relaxed"><%= "#{Country[critic.country].emoji_flag} #{Country[critic.country].common_name}" %></h3>
     </header>
     <footer class="flex justify-between items-center">
-      <div class="px-2 py-1 bg-teal-500 text-white rounded">
-        <%= pluralize(critic.ratings.size, "rating") %>
+      <div class="flex gap-2">
+        <div class="px-2 py-1 bg-violet-500 text-white text-xs rounded hover:bg-violet-700">
+          <%= pluralize(critic.edition_attendances.size, "edition") %>
+        </div>
+        <div class="px-2 py-1 bg-teal-500 text-white text-xs rounded hover:bg-teal-700">
+          <%= link_to pluralize(critic.ratings.size, "rating"), critic_url(critic), target: "_top" %>
+        </div>
       </div>
       <div>
         <%= button_to "🗑️", admin_user_path(critic.user.id), method: :delete, data: { "turbo-confirm": "Are you sure you want to delete #{critic.name}? This action is irreversible."} %>

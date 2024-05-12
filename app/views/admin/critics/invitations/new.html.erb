@@ -1,47 +1,48 @@
 <p style="color: green"><%= notice %></p>
+<div class="my-4 max-w-screen-sm mx-auto">
+  <%= turbo_frame_tag "modal" do %>
+    <h1 class="text-2xl font-semibold mb-4">Invite a critic</h1>
+    <p class="mb-8">Once you submit this form, an account will be created for the critic and an invitation email will be sent to them to get them started.</p>
 
-<%= turbo_frame_tag "modal" do %>
-  <h1 class="text-2xl font-semibold mb-4">Invite a critic</h1>
-  <p class="mb-8">Once you submit this form, an account will be created for the critic and an invitation email will be sent to them to get them started.</p>
+    <%= form_with(model: @user, url: admin_critics_invitation_path) do |form| %>
+      <%= render partial: "shared/errors", locals: { model: @user } %>
 
-  <%= form_with(model: @user, url: admin_critics_invitation_path) do |form| %>
-    <%= render partial: "shared/errors", locals: { model: @user } %>
-
-    <div class="mb-4">
-      <%= form.label :email, class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= form.email_field :email, required: true, autofocus: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
-    </div>
-
-    <%= form.fields_for :userable do |userable_form| %>
       <div class="mb-4">
-        <%= userable_form.label :first_name, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= userable_form.text_field :first_name, required: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+        <%= form.label :email, class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= form.email_field :email, required: true, autofocus: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
       </div>
 
-      <div class="mb-4">
-        <%= userable_form.label :last_name, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= userable_form.text_field :last_name, required: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
-      </div>
+      <%= form.fields_for :userable do |userable_form| %>
+        <div class="mb-4">
+          <%= userable_form.label :first_name, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= userable_form.text_field :first_name, required: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+        </div>
 
-      <div class="mb-4">
-        <%= userable_form.label :publication, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= userable_form.text_field :publication, required: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
-      </div>
+        <div class="mb-4">
+          <%= userable_form.label :last_name, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= userable_form.text_field :last_name, required: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+        </div>
 
-      <div class="mb-4">
-        <%= userable_form.label :country, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= userable_form.select :country, options_for_select(countries_select), { required: true }, { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" } %>
+        <div class="mb-4">
+          <%= userable_form.label :publication, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= userable_form.text_field :publication, required: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+        </div>
+
+        <div class="mb-4">
+          <%= userable_form.label :country, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= userable_form.select :country, options_for_select(countries_select), { required: true }, { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" } %>
+        </div>
+      <% end %>
+
+      <div>
+        <%= form.hidden_field :userable_type, value: "Critic" %>
+        <%= form.submit "Send invitation", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
       </div>
     <% end %>
-
-    <div>
-      <%= form.hidden_field :userable_type, value: "Critic" %>
-      <%= form.submit "Send invitation", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-    </div>
   <% end %>
-<% end %>
-<br>
+  <br>
 
-<div>
-  <%= link_to "Back", root_path %>
+  <div>
+    <%= link_to "Back", root_path %>
+  </div>
 </div>

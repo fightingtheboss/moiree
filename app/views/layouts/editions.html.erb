@@ -28,9 +28,14 @@
             <%= link_to "Categories", admin_festival_edition_categories_path(@festival, @edition), class: "inline-block" %>
           </li>
         <% end %>
+        <% if policy(Attendance).update? %>
+          <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if controller_name == "attendances" %>">
+            <%= link_to "Critics", admin_festival_edition_attendances_path(@festival, @edition), class: "inline-block" %>
+          </li>
+        <% end %>
       </ul>
     </nav>
-    <section class="md:min-h-screen">
+    <section class="md:min-h-[calc(100vh-9.25rem)]">
       <turbo-frame id="edition-detail">
         <%= yield %>
       </turbo-frame>

@@ -22,13 +22,15 @@
     <% end %>
   </div>
 
-  <aside id="<%= dom_id(selection) %>">
-    <% unless critic_already_rated?(selection) || defined?(hide_rate_button) %>
-      <%= render partial: "admin/ratings/new_rating_button", locals: { festival: @festival, edition: @edition, selection: selection } %>
-    <% end %>
+  <% if Current.user.admin? || (Current.user.critic? && Current.user.userable.edition_attendances.include?(@edition)) %>
+    <aside id="<%= dom_id(selection) %>">
+      <% unless critic_already_rated?(selection) || defined?(hide_rate_button) %>
+        <%= render partial: "admin/ratings/new_rating_button", locals: { festival: @festival, edition: @edition, selection: selection } %>
+      <% end %>
 
-    <% if critic_already_rated?(selection) %>
-      <%= render partial: "admin/ratings/edit_rating_button", locals: { festival: @festival, edition: @edition, selection: selection, rating: Current.user.userable.ratings.find_by(selection: selection) } %>
-    <% end %>
-  </aside>
+      <% if critic_already_rated?(selection) %>
+        <%= render partial: "admin/ratings/edit_rating_button", locals: { festival: @festival, edition: @edition, selection: selection, rating: Current.user.userable.ratings.find_by(selection: selection) } %>
+      <% end %>
+    </aside>
+  <% end %>
 </li>

@@ -1,7 +1,7 @@
 <div class="">
   <p class="mx-4 md:mx-auto max-w-screen-sm my-8">Drag and drop the categories to set the order that they'll be displayed on the grid</p>
 
-  <ul class="mx-4 md:mx-auto max-w-screen-sm" data-controller="sortable">
+  <ul class="mx-4 md:mx-auto max-w-screen-sm" data-controller="sortable" data-sortable-handle-value=".sortable-handle">
     <% @categories.each do |category| %>
       <li class="p-4 bg-white rounded shadow my-2 flex" data-sortable-url="<%= reorder_admin_festival_edition_category_path(@festival, @edition, category) %>">
         <div class="sortable-handle cursor-pointer">
