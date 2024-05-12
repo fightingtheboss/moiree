@@ -1,5 +1,11 @@
 # Changelog
 
+## 2024-05-11
+- Add ability to mark a Critic as attending an Edition
+  - Attending critics will show up in the grid even if they haven't rated anything yet (solves the cold start problem)
+  - Critics can't rate films in Editions they're not set to attend
+  - Admins mark Critics as attending an Edition via the drag-and-drop admin
+
 ## 2024-05-05
 - Add detail view for Film showing all of the ratings across Editions, as well as overall
 - Add detail view for Critic showing all of their ratings, per Edition
