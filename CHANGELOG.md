@@ -1,5 +1,11 @@
 # Changelog
 
+## 2024-05-13
+- Add ability to edit Critics
+
+## 2024-05-12
+- Fixes for grid rendering on Safari
+
 ## 2024-05-11
 - Add ability to mark a Critic as attending an Edition
   - Attending critics will show up in the grid even if they haven't rated anything yet (solves the cold start problem)

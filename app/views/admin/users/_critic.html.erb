@@ -1,13 +1,30 @@
-<li>
-  <article class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow">
-    <header class="mb-4">
-      <h1 class="font-semibold">
-        <%= link_to critic.name, critic_url(critic), class: "hover:italic hover:text-indigo-700", target: "_top" %>
-      </h1>
-      <h2 class="text-sm font-mono leading-relaxed"><%= critic.email %></h2>
-      <h4 class="text-sm leading-relaxed"><%= critic.publication %></h4>
-      <h3 class="text-sm leading-relaxed"><%= "#{Country[critic.country].emoji_flag} #{Country[critic.country].common_name}" %></h3>
+<li id="<%= dom_id(critic) %>">
+  <article class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow group">
+    <header class="flex justify-between mb-4">
+      <div>
+        <h1 class="font-semibold">
+          <%= link_to critic.name, critic_url(critic), class: "hover:italic hover:text-indigo-700", target: "_top" %>
+        </h1>
+        <h2 class="text-sm font-mono leading-relaxed"><%= critic.email %></h2>
+        <h4 class="text-sm leading-relaxed"><%= critic.publication %></h4>
+        <h3 class="text-sm leading-relaxed"><%= "#{Country[critic.country].emoji_flag} #{Country[critic.country].common_name}" %></h3>
+      </div>
+
+      <% if policy(critic).edit? %>
+        <div class="opacity-0 group-hover:opacity-100">
+          <%= link_to "Edit", edit_admin_critic_path(critic),
+              data: {
+                turbo_frame: "modal",
+                controller: "modal",
+                action: "modal#show",
+                "modal-dialog-param": "global-modal"
+              },
+              class: "inline-block text-xs text-indigo-500 hover:text-indigo-700 hover:underline"
+          %>
+        </div>
+      <% end %>
     </header>
+
     <footer class="flex justify-between items-center">
       <div class="flex gap-2">
         <div class="px-2 py-1 bg-violet-500 text-white text-xs rounded hover:bg-violet-700">
