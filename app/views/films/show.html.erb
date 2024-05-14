@@ -8,40 +8,46 @@
     </div>
   </header>
 
-  <div class="flex justify-between items-center text-center md:my-4 md:block md:px-8 py-2 px-4 md:mx-auto md:max-w-96">
-    <h3 class="font-semibold text-xl md:text-base uppercase">Overall rating</h3>
-    <p class="font-black text-3xl md:text-6xl"><%= number_with_precision(@film.overall_average_rating, precision: 1) %></p>
-    <p class="text-xs hidden md:block">across <%= pluralize(@film.editions.size, "festival") %></p>
-  </div>
+  <% if @film.ratings.any? %>
+    <div class="flex justify-between items-center text-center md:my-4 md:block md:px-8 py-2 px-4 md:mx-auto md:max-w-96">
+      <h3 class="font-semibold text-xl md:text-base uppercase">Overall average</h3>
+      <p class="font-black text-3xl md:text-6xl"><%= number_with_precision(@film.overall_average_rating, precision: 1) %></p>
+      <p class="text-xs hidden md:block">across <%= pluralize(@film.editions.size, "festival") %></p>
+    </div>
 
-  <section>
-    <% @film.editions.order("editions.start_date DESC").each do |edition| %>
-      <h3 class="sticky top-7 left-0 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
-      <table class="border-collapse border-spacing-0 w-full mb-4">
-        <thead>
-          <tr class="sticky top-[3.4rem] left-0">
-            <th class="border border-indigo-100 border-l-0 px-2 pl-4 py-1 text-left bg-indigo-700 text-white text-sm">Average rating</th>
-            <th class="border border-indigo-100 border-r-0 px-2 py-1 bg-indigo-700 text-white text-sm"><%= number_with_precision(@film.ratings.for(edition).average(:score), precision: 1) %></th>
-          </tr>
-          <tr class="sticky top-[5.1rem] left-0 shadow">
-            <th class="border border-indigo-100 border-l-0 text-left px-4 py-1 bg-indigo-50 text-sm">Critic</th>
-            <th class="border border-indigo-100 border-r-0 px-4 py-1 bg-indigo-50 text-sm">Rating</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @film.ratings.includes(:critic).for(edition).each do |rating| %>
-            <tr class="hover:bg-indigo-50">
-              <td class="border border-indigo-100 border-l-0 p-2 pl-4">
-                <h1 class="font-semibold">
-                  <%= link_to rating.critic.name, critic_path(rating.critic), target: "_top", class: "hover:italic hover:text-indigo-700" %>
-                </h1>
-                <h2><%= rating.critic.publication %></h2>
-              </td>
-              <td class="border border-indigo-100 border-r-0 p-2 text-center"><%= rating.score %></td>
+    <section>
+      <% @film.editions.order("editions.start_date DESC").each do |edition| %>
+        <h3 class="sticky top-7 left-0 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
+        <table class="border-collapse border-spacing-0 w-full mb-4">
+          <thead>
+            <tr class="sticky top-[3.4rem] left-0">
+              <th class="border border-indigo-100 border-l-0 px-2 pl-4 py-1 text-left bg-indigo-700 text-white text-sm">Average rating</th>
+              <th class="border border-indigo-100 border-r-0 px-2 py-1 bg-indigo-700 text-white text-sm"><%= number_with_precision(@film.ratings.for(edition).average(:score), precision: 1) %></th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
-  </section>
+            <tr class="sticky top-[5.1rem] left-0 shadow">
+              <th class="border border-indigo-100 border-l-0 text-left px-4 py-1 bg-indigo-50 text-sm">Critic</th>
+              <th class="border border-indigo-100 border-r-0 px-4 py-1 bg-indigo-50 text-sm">Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @film.ratings.includes(:critic).for(edition).each do |rating| %>
+              <tr class="hover:bg-indigo-50">
+                <td class="border border-indigo-100 border-l-0 p-2 pl-4">
+                  <h1 class="font-semibold">
+                    <%= link_to rating.critic.name, critic_path(rating.critic), target: "_top", class: "hover:italic hover:text-indigo-700" %>
+                  </h1>
+                  <h2><%= rating.critic.publication %></h2>
+                </td>
+                <td class="border border-indigo-100 border-r-0 p-2 text-center"><%= rating.score %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </section>
+  <% else %>
+    <section class="grid h-[calc(100vh-4rem)]">
+      <p class="place-content-center place-items-center text-center">No ratings yet</p>
+    </section>
+  <% end %>
 </article>
