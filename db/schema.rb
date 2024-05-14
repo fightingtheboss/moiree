@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_14_021701) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_14_021913) do
   create_table "admins", force: :cascade do |t|
     t.string "username"
     t.datetime "created_at", null: false
@@ -63,6 +63,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_14_021701) do
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
+    t.index ["festival_id", "slug"], name: "index_editions_on_festival_id_and_slug", unique: true
     t.index ["festival_id"], name: "index_editions_on_festival_id"
   end
 
