@@ -47,9 +47,7 @@ Rails.application.routes.draw do
 
     resource :invitation, only: [:new, :create]
 
-    resources :critics, only: [:edit, :update] do
-      resources :attendances, only: [:new, :create], module: "critics"
-    end
+    resources :critics, only: [:edit, :update]
 
     namespace :critics do
       resource :invitation, only: [:new, :create]
