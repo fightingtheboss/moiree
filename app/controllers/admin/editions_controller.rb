@@ -50,7 +50,7 @@ class Admin
     private
 
     def set_festival
-      @festival = Festival.find(params[:festival_id])
+      @festival = Festival.friendly.find(params[:festival_id])
     end
 
     def edition_params
@@ -58,7 +58,7 @@ class Admin
     end
 
     def set_edition
-      @edition = Edition.find(params[:id])
+      @edition = Edition.friendly.find(params[:id])
     end
   end
 end

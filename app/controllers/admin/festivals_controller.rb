@@ -28,11 +28,11 @@ class Admin
     end
 
     def edit
-      @festival = Festival.find(params[:id])
+      @festival = Festival.friendly.find(params[:id])
     end
 
     def update
-      @festival = Festival.find(params[:id])
+      @festival = Festival.friendly.find(params[:id])
 
       if @festival.update(festival_params)
         redirect_to(admin_festivals_path, notice: "#{@festival.name} updated")
@@ -42,7 +42,7 @@ class Admin
     end
 
     def destroy
-      @festival = Festival.find(params[:id])
+      @festival = Festival.friendly.find(params[:id])
       @festival.destroy
 
       redirect_to(admin_festivals_path, notice: "#{festival.name} deleted")

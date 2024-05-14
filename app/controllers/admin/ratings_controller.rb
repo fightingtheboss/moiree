@@ -88,8 +88,8 @@ class Admin
     private
 
     def set_festival_and_edition
-      @festival = Festival.find(params[:festival_id])
-      @edition = @festival.editions.find(params[:edition_id])
+      @edition = Edition.includes(:festival).friendly.find(params[:edition_id])
+      @festival = @edition.festival
     end
 
     def set_selection

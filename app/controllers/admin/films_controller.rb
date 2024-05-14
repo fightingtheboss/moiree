@@ -6,7 +6,7 @@ class Admin
       @films = Film.search(params[:query], edition_id: params[:edition_id], exclude: params[:exclude_films_in_edition])
 
       if params[:edition_id].present?
-        @edition = Edition.find(params[:edition_id])
+        @edition = Edition.friendly.find(params[:edition_id])
         @festival = @edition.festival
         @selections = @edition.selections_with_categories.where(film: @films)
 
@@ -22,7 +22,7 @@ class Admin
 
     def search_for_film_to_add_to_edition
       @films = Film.search_excluding_edition(params[:query], params[:edition_id])
-      @edition = Edition.find(params[:edition_id])
+      @edition = Edition.friendly.find(params[:edition_id])
       @festival = @edition.festival
 
       render(

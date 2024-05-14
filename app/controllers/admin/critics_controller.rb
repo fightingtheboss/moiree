@@ -2,15 +2,12 @@
 
 class Admin
   class CriticsController < AdminController
+    before_action :set_critic_and_user
+
     def edit
-      @critic = Critic.includes(:user).find(params[:id])
-      @user = @critic.user
     end
 
     def update
-      @critic = Critic.includes(:user).find(params[:id])
-      @user = @critic.user
-
       if @user.update(user_params)
         respond_to do |format|
           format.html { redirect_to(critics_admin_users_path, notice: "#{@user.name} updated") }
@@ -63,6 +60,11 @@ class Admin
           :country,
         ],
       )
+    end
+
+    def set_critic_and_user
+      @critic = Critic.includes(:user).friendly.find(params[:id])
+      @user = @critic.user
     end
   end
 end

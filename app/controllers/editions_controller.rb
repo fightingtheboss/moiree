@@ -8,7 +8,7 @@ class EditionsController < ApplicationController
   def show
     hidden_critics = params[:critics]
 
-    @edition = Edition.find(params[:id])
+    @edition = Edition.friendly.find(params[:id])
     @selections = @edition.selections_with_categories.includes(ratings: :critic).order("films.title")
     @selections_by_category = @selections.group_by do |selection|
                                 selection.film.categories.first

@@ -2,6 +2,6 @@
 
 class FilmsController < ApplicationController
   def show
-    @film = Film.includes(:editions, ratings: :critic).find(params[:id])
+    @film = Film.includes(:editions, ratings: :critic).friendly.find(params[:id])
   end
 end

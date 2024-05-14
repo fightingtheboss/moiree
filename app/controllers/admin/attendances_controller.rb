@@ -95,7 +95,7 @@ class Admin
     end
 
     def set_festival_and_edition
-      @edition = Edition.includes(:festival).find(params[:edition_id])
+      @edition = Edition.includes(:festival).friendly.find(params[:edition_id])
       @festival = @edition.festival
     end
   end
