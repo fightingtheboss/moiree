@@ -4,8 +4,8 @@ module Film::Searchable
   extend ActiveSupport::Concern
 
   class_methods do
-    def search(query, edition_id: nil, exclude: false)
-      films = all
+    def search(query, edition_id: nil, exclude: false, blank_returns_none: false)
+      films = blank_returns_none ? none : all
 
       if query.present?
         films = where("films.title LIKE :query", query: "%#{query}%")
@@ -15,14 +15,14 @@ module Film::Searchable
         films = films.joins(selections: :edition)
 
         films = if exclude
-          edition = Edition.find(edition_id)
+          edition = Edition.friendly.find(edition_id)
           films.where.not(id: edition.films)
         else
           films.where(edition: { id: edition_id })
         end
       end
 
-      films.distinct
+      films.uniq
     end
 
     def search_within_edition(query, edition_id)
@@ -30,7 +30,7 @@ module Film::Searchable
     end
 
     def search_excluding_edition(query, edition_id)
-      search(query, edition_id: edition_id, exclude: true)
+      search(query, edition_id: edition_id, exclude: true, blank_returns_none: true)
     end
   end
 end
