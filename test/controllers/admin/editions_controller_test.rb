@@ -51,7 +51,7 @@ class Admin::EditionsControllerTest < ActionDispatch::IntegrationTest
       },
     }
 
-    assert_redirected_to admin_festival_editions_path(edition.festival)
+    assert_redirected_to admin_festival_edition_path(edition.festival, edition)
   end
 
   # test "should destroy an Edition" do

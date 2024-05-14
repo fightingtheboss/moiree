@@ -23,7 +23,7 @@ class Edition < ApplicationRecord
 
   delegate :name, :short_name, :country, to: :festival
 
-  scope :upcoming, -> { includes(:festival).where("start_date >= ?", Date.current).order(:start_date) }
+  scope :upcoming, -> { includes(:festival).where("start_date > ?", Date.current).order(:start_date) }
   scope :past, -> { includes(:festival).where("end_date < ?", Date.current).order(start_date: :desc) }
   scope :current, -> {
                     includes(:festival)

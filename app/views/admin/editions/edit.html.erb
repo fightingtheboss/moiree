@@ -1,5 +1,4 @@
-<h1 class="text-3xl font-extrabold mb-8">Edit <%= @edition.code %></h1>
-
-<%= turbo_frame_tag "edit_edition" do %>
-  <%= render partial: "form", locals: { edition: @edition } %>
+<%= turbo_frame_tag "modal" do %>
+  <h1 class="text-2xl font-semibold mb-4">Edit <%= @edition.code %></h1>
+  <%= render partial: "form", locals: { festival: @festival, edition: @edition } %>
 <% end %>

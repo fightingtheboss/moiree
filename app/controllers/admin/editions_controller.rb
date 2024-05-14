@@ -35,7 +35,7 @@ class Admin
 
     def update
       if @edition.update(edition_params)
-        redirect_to(admin_festival_editions_path(@edition.festival), notice: "Edition updated")
+        redirect_to(admin_festival_edition_path(@edition.festival, @edition), notice: "Edition updated")
       else
         render(:edit)
       end
@@ -44,7 +44,7 @@ class Admin
     def destroy
       @edition.destroy
 
-      redirect_to(admin_festival_editions_path(@edition.festival), notice: "Edition deleted")
+      redirect_to(admin_festivals_path(@edition.festival), notice: "Edition deleted")
     end
 
     private
