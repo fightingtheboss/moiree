@@ -124,6 +124,6 @@ class Admin::SelectionsControllerTest < ActionDispatch::IntegrationTest
       },
     }
 
-    assert_redirected_to admin_festival_edition_path(@edition.festival, @edition)
+    assert_redirected_to admin_festival_edition_url(@edition.festival, @edition)
   end
 end

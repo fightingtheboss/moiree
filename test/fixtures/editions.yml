@@ -6,10 +6,12 @@ base:
   code: TIFF24
   start_date: 2024-09-09
   end_date: 2024-09-19
+  slug: tiff24
 
 with_no_films:
   festival: with_no_films
-  year: 2024
-  code: TIFF24
-  start_date: 2024-09-09
-  end_date: 2024-09-19
+  year: 2025
+  code: TIFF25
+  start_date: 2025-09-09
+  end_date: 2025-09-19
+  slug: tiff25
