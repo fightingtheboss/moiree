@@ -2,6 +2,7 @@
 
 class Film < ApplicationRecord
   include Importable, Searchable
+  include FriendlyId
 
   has_many :categorizations, dependent: :destroy
   has_many :categories, through: :categorizations
@@ -22,6 +23,8 @@ class Film < ApplicationRecord
 
   accepts_nested_attributes_for :categorizations
 
+  friendly_id :slug_candidates, use: :slugged
+
   def cache_overall_average_rating
     update(overall_average_rating: ratings.average(:score).to_f)
   end
@@ -36,5 +39,15 @@ class Film < ApplicationRecord
 
   def category(edition:)
     categories.find_by(edition: edition)
+  end
+
+  private
+
+  def slug_candidates
+    [
+      :title,
+      [:title, :year],
+      [:title, :year, :country],
+    ]
   end
 end

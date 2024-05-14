@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Edition < ApplicationRecord
+  include FriendlyId
+
   belongs_to :festival
 
   has_many :attendances, dependent: :destroy
@@ -28,6 +30,8 @@ class Edition < ApplicationRecord
                       .where("start_date <= ? AND end_date >= ?", Date.current, Date.current)
                       .order(:start_date)
                   }
+
+  friendly_id :code, use: [:slugged, :scoped], scope: :festival
 
   def url
     super || festival.url
