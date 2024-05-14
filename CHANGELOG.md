@@ -3,6 +3,7 @@
 ## 2024-05-13
 - Add ability to edit Critics
 - Change five star rating to 🔥 instead of 🤩
+- Add friendly_id gem and update the app to use throughout
 
 ## 2024-05-12
 - Fixes for grid rendering on Safari

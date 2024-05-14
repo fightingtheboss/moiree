@@ -28,7 +28,6 @@ When an Admin is invited, their account is created and they're sent a link to re
     - Has a search for film by title to redraw the table
 
 ### Nice-to-haves
-- Could add friendly_id for readable URLs for festival and edition (e.g. /festival/tiff/edition/TIFF24)
 - Add TMDb integration to get Film data and images
   - Maybe this is an option for Admins to do a search or an automated matching of the entered film data
     - I think it should be automatable if we have the title, directors and year as criteria
