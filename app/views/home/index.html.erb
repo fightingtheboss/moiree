@@ -42,7 +42,7 @@
                     <p class="text-sm mb-1"><strong><%= rating.critic.name %></strong> rated</p>
                     <div class="mb-2">
                       <h4 class="text-lg leading-tight"><%= rating.film.title %></h4>
-                      <p><strong class="mt-1 text-2xl"><%= rating.score %></strong></p>
+                      <p class="mt-1"><strong class="text-2xl"><%= rating.score %></strong></p>
                     </div>
                     <p class="text-xs text-slate-100"><%= time_ago_in_words(rating.created_at) %> ago</p>
                   </li>
