@@ -36,4 +36,8 @@ class Edition < ApplicationRecord
   def url
     super || festival.url
   end
+
+  def current?
+    start_date <= Date.current && end_date >= Date.current
+  end
 end
