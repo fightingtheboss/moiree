@@ -41,7 +41,7 @@
                   <li class="flex flex-col justify-between bg-indigo-500 text-white py-4 px-2 shadow-sm rounded-md text-center mb-2 md:mb-0">
                     <p class="text-sm mb-1"><strong><%= rating.critic.name %></strong> rated</p>
                     <div class="mb-2">
-                      <h4 class="text-lg"><%= rating.film.title %></h4>
+                      <h4 class="text-lg leading-tight"><%= rating.film.title %></h4>
                       <p><strong class="mt-1 text-2xl"><%= rating.score %></strong></p>
                     </div>
                     <p class="text-xs text-slate-100"><%= time_ago_in_words(rating.created_at) %> ago</p>
