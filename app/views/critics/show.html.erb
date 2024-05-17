@@ -11,28 +11,32 @@
     <section>
       <% @editions.each do |edition| %>
         <h3 class="sticky top-8 left-0 z-20 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
-        <table class="border-collapse border-spacing-0 w-full mb-4">
-          <thead>
-            <tr class="sticky top-14 left-0 z-10">
-              <th class="border border-indigo-100 border-l-0 p-2 pl-4 text-left bg-indigo-700 text-white w-7/12 text-sm">Film</th>
-              <th class="border border-indigo-100 p-2 pl-4 bg-indigo-700 text-white w-3/12 text-sm">Category</th>
-              <th class="border border-indigo-100 border-r-0 p-2 bg-indigo-700 text-white w-2/12 text-sm">Rating</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @ratings.for(edition).each do |rating| %>
-              <tr class="hover:bg-indigo-50">
-                <td class="border border-indigo-100 border-l-0 p-2 pl-4">
-                  <h1 class="font-semibold"><%= link_to rating.film.title, film_url(rating.film), target: "_top", class: "hover:italic hover:text-indigo-700" %></h1>
-                  <h2><%= rating.film.director %></h2>
-                  <h3><%= rating.film.year %></h3>
-                </td>
-                <td class="border border-indigo-100 p-2 text-center"><%= rating.film.category(edition: edition).name %></td>
-                <td class="border border-indigo-100 border-r-0 p-2 text-center"><%= rating.score %></td>
+        <% if @ratings.for(edition).any? %>
+          <table class="border-collapse border-spacing-0 w-full mb-4">
+            <thead>
+              <tr class="sticky top-14 left-0 z-10">
+                <th class="border border-indigo-100 border-l-0 p-2 pl-4 text-left bg-indigo-700 text-white w-7/12 text-sm">Film</th>
+                <th class="border border-indigo-100 p-2 pl-4 bg-indigo-700 text-white w-3/12 text-sm">Category</th>
+                <th class="border border-indigo-100 border-r-0 p-2 bg-indigo-700 text-white w-2/12 text-sm">Rating</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% @ratings.for(edition).order(score: :desc).each do |rating| %>
+                <tr class="hover:bg-indigo-50">
+                  <td class="border border-indigo-100 border-l-0 p-2 pl-4">
+                    <h1 class="font-semibold leading-tight"><%= link_to rating.film.title, film_url(rating.film), target: "_top", class: "hover:italic hover:text-indigo-700" %></h1>
+                    <h2><%= rating.film.director %></h2>
+                    <h3><%= rating.film.year %></h3>
+                  </td>
+                  <td class="border border-indigo-100 p-2 text-center"><%= rating.film.category(edition: edition).name %></td>
+                  <td class="border border-indigo-100 border-r-0 p-2 text-center"><%= display_rating(rating.score) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p class="p-4 mb-4">No ratings yet</p>
+        <% end %>
       <% end %>
     </section>
   <% else %>
