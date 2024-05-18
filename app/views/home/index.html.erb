@@ -66,3 +66,34 @@
     <% end %>
   <% end %>
 </section>
+
+<footer class="min-h-32 bg-indigo-900 shadow-inner  text-white px-4 py-2 md:py-0">
+  <div class="md:grid md:grid-cols-2 md:gap-16">
+    <section class="my-4 text-sm">
+      <h1 class="font-bold mb-1">Critics & Admins</h1>
+      <ul>
+        <li>
+          <% if Current.user %>
+            <%= link_to "Sign out", sign_out_path, class: "underline underline-offset-2" %>
+          <% else %>
+            <%= link_to "Sign in", sign_in_path, class: "underline underline-offset-2" %>
+          <% end %>
+        </li>
+      </ul>
+    </section>
+    <section class="my-4 text-sm">
+      <h1 class="font-bold mb-1">About</h1>
+      <p class="mb-1">MOIRÉE is a platform that showcases real-time ratings from a curated community of film critics at festivals worldwide.</p>
+      <p>
+        A collaboration between
+        <a href="https://blakewilliams.net" target="_blank" class="underline underline-offset-2">Blake Williams</a>,
+        <a href="https://mubi.com/en/notebook/posts/author/4" target="_blank" class="underline underline-offset-2">Danny Kasman</a>, and
+        👨🏽‍💻 <a href="https://fightingtheboss.com" target="_blank" class="underline underline-offset-2">Mina Mikhail</a>.
+      </p>
+      <div class="md:flex md:gap-4 justify-end items-center mt-6">
+        <p class="mb-1 md:mb-0 text-xs">Made with ❤️ in Toronto</p>
+        <p class="text-xs">© <%= Time.current.year %> MOIRÉE. All rights reserved.</p>
+      </div>
+    </section>
+  </div>
+</footer>
