@@ -11,7 +11,7 @@
 
     <section class="mx-4">
       <% if @current.any? %>
-        <h2 class="font-semibold mb-4">Current festivals</h2>
+        <h2 class="font-semibold mb-4">Current <%= "festival".pluralize(@current.size) %></h2>
 
         <% @current.each do |edition| %>
           <%= link_to edition_path(edition), class: "block" do %>
@@ -60,7 +60,7 @@
       <% if @upcoming.any? || @past.any? %>
         <% [["Upcoming", @upcoming], ["Past", @past]].each do |(label, festivals)| %>
           <% if festivals.any? %>
-            <h2 class="font-semibold mb-4"><%= label %> festivals</h2>
+            <h2 class="font-semibold mb-4"><%= label %> <%= "festival".pluralize(festivals.size) %></h2>
             <ul class="grid grid-cols-1 md:grid-cols-3 md:gap-2">
               <%= render festivals %>
             </ul>
