@@ -1,99 +1,103 @@
-<header class="bg-white relative mb-4 shadow">
-  <div class="grid place-content-center bg-logo-radial-gradient contrast-[2000] after:bg-logo-radial-gradient-overlay after:absolute after:top-0 after:left-0 after:right-0 after:bottom-0 after:mix-blend-lighten">
-    <h1 class="font-black uppercase text-7xl md:text-8xl pt-8 pb-8 md:pb-12 px-4">
-      <span class="inline-block">Moirée</span>
-    </h1>
-  </div>
-  <p class="hidden md:block font-normal text-indigo-700 md:text-2xl text-center pb-4 z-10 -my-12 absolute left-[50%] -translate-x-1/2">Critic ratings from film festivals around the world</p>
-</header>
-
-<section class="mx-4">
-  <% if @current.any? %>
-    <h2 class="font-semibold mb-4">Current festivals</h2>
-
-    <% @current.each do |edition| %>
-      <%= link_to edition_path(edition), class: "block" do %>
-        <article class="mb-4 bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow">
-          <header class="mb-4">
-            <h2 class="text-xs uppercase mb-2"><%= edition.name %></h2>
-            <h1 class="font-semibold text-xl"><%= edition.code %></h1>
-            <div>
-              <time datetime="<%= edition.start_date.to_date %>" class="text-sm"><%= edition.start_date.strftime("%b %d, %Y") %></time>
-              <span class="text-sm"> --> </span>
-              <time datetime="<%= edition.end_date.to_date %>" class="text-sm"><%= edition.end_date.strftime("%b %d, %Y") %></time>
-            </div>
-          </header>
-
-          <ul class="text-xs flex">
-            <li class="mr-1 px-2 py-1 bg-violet-500 text-white rounded"><strong><%= edition.categories.size %></strong> Categories</li>
-            <li class="mr-1 px-2 py-1 bg-fuchsia-500 text-white rounded"><strong><%= edition.films.size %></strong> Films</li>
-            <li class="px-2 py-1 bg-teal-500 text-white rounded"><strong><%= edition.ratings.size %></strong> Ratings</li>
-          </ul>
-
-          <% if edition.ratings.any? %>
-            <section>
-              <header class="my-4">
-                <h3 class="text-lg font-semibold">Latest ratings</h3>
-                <p class="text-sm">Ratings are out of 5</p>
-              </header>
-              <ul class="md:grid md:grid-cols-5 md:gap-2">
-                <% edition.ratings.includes(:critic).order("created_at DESC").limit(5).each do |rating| %>
-                  <li class="flex flex-col justify-between bg-indigo-500 text-white py-4 px-2 shadow-sm rounded-md text-center mb-2 md:mb-0">
-                    <p class="text-sm mb-1"><strong><%= rating.critic.name %></strong> rated</p>
-                    <div class="mb-2">
-                      <h4 class="text-lg leading-tight"><%= rating.film.title %></h4>
-                      <p class="mt-1"><strong class="text-2xl"><%= rating.score %></strong></p>
-                    </div>
-                    <p class="text-xs text-slate-100"><%= time_ago_in_words(rating.created_at) %> ago</p>
-                  </li>
-                <% end %>
-              </ul>
-            </section>
-          <% end %>
-        </article>
-      <% end %>
-    <% end %>
-  <% end %>
-
-  <% if @upcoming.any? || @past.any? %>
-    <% [["Upcoming", @upcoming], ["Past", @past]].each do |(label, festivals)| %>
-      <% if festivals.any? %>
-        <h2 class="font-semibold mb-4"><%= label %> festivals</h2>
-        <ul class="grid grid-cols-1 md:grid-cols-3 md:gap-2">
-          <%= render festivals %>
-        </ul>
-      <% end %>
-    <% end %>
-  <% end %>
-</section>
-
-<footer class="min-h-32 bg-indigo-900 shadow-inner  text-white px-4 py-2 md:py-0">
-  <div class="md:grid md:grid-cols-2 md:gap-16">
-    <section class="my-4 text-sm">
-      <h1 class="font-bold mb-1">Critics & Admins</h1>
-      <ul>
-        <li>
-          <% if Current.user %>
-            <%= link_to "Sign out", sign_out_path, class: "underline underline-offset-2" %>
-          <% else %>
-            <%= link_to "Sign in", sign_in_path, class: "underline underline-offset-2" %>
-          <% end %>
-        </li>
-      </ul>
-    </section>
-    <section class="my-4 text-sm">
-      <h1 class="font-bold mb-1">About</h1>
-      <p class="mb-1">MOIRÉE is a platform that showcases real-time ratings from a curated community of film critics at festivals worldwide.</p>
-      <p>
-        A collaboration between
-        <a href="https://blakewilliams.net" target="_blank" class="underline underline-offset-2">Blake Williams</a>,
-        <a href="https://mubi.com/en/notebook/posts/author/4" target="_blank" class="underline underline-offset-2">Danny Kasman</a>, and
-        👨🏽‍💻 <a href="https://fightingtheboss.com" target="_blank" class="underline underline-offset-2">Mina Mikhail</a>.
-      </p>
-      <div class="md:flex md:gap-4 justify-end items-center mt-6">
-        <p class="mb-1 md:mb-0 text-xs">Made with ❤️ in Toronto</p>
-        <p class="text-xs">© <%= Time.current.year %> MOIRÉE. All rights reserved.</p>
+<div class="min-h-[calc(100vh-2rem)] flex flex-col justify-between">
+  <div>
+    <header class="bg-white relative mb-4 shadow">
+      <div class="grid place-content-center bg-logo-radial-gradient contrast-[2000] after:bg-logo-radial-gradient-overlay after:absolute after:top-0 after:left-0 after:right-0 after:bottom-0 after:mix-blend-lighten">
+        <h1 class="font-black uppercase text-7xl md:text-8xl pt-8 pb-8 md:pb-12 px-4">
+          <span class="inline-block">Moirée</span>
+        </h1>
       </div>
+      <p class="hidden md:block font-normal text-indigo-700 md:text-2xl text-center pb-4 z-10 -my-12 absolute left-[50%] -translate-x-1/2">Critic ratings from film festivals around the world</p>
+    </header>
+
+    <section class="mx-4">
+      <% if @current.any? %>
+        <h2 class="font-semibold mb-4">Current festivals</h2>
+
+        <% @current.each do |edition| %>
+          <%= link_to edition_path(edition), class: "block" do %>
+            <article class="mb-4 bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow">
+              <header class="mb-4">
+                <h2 class="text-xs uppercase mb-2"><%= edition.name %></h2>
+                <h1 class="font-semibold text-xl"><%= edition.code %></h1>
+                <div>
+                  <time datetime="<%= edition.start_date.to_date %>" class="text-sm"><%= edition.start_date.strftime("%b %d, %Y") %></time>
+                  <span class="text-sm"> --> </span>
+                  <time datetime="<%= edition.end_date.to_date %>" class="text-sm"><%= edition.end_date.strftime("%b %d, %Y") %></time>
+                </div>
+              </header>
+
+              <ul class="text-xs flex">
+                <li class="mr-1 px-2 py-1 bg-violet-500 text-white rounded"><strong><%= edition.categories.size %></strong> Categories</li>
+                <li class="mr-1 px-2 py-1 bg-fuchsia-500 text-white rounded"><strong><%= edition.films.size %></strong> Films</li>
+                <li class="px-2 py-1 bg-teal-500 text-white rounded"><strong><%= edition.ratings.size %></strong> Ratings</li>
+              </ul>
+
+              <% if edition.ratings.any? %>
+                <section>
+                  <header class="my-4">
+                    <h3 class="text-lg font-semibold">Latest ratings</h3>
+                    <p class="text-sm">Ratings are out of 5</p>
+                  </header>
+                  <ul class="md:grid md:grid-cols-5 md:gap-2">
+                    <% edition.ratings.includes(:critic).order("created_at DESC").limit(5).each do |rating| %>
+                      <li class="flex flex-col justify-between bg-indigo-500 text-white py-4 px-2 shadow-sm rounded-md text-center mb-2 md:mb-0">
+                        <p class="text-sm mb-1"><strong><%= rating.critic.name %></strong> rated</p>
+                        <div class="mb-2">
+                          <h4 class="text-lg leading-tight"><%= rating.film.title %></h4>
+                          <p class="mt-1"><strong class="text-2xl"><%= rating.score %></strong></p>
+                        </div>
+                        <p class="text-xs text-slate-100"><%= time_ago_in_words(rating.created_at) %> ago</p>
+                      </li>
+                    <% end %>
+                  </ul>
+                </section>
+              <% end %>
+            </article>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% if @upcoming.any? || @past.any? %>
+        <% [["Upcoming", @upcoming], ["Past", @past]].each do |(label, festivals)| %>
+          <% if festivals.any? %>
+            <h2 class="font-semibold mb-4"><%= label %> festivals</h2>
+            <ul class="grid grid-cols-1 md:grid-cols-3 md:gap-2">
+              <%= render festivals %>
+            </ul>
+          <% end %>
+        <% end %>
+      <% end %>
     </section>
   </div>
-</footer>
+
+  <footer class="min-h-32 bg-indigo-900 shadow-inner  text-white px-4 py-2 md:py-0">
+    <div class="md:grid md:grid-cols-2 md:gap-16">
+      <section class="my-4 text-sm">
+        <h1 class="font-bold mb-1">Critics & Admins</h1>
+        <ul>
+          <li>
+            <% if Current.user %>
+              <%= link_to "Sign out", sign_out_path, class: "underline underline-offset-2" %>
+            <% else %>
+              <%= link_to "Sign in", sign_in_path, class: "underline underline-offset-2" %>
+            <% end %>
+          </li>
+        </ul>
+      </section>
+      <section class="my-4 text-sm">
+        <h1 class="font-bold mb-1">About</h1>
+        <p class="mb-1">MOIRÉE is a platform that showcases real-time ratings from a curated community of film critics at festivals worldwide.</p>
+        <p>
+          A collaboration between
+          <a href="https://blakewilliams.net" target="_blank" class="underline underline-offset-2">Blake Williams</a>,
+          <a href="https://mubi.com/en/notebook/posts/author/4" target="_blank" class="underline underline-offset-2">Danny Kasman</a>, and
+          👨🏽‍💻 <a href="https://fightingtheboss.com" target="_blank" class="underline underline-offset-2">Mina Mikhail</a>.
+        </p>
+        <div class="md:flex md:gap-4 justify-end items-center mt-6">
+          <p class="mb-1 md:mb-0 text-xs">Made with ❤️ in Toronto</p>
+          <p class="text-xs">© <%= Time.current.year %> MOIRÉE. All rights reserved.</p>
+        </div>
+      </section>
+    </div>
+  </footer>
+</div>
