@@ -1,4 +1,4 @@
-<h1 class="font-semibold text-2xl mb-4">✨&nbsp;Sign in with a magic link</h1>
+<h1 class="font-semibold text-xl md:text-2xl mb-4">✨&nbsp;Sign in with a magic link</h1>
 <p class="mb-4">No need for yet another password, just give us the email associated with your account and <strong>we'll email you a sign-in link</strong> that will keep you signed in on your device until you sign out.</p>
 
 <%= form_with(url: magic_path) do |form| %>
@@ -11,3 +11,5 @@
     <%= form.submit "Send me the sign-in link", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
   </div>
 <% end %>
+
+<p class="text-sm mt-4">or <%= link_to "Sign in with a password", sign_in_path, class: "inline-block text-sm underline underline-offset-2"%></p>

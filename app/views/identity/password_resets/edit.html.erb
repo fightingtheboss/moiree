@@ -1,4 +1,4 @@
-<h1 class="font-semibold text-2xl mb-4">Reset your password</h1>
+<h1 class="font-semibold text-xl md:text-2xl mb-4">Reset your password</h1>
 
 <%= form_with(url: identity_password_reset_path, method: :patch) do |form| %>
   <%= render partial: "shared/errors", locals: { model: @user } %>
@@ -8,7 +8,7 @@
   <div class="mb-4">
     <%= form.label :password, "New password", class: "block text-gray-700 text-sm font-bold mb-2" %>
     <%= form.password_field :password, required: true, autofocus: true, autocomplete: "new-password", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
-    <div>12 characters minimum.</div>
+    <p class="text-sm my-2">12 characters minimum.</p>
   </div>
 
   <div class="mb-4">
