@@ -1,6 +1,6 @@
 <article>
-  <header class="sticky top-0 left-0 z-30 bg-white py-1 overflow-y-scroll whitespace-nowrap px-4">
-    <div class="flex items-center gap-2">
+  <header class="sticky top-0 left-0 z-30 bg-white py-1 overflow-y-auto whitespace-nowrap">
+    <div class="flex items-center gap-2 px-4 w-fit">
       <h1 class="font-semibold text-sm"><%= @critic.name %></h1>•
       <h2 class="text-sm"><%= @critic.publication %></h2>•
       <h3 class="text-sm"><%= "#{Country[@critic.country].emoji_flag}" %></h3>

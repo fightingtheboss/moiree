@@ -1,9 +1,9 @@
 <article>
-  <header class="sticky top-0 left-0 bg-white py-1 overflow-y-scroll whitespace-nowrap px-4">
-    <div class="flex items-center gap-2">
-      <h1 class="font-semibold text-sm"><%= @film.title %></h1>•
-      <h2 class="text-sm"><%= @film.director %></h2>•
-      <h4 class="text-sm"><%= @film.year %></h4>•
+  <header class="sticky top-0 left-0 w-full bg-white py-1 overflow-y-auto whitespace-nowrap">
+    <div class="flex items-center gap-2 px-4 w-fit">
+      <h1 class="font-semibold text-sm"><%= @film.title %></h1><span>•</span>
+      <h2 class="text-sm"><%= @film.director %></h2><span>•</span>
+      <h4 class="text-sm"><%= @film.year %></h4><span>•</span>
       <h3 class="text-sm"><%= @film.country.split(",").map(&:strip).map { |c| "#{Country[c].emoji_flag}" }.join(" ") %></h3>
     </div>
   </header>
