@@ -47,6 +47,10 @@ gem "tzinfo-data", platforms: [:windows, :jruby]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+gem "solid_queue"
+
+gem "mission_control-jobs"
+
 gem "bugsnag"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
