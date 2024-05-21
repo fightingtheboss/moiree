@@ -22,6 +22,8 @@
         BugsnagPerformance.start({ apiKey: "<%= Rails.application.credentials.bugsnag.api_key %>" })
       </script>
     <% end %>
+
+    <meta name="description" content="<%= content_for(:description) %>">
   </head>
 
   <body class="relative bg-slate-50">
