@@ -40,16 +40,16 @@ class RatingTest < ActiveSupport::TestCase
     assert_equal(film, rating.film)
   end
 
-  test "should call Film#overall_average_rating when a new Rating is created" do
+  test "should enqueue a CacheAverageRatingJob when a new Rating is created" do
     rating = Rating.new(score: 5, critic: critics(:without_ratings), selection: selections(:base))
-    rating.film.expects(:cache_overall_average_rating)
+    CacheAverageRatingJob.expects(:perform_later).with(rating)
 
     rating.save
   end
 
-  test "should call Film#overall_average_rating when a Rating is destroyed" do
+  test "should enqueue a CacheAverageRatingJob when a Rating is destroyed" do
     rating = ratings(:base)
-    rating.film.expects(:cache_overall_average_rating)
+    CacheAverageRatingJob.expects(:perform_later).with(rating)
 
     rating.destroy
   end

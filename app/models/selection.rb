@@ -10,4 +10,8 @@ class Selection < ApplicationRecord
   validates :edition_id, uniqueness: { scope: :film_id }
 
   accepts_nested_attributes_for :film
+
+  def cache_average_rating
+    update(average_rating: ratings.average(:score).to_f)
+  end
 end

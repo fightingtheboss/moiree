@@ -16,14 +16,12 @@ class Rating < ApplicationRecord
     message: ->(object, _) { "#{object.critic.name} has already rated #{object.film.title}" },
   }
 
-  after_create :cache_overall_average_rating_on_film
-  after_destroy :cache_overall_average_rating_on_film
+  after_create :cache_average_ratings
+  after_destroy :cache_average_ratings
 
   private
 
-  # This should be a background job in the long run.
-  # I don't even think it's wise to have side-effects in callbacks like this (but it's fine for now)
-  def cache_overall_average_rating_on_film
-    film.cache_overall_average_rating
+  def cache_average_ratings
+    CacheAverageRatingJob.perform_later(self)
   end
 end
