@@ -1,5 +1,11 @@
 # Changelog
 
+## 2024-05-22
+- Install Solid Queue to handle jobs via SQLite
+- Add DailySummaryTweetJob to post a tweet every day at midnight with a roundup
+- Cache average rating for selections on Rating create and destroy rather than calculating every time
+  - This is done via background job now, rather than having the callbacks have direct side-effects
+
 ## 2024-05-13
 - Add ability to edit Critics
 - Change five star rating to 🔥 instead of 🤩

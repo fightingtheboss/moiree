@@ -21,6 +21,8 @@ When an Admin is invited, their account is created and they're sent a link to re
 
 
 ## Roadmap
+- Have a view that shows all ratings by most recent
+- Replace star rating range input with something more universal
 - Grid sorting and filtering
   - Need to show film country
   - Add a filtering toolbar
@@ -29,5 +31,9 @@ When an Admin is invited, their account is created and they're sent a link to re
 
 ### Nice-to-haves
 - Add TMDb integration to get Film data and images
+  - Make this super simple
+    - Provide a field for the TMDB link to the film with a link out to TMDB to help admin find it
+    - Use that link on save to fetch the data from the API and cache it
+      - This can include extended metadata and URLs to images (posters and banners)
   - Maybe this is an option for Admins to do a search or an automated matching of the entered film data
     - I think it should be automatable if we have the title, directors and year as criteria
