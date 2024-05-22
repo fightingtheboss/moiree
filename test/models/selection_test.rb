@@ -24,6 +24,6 @@ class SelectionTest < ActiveSupport::TestCase
 
     selection.cache_average_rating
 
-    assert_equal 3.5, selection.reload.average_rating
+    assert_equal 4.5, selection.reload.average_rating
   end
 end

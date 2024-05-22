@@ -12,7 +12,7 @@ class CacheAverageRatingJobTest < ActiveJob::TestCase
 
     CacheAverageRatingJob.perform_now(rating)
 
-    assert_equal 3.5, selection.reload.average_rating
+    assert_equal 4.5, selection.reload.average_rating
   end
 
   test "cache overall average rating" do

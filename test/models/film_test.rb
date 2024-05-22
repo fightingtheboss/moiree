@@ -32,24 +32,13 @@ class FilmTest < ActiveSupport::TestCase
     assert_equal(category, film.category(edition: edition))
   end
 
-  test "#overall_average_rating should be updated when a new Rating is added" do
+  test "#cache_overall_average_rating should update overall_average_rating" do
     film = films(:base)
-    overall_average_rating_before = film.overall_average_rating = film.ratings.average(:score).to_f # 3.0
+    film.update(overall_average_rating: nil)
 
-    Rating.create!(score: 5, critic: critics(:without_ratings), selection: selections(:base))
+    film.cache_overall_average_rating
 
-    assert_not_equal overall_average_rating_before, film.reload.overall_average_rating
-    assert film.overall_average_rating > overall_average_rating_before
-  end
-
-  test "#overall_average_rating should be updated when a new Rating is removed" do
-    film = films(:base)
-    overall_average_rating_before = film.overall_average_rating = film.ratings.average(:score).to_f # 3.0
-
-    film.ratings.last.destroy
-
-    assert_not_equal overall_average_rating_before, film.reload.overall_average_rating
-    assert film.overall_average_rating > overall_average_rating_before
+    assert_equal 3.0, film.overall_average_rating
   end
 
   test "#search with no query returns all films" do

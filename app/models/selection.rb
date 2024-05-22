@@ -12,6 +12,6 @@ class Selection < ApplicationRecord
   accepts_nested_attributes_for :film
 
   def cache_average_rating
-    update(average_rating: ratings.average(:score).to_f)
+    update(average_rating: ratings.where(critic: edition.critics).average(:score).to_f)
   end
 end
