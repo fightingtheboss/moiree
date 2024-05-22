@@ -79,7 +79,7 @@
         <ul>
           <li>
             <% if Current.user %>
-              <%= link_to "Sign out", sign_out_path, class: "underline underline-offset-2" %>
+              <%= button_to "Sign out", sign_out_path, method: :delete, class: "underline underline-offset-2" %>
             <% else %>
               <%= link_to "Sign in", sign_in_path, class: "underline underline-offset-2" %>
             <% end %>
