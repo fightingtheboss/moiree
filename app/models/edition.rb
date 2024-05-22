@@ -40,4 +40,10 @@ class Edition < ApplicationRecord
   def current?
     start_date <= Date.current && end_date >= Date.current
   end
+
+  def current_day
+    if current?
+      (Date.current - start_date).to_i + 1
+    end
+  end
 end

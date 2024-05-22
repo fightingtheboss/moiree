@@ -1,18 +1,23 @@
-# default: &default
-#   dispatchers:
-#     - polling_interval: 1
-#       batch_size: 500
+default: &default
+  dispatchers:
+    - polling_interval: 1
+      batch_size: 500
 #   workers:
 #     - queues: "*"
 #       threads: 3
 #       processes: 1
 #       polling_interval: 0.1
-#
-# development:
-#  <<: *default
-#
-# test:
-#  <<: *default
-#
-# production:
-#  <<: *default
+
+development:
+ <<: *default
+
+test:
+ <<: *default
+
+production:
+ <<: *default
+ dispatchers:
+  - recurring_tasks:
+      daily_summary_tweet:
+        class: "DailySummaryTweetJob"
+        schedule: "every day at midnight"
