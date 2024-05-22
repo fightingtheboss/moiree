@@ -12,13 +12,24 @@ module Sessions
     end
 
     def edit
-      session_record = @user.sessions.create!
-      cookies.signed.permanent[:session_token] = { value: session_record.id, httponly: true }
+      # Since this is a GET request with write side-effects,
+      # we need to ensure that the request is run on the primary instance since we're running LiteFS in production.
+      # https://fly.io/docs/litefs/primary/
+      # https://fly.io/docs/networking/dynamic-request-routing/#the-fly-replay-response-header
 
-      revoke_tokens
+      if File.exist?("/litefs/.primary")
+        primary_instance_id = File.read("/litefs/.primary").strip
+        response.headers["fly-replay"] = "instance=#{primary_instance_id}"
+        head(:ok)
+      else
+        session_record = @user.sessions.create!
+        cookies.signed.permanent[:session_token] = { value: session_record.id, httponly: true }
 
-      # This should take the Critic to the Festival listing
-      redirect_to(admin_root_path, notice: "Signed in successfully")
+        revoke_tokens
+
+        # This should take the Critic to the Festival listing
+        redirect_to(admin_root_path, notice: "Signed in successfully")
+      end
     end
 
     def create
