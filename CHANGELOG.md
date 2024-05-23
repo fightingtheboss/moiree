@@ -1,5 +1,11 @@
 # Changelog
 
+## 2024-05-23
+- Ensure average caches are updated when a rating is deleted
+- Ensure that the tweet is within the 280 character limit
+  - Moved the logic out of the job into PORO class DailySummaryTweet
+  -
+
 ## 2024-05-22
 - Install Solid Queue to handle jobs via SQLite
 - Add DailySummaryTweetJob to post a tweet every day at midnight with a roundup

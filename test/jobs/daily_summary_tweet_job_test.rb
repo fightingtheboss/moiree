@@ -11,7 +11,7 @@ class DailySummaryTweetJobTest < ActiveJob::TestCase
     edition = editions(:base)
     edition.update(start_date: 2.weeks.ago, end_date: 1.week.ago)
 
-    X::Client.any_instance.expects(:post).never
+    DailySummaryTweet.any_instance.expects(:post!).never
 
     perform_enqueued_jobs do
       DailySummaryTweetJob.perform_later
@@ -23,7 +23,7 @@ class DailySummaryTweetJobTest < ActiveJob::TestCase
     edition.update(start_date: 1.week.ago, end_date: 1.week.from_now)
     Rating.destroy_all
 
-    X::Client.any_instance.expects(:post).never
+    DailySummaryTweet.any_instance.expects(:post!).never
 
     perform_enqueued_jobs do
       DailySummaryTweetJob.perform_later
@@ -35,7 +35,7 @@ class DailySummaryTweetJobTest < ActiveJob::TestCase
     edition.update(start_date: 1.week.ago, end_date: 1.week.from_now)
     edition.ratings.update_all(created_at: 2.days.ago)
 
-    X::Client.any_instance.expects(:post).never
+    DailySummaryTweet.any_instance.expects(:post!).never
 
     perform_enqueued_jobs do
       DailySummaryTweetJob.perform_later
@@ -49,13 +49,16 @@ class DailySummaryTweetJobTest < ActiveJob::TestCase
 
     tweet = <<~TWEET
       ⭐️ TIFF24 Day 8 Ratings ⭐️
+      There were 3 ratings from 2 critics across 2 films
+      http://localhost:3000/editions/tiff24
 
-      There were 3 ratings from our critics across 2 films. Here are the new averages for rated films:
-
-      • Festival Film -> 3.5
+      Top 2 (avg):
       • With Original Title -> 4.5
+      • Festival Film -> 3.5
 
-      Visit http://localhost:3000/editions/tiff24 for detailed ratings
+      Bottom 2 (avg):
+      • With Original Title -> 4.5
+      • Festival Film -> 3.5
     TWEET
 
     X::Client.any_instance.expects(:post).with("tweets", { text: tweet }.to_json).returns(true)
