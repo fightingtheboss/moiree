@@ -42,14 +42,14 @@ class RatingTest < ActiveSupport::TestCase
 
   test "should enqueue a CacheAverageRatingJob when a new Rating is created" do
     rating = Rating.new(score: 5, critic: critics(:without_ratings), selection: selections(:base))
-    CacheAverageRatingJob.expects(:perform_later).with(rating)
+    CacheAverageRatingJob.expects(:perform_later).with(rating.selection)
 
     rating.save
   end
 
   test "should enqueue a CacheAverageRatingJob when a Rating is destroyed" do
     rating = ratings(:base)
-    CacheAverageRatingJob.expects(:perform_later).with(rating)
+    CacheAverageRatingJob.expects(:perform_later).with(rating.selection)
 
     rating.destroy
   end
