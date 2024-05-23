@@ -22,6 +22,6 @@ class Rating < ApplicationRecord
   private
 
   def cache_average_ratings
-    CacheAverageRatingJob.perform_later(self)
+    CacheAverageRatingJob.perform_later(selection)
   end
 end

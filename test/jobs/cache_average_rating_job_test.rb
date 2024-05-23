@@ -10,7 +10,7 @@ class CacheAverageRatingJobTest < ActiveJob::TestCase
     selection.update(average_rating: nil)
     rating.update(score: 4.5)
 
-    CacheAverageRatingJob.perform_now(rating)
+    CacheAverageRatingJob.perform_now(selection)
 
     assert_equal 4.5, selection.reload.average_rating
   end
@@ -21,7 +21,7 @@ class CacheAverageRatingJobTest < ActiveJob::TestCase
     rating.film.update(overall_average_rating: nil)
     rating.update(score: 4.5)
 
-    CacheAverageRatingJob.perform_now(rating)
+    CacheAverageRatingJob.perform_now(rating.selection)
 
     assert_equal 3.5, rating.film.reload.overall_average_rating
   end
