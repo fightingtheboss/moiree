@@ -48,10 +48,10 @@ class DailySummaryTweet
     top, bottom = trending(num_films: num_films)
 
     <<~TWEET
-      Top #{top.size == 1 ? "" : top.size} (avg):
+      Top #{top.size == 1 ? "" : top.size} (avg)
       #{film_list_items(top)}
 
-      Bottom #{bottom.size == 1 ? "" : bottom.size} (avg):
+      Bottom #{bottom.size == 1 ? "" : bottom.size} (avg)
       #{film_list_items(bottom)}
     TWEET
   end
@@ -90,7 +90,7 @@ class DailySummaryTweet
   end
 
   def film_list_items(selections)
-    selections.map { |selection| "• #{selection.film.title} -> #{selection.average_rating}" }.join("\n")
+    selections.map { |selection| "• #{selection.film.title} → #{selection.average_rating}" }.join("\n")
   end
 
   def line_break
