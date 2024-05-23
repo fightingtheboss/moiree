@@ -52,13 +52,13 @@ class DailySummaryTweetJobTest < ActiveJob::TestCase
       There were 3 ratings from 2 critics across 2 films
       http://localhost:3000/editions/tiff24
 
-      Top 2 (avg):
-      • With Original Title -> 4.5
-      • Festival Film -> 3.5
+      Top 2 (avg)
+      • With Original Title → 4.5
+      • Festival Film → 3.5
 
-      Bottom 2 (avg):
-      • With Original Title -> 4.5
-      • Festival Film -> 3.5
+      Bottom 2 (avg)
+      • With Original Title → 4.5
+      • Festival Film → 3.5
     TWEET
 
     X::Client.any_instance.expects(:post).with("tweets", { text: tweet }.to_json).returns(true)

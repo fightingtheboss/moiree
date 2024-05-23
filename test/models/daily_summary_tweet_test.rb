@@ -88,8 +88,8 @@ class DailySummaryTweetTest < ActiveSupport::TestCase
 
     summary = DailySummaryTweet.new(edition)
 
-    assert_match(/Top 2 \(avg\):/, summary.film_list)
-    assert_match(/Bottom 2 \(avg\):/, summary.film_list)
+    assert_match(/Top 2 \(avg\)/, summary.film_list)
+    assert_match(/Bottom 2 \(avg\)/, summary.film_list)
   end
 
   test "#text should return the full tweet text" do
@@ -102,13 +102,13 @@ class DailySummaryTweetTest < ActiveSupport::TestCase
       There were 3 ratings from 2 critics across 2 films
       http://localhost:3000/editions/tiff24
 
-      Top 2 (avg):
-      • With Original Title -> 4.5
-      • Festival Film -> 3.5
+      Top 2 (avg)
+      • With Original Title → 4.5
+      • Festival Film → 3.5
 
-      Bottom 2 (avg):
-      • With Original Title -> 4.5
-      • Festival Film -> 3.5
+      Bottom 2 (avg)
+      • With Original Title → 4.5
+      • Festival Film → 3.5
     TWEET
 
     assert_equal DailySummaryTweet.new(edition).text, tweet
@@ -126,11 +126,11 @@ class DailySummaryTweetTest < ActiveSupport::TestCase
   #     There were 3 ratings from 2 critics across 2 films
   #     http://localhost:3000/editions/tiff24
 
-  #     Top 1 (avg):
-  #     • With Original Title -> 4.5
+  #     Top 1 (avg)
+  #     • With Original Title → 4.5
 
-  #     Bottom 1 (avg):
-  #     • With Original Title -> 4.5
+  #     Bottom 1 (avg)
+  #     • With Original Title → 4.5
   #   TWEET
 
   #   assert_equal DailySummaryTweet.new(edition).text, tweet
@@ -146,13 +146,13 @@ class DailySummaryTweetTest < ActiveSupport::TestCase
       There were 3 ratings from 2 critics across 2 films
       http://localhost:3000/editions/tiff24
 
-      Top 2 (avg):
-      • With Original Title -> 4.5
-      • Festival Film -> 3.5
+      Top 2 (avg)
+      • With Original Title → 4.5
+      • Festival Film → 3.5
 
-      Bottom 2 (avg):
-      • With Original Title -> 4.5
-      • Festival Film -> 3.5
+      Bottom 2 (avg)
+      • With Original Title → 4.5
+      • Festival Film → 3.5
     TWEET
 
     X::Client.any_instance.expects(:post).with("tweets", { text: tweet }.to_json).returns(true)
