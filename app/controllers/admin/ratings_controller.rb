@@ -4,7 +4,7 @@ class Admin
   class RatingsController < AdminController
     before_action :set_festival_and_edition
     before_action :set_selection
-    before_action :set_rating, only: [:edit, :update]
+    before_action :set_rating, only: [:edit, :update, :destroy]
 
     def new
       @rating = @selection.ratings.build
@@ -20,8 +20,8 @@ class Admin
             flash.now[:notice] = "#{@rating.critic.name} rated #{@rating.film.title} #{@rating.score} stars"
             render(turbo_stream: [
               turbo_stream.prepend("flash", partial: "layouts/flash"),
-              turbo_stream.replace(
-                helpers.dom_id(@selection, :rate_button_for),
+              turbo_stream.update(
+                helpers.dom_id(@selection, :critic_rating),
                 partial: "admin/ratings/edit_rating_button",
                 locals: { festival: @festival, edition: @edition, selection: @selection, rating: @rating },
               ),
@@ -60,7 +60,11 @@ class Admin
             flash.now[:notice] = "#{@rating.critic.name} rated #{@rating.film.title} #{@rating.score} stars"
             render(turbo_stream: [
               turbo_stream.prepend("flash", partial: "layouts/flash"),
-              turbo_stream.update(helpers.dom_id(@rating), "Your rating: #{@rating.score}"),
+              turbo_stream.update(
+                helpers.dom_id(@selection, :critic_rating),
+                partial: "admin/ratings/edit_rating_button",
+                locals: { festival: @festival, edition: @edition, selection: @selection, rating: @rating },
+              ),
             ])
           end
         end
@@ -81,6 +85,26 @@ class Admin
               status: :unprocessable_entity,
             )
           end
+        end
+      end
+    end
+
+    def destroy
+      @rating.destroy
+
+      respond_to do |format|
+        format.html { redirect_to(admin_festival_edition_path(@festival, @edition), notice: "Rating deleted") }
+        format.turbo_stream do
+          flash.now[:notice] = "Rating deleted"
+
+          render(turbo_stream: [
+            turbo_stream.update(
+              helpers.dom_id(@selection, :critic_rating),
+              partial: "admin/ratings/new_rating_button",
+              locals: { festival: @festival, edition: @edition, selection: @selection },
+            ),
+            turbo_stream.prepend("flash", partial: "layouts/flash"),
+          ])
         end
       end
     end

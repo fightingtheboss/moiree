@@ -23,7 +23,7 @@
   </div>
 
   <% if Current.user.admin? || (Current.user.critic? && Current.user.userable.edition_attendances.include?(@edition)) %>
-    <aside id="<%= dom_id(selection) %>">
+    <aside id="<%= dom_id(selection, :critic_rating) %>" class="mt-4">
       <% unless critic_already_rated?(selection) || defined?(hide_rate_button) %>
         <%= render partial: "admin/ratings/new_rating_button", locals: { festival: @festival, edition: @edition, selection: selection } %>
       <% end %>

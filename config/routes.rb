@@ -34,7 +34,7 @@ Rails.application.routes.draw do
           get :csv, on: :collection
           post :import, on: :collection
 
-          resources :ratings, only: [:new, :create, :edit, :update]
+          resources :ratings, only: [:new, :create, :edit, :update, :destroy]
         end
       end
     end
