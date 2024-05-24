@@ -20,4 +20,4 @@ production:
   - recurring_tasks:
       daily_summary_tweet:
         class: "DailySummaryTweetJob"
-        schedule: "every day at midnight"
+        schedule: "every day at 11:50pm"
