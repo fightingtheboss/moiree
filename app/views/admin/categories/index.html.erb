@@ -3,7 +3,7 @@
 
   <ul class="mx-4 md:mx-auto max-w-screen-sm" data-controller="sortable" data-sortable-handle-value=".sortable-handle">
     <% @categories.each do |category| %>
-      <li class="p-4 bg-white rounded shadow my-2 flex" data-sortable-url="<%= reorder_admin_festival_edition_category_path(@festival, @edition, category) %>">
+      <li class="p-4 bg-white rounded shadow my-2 flex items-center group" data-sortable-url="<%= reorder_admin_festival_edition_category_path(@festival, @edition, category) %>">
         <div class="sortable-handle cursor-pointer">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="5" r="2"/>
@@ -11,7 +11,13 @@
             <circle cx="12" cy="19" r="2"/>
           </svg>
         </div>
-        <p class="ml-2"><%= category.name %></p>
+        <p class="ml-2"><%= category.name %><%= category.standalone? ? " ⭐️" : "" %></p>
+        <div class="ml-auto hidden group-hover:block">
+          <%= form_with(model: category, url: admin_festival_edition_category_path(@festival, @edition, category)) do |form| %>
+            <%= form.hidden_field :standalone, value: !category.standalone? %>
+            <%= form.submit category.standalone? ? "Undo standalone" : "Make standalone", class: "bg-indigo-500 hover:bg-indigo-700 text-white text-xs font-semibold py-0.5 px-2 rounded" %>
+          <% end %>
+        </div>
       </li>
     <% end %>
   </ul>

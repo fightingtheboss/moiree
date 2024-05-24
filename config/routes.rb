@@ -26,9 +26,11 @@ Rails.application.routes.draw do
 
         resources :attendances, only: [:index, :create, :destroy]
 
-        resources :categories, only: [:index] do
+        resources :categories, only: [:index, :update] do
           patch :reorder, on: :member
         end
+
+        resource :leaderboard, only: [:show]
 
         resources :selections do
           get :csv, on: :collection

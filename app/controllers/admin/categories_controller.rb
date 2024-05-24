@@ -40,7 +40,7 @@ class Admin::CategoriesController < ApplicationController
   private
 
   def category_params
-    params.require(:category).permit(:name, :position, :edition_id)
+    params.require(:category).permit(:name, :position, :edition_id, :standalone)
   end
 
   def set_category
