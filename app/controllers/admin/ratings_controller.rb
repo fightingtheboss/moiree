@@ -18,14 +18,15 @@ class Admin
           format.html { redirect_to(admin_festival_edition_path(@festival, @edition), notice: "Rating created") }
           format.turbo_stream do
             flash.now[:notice] = "#{@rating.critic.name} rated #{@rating.film.title} #{@rating.score} stars"
-            render(turbo_stream: [
-              turbo_stream.prepend("flash", partial: "layouts/flash"),
-              turbo_stream.update(
-                helpers.dom_id(@selection, :critic_rating),
-                partial: "admin/ratings/edit_rating_button",
-                locals: { festival: @festival, edition: @edition, selection: @selection, rating: @rating },
-              ),
-            ])
+
+            turbo_response = [turbo_stream.prepend("flash", partial: "layouts/flash")]
+            turbo_response << turbo_stream.update(
+              helpers.dom_id(@selection, :critic_rating),
+              partial: "admin/ratings/edit_rating_button",
+              locals: { festival: @festival, edition: @edition, selection: @selection, rating: @rating },
+            ) if Current.user.critic?
+
+            render(turbo_stream: turbo_response)
           end
         end
       else

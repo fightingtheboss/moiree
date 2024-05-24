@@ -30,6 +30,14 @@ class EditionsController < ApplicationController
     end
   end
 
+  def live
+    @edition = Edition.friendly.find(params[:id])
+    @ratings = @edition.ratings.includes(
+      :critic,
+      :film,
+    ).where(critic: @edition.critics).order(created_at: :desc)
+  end
+
   private
 
   def only_show_rated?

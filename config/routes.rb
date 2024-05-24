@@ -12,7 +12,9 @@ Rails.application.routes.draw do
   get  "verify", to: "sessions/passwordlesses#edit"
 
   resources :critics, only: [:show]
-  resources :editions, only: [:show]
+  resources :editions, only: [:show] do
+    get :live, on: :member
+  end
   resources :films, only: [:show]
   resource  :password, only: [:edit, :update]
   resources :sessions, only: [:index, :show, :destroy]
