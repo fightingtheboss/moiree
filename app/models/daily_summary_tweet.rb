@@ -44,26 +44,27 @@ class DailySummaryTweet
     HEADER
   end
 
-  def film_list(num_films: 3)
+  def film_lists(num_films: 3)
     top, bottom = trending(num_films: num_films)
 
-    <<~TWEET
-      Top #{top.size == 1 ? "" : top.size} (avg)
-      #{film_list_items(top)}
+    film_list(type: :top, selections: top) + line_break + film_list(type: :bottom, selections: bottom)
+  end
 
-      Bottom #{bottom.size == 1 ? "" : bottom.size} (avg)
-      #{film_list_items(bottom)}
-    TWEET
+  def film_list(type: :top, selections: [])
+    <<~FILM_LIST
+      #{type.capitalize} #{selections.size == 1 ? "" : selections.size} (avg)
+      #{film_list_items(selections)}
+    FILM_LIST
   end
 
   def text
     num_films = 3
-    tweet = header + line_break + film_list
+    tweet = header + line_break + film_lists
 
     until tweet.chars.size <= 280
       if num_films > 0
         num_films -= 1
-        tweet = header + line_break + film_list(num_films: num_films)
+        tweet = header + line_break + film_lists(num_films: num_films)
       else
         tweet = header + line_break + "Visit the link for detailed ratings"
       end

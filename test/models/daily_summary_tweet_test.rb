@@ -76,20 +76,22 @@ class DailySummaryTweetTest < ActiveSupport::TestCase
     edition.update(start_date: 1.week.ago, end_date: 1.week.from_now)
 
     summary = DailySummaryTweet.new(edition)
+    header = summary.header
 
-    assert_match(/TIFF24 Day 8 Ratings/, summary.header)
-    assert_match(/2 critics/, summary.header)
-    assert_match(/2 films/, summary.header)
+    assert_match(/TIFF24 Day 8 Ratings/, header)
+    assert_match(/2 critics/, header)
+    assert_match(/2 films/, header)
   end
 
-  test "#film_list should return the top and bottom films by average rating" do
+  test "#film_lists should return the top and bottom films by average rating" do
     edition = editions(:base)
     edition.selections.find_each(&:cache_average_rating)
 
     summary = DailySummaryTweet.new(edition)
+    film_lists = summary.film_lists
 
-    assert_match(/Top 2 \(avg\)/, summary.film_list)
-    assert_match(/Bottom 2 \(avg\)/, summary.film_list)
+    assert_match(/Top 2 \(avg\)/, film_lists)
+    assert_match(/Bottom 2 \(avg\)/, film_lists)
   end
 
   test "#text should return the full tweet text" do
