@@ -25,6 +25,7 @@ class Admin::SelectionsControllerTest < ActionDispatch::IntegrationTest
         country: ["CA", "US"],
       },
       selection: {
+        category_id: categories(:base).id,
         film_attributes: {
           title: "New Film",
           director: "Director",
@@ -49,6 +50,7 @@ class Admin::SelectionsControllerTest < ActionDispatch::IntegrationTest
             country: ["CA", "US"],
           },
           selection: {
+            category_id: categories(:base).id,
             film_attributes: {
               title: "New Film",
               director: "Director",
@@ -71,6 +73,7 @@ class Admin::SelectionsControllerTest < ActionDispatch::IntegrationTest
         post admin_festival_edition_selections_url(@edition.festival, @edition, params: {
           film_id: films(:with_multiple_countries).id,
           selection: {
+            category_id: categories(:base).id,
             film_attributes: {
               categorizations_attributes: {
                 "0" => {
@@ -91,15 +94,11 @@ class Admin::SelectionsControllerTest < ActionDispatch::IntegrationTest
           country: ["CA", "US"],
         },
         selection: {
+          category_id: "-1",
           film_attributes: {
             title: "New Film",
             director: "Director",
             year: 2024,
-            categorizations_attributes: {
-              "0" => {
-                category_id: "-1",
-              },
-            },
           },
         },
         new_category: "New Category",

@@ -3,7 +3,9 @@
 base:
   edition: base
   film: base
+  category: base
 
 with_original_title:
   edition: base
   film: with_original_title
+  category: midnight

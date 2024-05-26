@@ -27,10 +27,17 @@ module Film::Importable
           end
         end
 
-        film.editions << edition unless film.editions.include?(edition)
+        film.update(row.to_hash)
+
+        film.selections.create(
+          edition: edition,
+          category: category,
+        ) if film.editions.exclude?(edition)
+
+        # TODO: Remove this when categorizations are removed
         film.categories << category unless film.categories.include?(category)
 
-        if film.update(row.to_hash)
+        if film.valid?
           result.imported << film
         else
           result.errors << film.errors.full_messages
