@@ -3,6 +3,8 @@
 class Category < ApplicationRecord
   belongs_to :edition
 
+  has_many :selections
+
   has_many :categorizations, dependent: :destroy
   has_many :films, through: :categorizations
   has_many :ratings, through: :films

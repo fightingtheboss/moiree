@@ -3,6 +3,7 @@
 class Selection < ApplicationRecord
   belongs_to :edition, inverse_of: :selections
   belongs_to :film, inverse_of: :selections
+  belongs_to :category, inverse_of: :selections
 
   has_many :ratings, dependent: :destroy
   has_many :critics, through: :ratings
