@@ -30,7 +30,7 @@
                     <h2><%= rating.film.director %></h2>
                     <h3><%= rating.film.year %></h3>
                   </td>
-                  <td class="border border-indigo-100 p-2 text-center"><%= rating.film.category(edition: edition).name %></td>
+                  <td class="border border-indigo-100 p-2 text-center"><%= rating.selection.category.name %></td>
                   <td class="border border-indigo-100 border-r-0 p-2 text-center"><%= display_rating(rating.score) %></td>
                 </tr>
               <% end %>

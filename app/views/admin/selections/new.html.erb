@@ -62,25 +62,22 @@
             <%= field_set_tag do %>
               <legend class="block text-gray-700 text-sm font-bold mb-2">Category</legend>
 
-              <%= form.fields_for :categorizations, @film.categorizations.build do |category_form| %>
-                <% if @edition.categories.any? %>
-                  <% @edition.categories.order(:name).all.each do |category| %>
-                    <%= category_form.label :category_id, value: category.id, class: "block text-gray-700 text-sm font-semibold mb-3" do %>
-                      <%= category_form.radio_button :category_id, category.id, class: "text-indigo-500 focus:ring-indigo-500" %>
-                      <span class="inline-block ml-2"><%= category.name %></span>
-                    <% end %>
+              <% if @edition.categories.any? %>
+                <% @edition.categories.order(:name).all.each do |category| %>
+                  <%= selection_form.label :category_id, value: category.id, class: "block text-gray-700 text-sm font-semibold mb-3" do %>
+                    <%= selection_form.radio_button :category_id, category.id, class: "text-indigo-500 focus:ring-indigo-500" %>
+                    <span class="inline-block ml-2"><%= category.name %></span>
                   <% end %>
-                <% end %>
-
-                <%= category_form.label :category_id, value: "-1", class: "block text-gray-700 text-sm font-semibold" do %>
-                  <%= category_form.radio_button :category_id, "-1", class: "peer text-indigo-500 focus:ring-indigo-500" %> <span class="inline-block ml-2 text-indigo-400 peer-checked:text-indigo-500">Add a new category</span>
-
-                  <div class="hidden peer-checked:block mt-3">
-                    <%= text_field_tag :new_category, nil, placeholder: "e.g. Special Presentations", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
-                  </div>
                 <% end %>
               <% end %>
 
+              <%= selection_form.label :category_id, value: "-1", class: "block text-gray-700 text-sm font-semibold" do %>
+                <%= selection_form.radio_button :category_id, "-1", class: "peer text-indigo-500 focus:ring-indigo-500" %> <span class="inline-block ml-2 text-indigo-400 peer-checked:text-indigo-500">Add a new category</span>
+
+                <div class="hidden peer-checked:block mt-3">
+                  <%= text_field_tag :new_category, nil, placeholder: "e.g. Special Presentations", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+                </div>
+              <% end %>
             <% end %>
           </div>
           <div class="flex items-center justify-between mt-8">

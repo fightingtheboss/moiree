@@ -1,7 +1,7 @@
 <li id="<%= dom_id(selection) %>" class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow my-1 md:my-0 group">
   <div class="flex justify-between">
     <article class="basis-full">
-      <h2 class="text-xs uppercase tracking-wide font-light"><%= selection.film.categories.first.name %></h2>
+      <h2 class="text-xs uppercase tracking-wide font-light"><%= selection.category.name %></h2>
       <h1 class="font-semibold my-2 leading-tight"><%= link_to selection.film.title, film_url(selection.film), target: "_top", class: "hover:italic hover:text-indigo-700" %></h1>
       <p class="text-sm my-0.5"><%= selection.film.director %></p>
       <p class="text-sm my-0.5"><%= selection.film.countries.join(", ") %></p>

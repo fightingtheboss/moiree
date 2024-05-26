@@ -9,15 +9,13 @@ class EditionsController < ApplicationController
     hidden_critics = params[:critics]
 
     @edition = Edition.friendly.find(params[:id])
-    @selections = @edition.selections_with_categories.includes(ratings: :critic).order("films.title")
+    @selections = @edition.selections.includes(:category, :film, ratings: :critic).order("films.title")
 
     if only_show_rated?
       @selections = @selections.where.associated(:ratings)
     end
 
-    @selections_by_category = @selections.group_by do |selection|
-                                selection.film.categories.first
-                              end.sort_by { |category, _selections| category&.position }
+    @selections_by_category = @selections.group_by(&:category).sort_by { |category, _selections| category&.position }
 
     @critics = @edition.critics.sort_by(&:last_name).reject do |critic|
       hidden_critics&.include?(critic.id.to_s)

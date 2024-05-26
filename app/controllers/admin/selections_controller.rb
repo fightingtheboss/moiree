@@ -6,7 +6,6 @@ class Admin
 
     def new
       @film = params[:film_id] ? Film.find(params[:film_id]) : Film.new
-      @film.categorizations.build
       @selection = @film.selections.build(edition: @edition)
     end
 
@@ -24,7 +23,7 @@ class Admin
       # Save film and new category in a transaction
       ActiveRecord::Base.transaction do
         category = category_for(edition: @edition)
-        @film.categories << category if category
+        @selection.category = category if category
 
         @film.save!
         @selection.save!
@@ -51,7 +50,8 @@ class Admin
       respond_to do |format|
         format.html { render(:new) }
         format.turbo_stream do
-          flash.now[:alert] = @rating.errors.full_messages.join(", ")
+          flash.now[:alert] = (@film.errors.full_messages + @selection.errors.full_messages).join(", ")
+
           render(
             turbo_stream: [
               turbo_stream.update(
@@ -82,7 +82,7 @@ class Admin
         # Handle new category
         category = category_for(edition: @edition)
 
-        @film.categories << category if category.new_record?
+        @selection.category = category if category&.new_record?
 
         @selection.update!(selection_params_without_new_category)
       end
@@ -112,7 +112,8 @@ class Admin
         format.html { render(:edit) }
 
         format.turbo_stream do
-          flash.now[:alert] = @rating.errors.full_messages.join(", ")
+          flash.now[:alert] = (@film.errors.full_messages + @selection.errors.full_messages).join(", ")
+
           render(
             turbo_stream: [
               turbo_stream.update(
@@ -163,6 +164,7 @@ class Admin
     def selection_params
       params.require(:selection).permit(
         :film_id,
+        :category_id,
         film_attributes: [
           :id,
           :title,
@@ -180,8 +182,8 @@ class Admin
 
     def selection_params_without_new_category
       # Check for category with value -1 (new category) and remove from params
-      if params[:selection][:film_attributes][:categorizations_attributes]["0"][:category_id] == "-1"
-        params[:selection][:film_attributes].delete(:categorizations_attributes)
+      if params[:selection][:category_id] == "-1"
+        params[:selection].delete(:category_id)
       end
 
       selection_params
@@ -189,7 +191,7 @@ class Admin
 
     def existing_category_id
       if params[:new_category].blank?
-        params[:selection][:film_attributes][:categorizations_attributes]["0"][:category_id]
+        params[:selection][:category_id]
       end
     end
 
