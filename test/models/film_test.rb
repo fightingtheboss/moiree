@@ -10,28 +10,6 @@ class FilmTest < ActiveSupport::TestCase
     assert(film.ratings.include?(rating))
   end
 
-  test "#categories should return the Categories associated with the Film" do
-    film = films(:base)
-    category = categories(:base)
-
-    assert(film.categories.include?(category))
-  end
-
-  test "#category should return nil if no Category is associated with the film" do
-    film = films(:with_multiple_directors)
-    edition = editions(:base)
-
-    assert_nil(film.category(edition: edition))
-  end
-
-  test "#category should return the Category associated with the Film for the given Edition" do
-    film = films(:base)
-    edition = editions(:base)
-    category = categories(:base)
-
-    assert_equal(category, film.category(edition: edition))
-  end
-
   test "#cache_overall_average_rating should update overall_average_rating" do
     film = films(:base)
     film.update(overall_average_rating: nil)

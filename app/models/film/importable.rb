@@ -34,9 +34,6 @@ module Film::Importable
           category: category,
         ) if film.editions.exclude?(edition)
 
-        # TODO: Remove this when categorizations are removed
-        film.categories << category unless film.categories.include?(category)
-
         if film.valid?
           result.imported << film
         else

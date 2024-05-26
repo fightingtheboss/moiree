@@ -4,9 +4,6 @@ class Film < ApplicationRecord
   include Importable, Searchable
   include FriendlyId
 
-  has_many :categorizations, dependent: :destroy
-  has_many :categories, through: :categorizations
-
   has_many :selections, dependent: :destroy, inverse_of: :film
   has_many :editions, through: :selections
   has_many :ratings, through: :selections do
@@ -21,8 +18,6 @@ class Film < ApplicationRecord
 
   validates :title, :director, :country, :year, presence: true
 
-  accepts_nested_attributes_for :categorizations
-
   friendly_id :slug_candidates, use: :slugged
 
   def cache_overall_average_rating
@@ -35,10 +30,6 @@ class Film < ApplicationRecord
 
   def countries
     country.split(",").map(&:strip).map { |c| Country[c].common_name }
-  end
-
-  def category(edition:)
-    categories.find_by(edition: edition)
   end
 
   private

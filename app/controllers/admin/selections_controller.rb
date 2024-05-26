@@ -172,10 +172,6 @@ class Admin
           :director,
           :year,
           country: [],
-          categorizations_attributes: [
-            :category_id,
-            :id,
-          ],
         ],
       )
     end

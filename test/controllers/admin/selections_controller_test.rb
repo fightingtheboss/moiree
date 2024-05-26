@@ -30,11 +30,6 @@ class Admin::SelectionsControllerTest < ActionDispatch::IntegrationTest
           title: "New Film",
           director: "Director",
           year: 2024,
-          categorizations_attributes: {
-            "0" => {
-              category_id: categories(:base).id,
-            },
-          },
         },
       },
     })
@@ -55,11 +50,6 @@ class Admin::SelectionsControllerTest < ActionDispatch::IntegrationTest
               title: "New Film",
               director: "Director",
               year: 2024,
-              categorizations_attributes: {
-                "0" => {
-                  category_id: categories(:base).id,
-                },
-              },
             },
           },
         })
@@ -74,13 +64,6 @@ class Admin::SelectionsControllerTest < ActionDispatch::IntegrationTest
           film_id: films(:with_multiple_countries).id,
           selection: {
             category_id: categories(:base).id,
-            film_attributes: {
-              categorizations_attributes: {
-                "0" => {
-                  category_id: categories(:base).id,
-                },
-              },
-            },
           },
         })
       end
