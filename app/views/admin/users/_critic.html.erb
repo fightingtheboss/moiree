@@ -28,7 +28,7 @@
     <footer class="flex justify-between items-center">
       <div class="flex gap-2">
         <div class="px-2 py-1 bg-violet-500 text-white text-xs rounded hover:bg-violet-700">
-          <%= pluralize(critic.edition_attendances.size, "edition") %>
+          <%= pluralize(critic.editions.size, "edition") %>
         </div>
         <div class="px-2 py-1 bg-teal-500 text-white text-xs rounded hover:bg-teal-700">
           <%= link_to pluralize(critic.ratings.size, "rating"), critic_url(critic), target: "_top" %>

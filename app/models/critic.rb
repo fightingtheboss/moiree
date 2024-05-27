@@ -5,7 +5,7 @@ class Critic < ApplicationRecord
   include FriendlyId
 
   has_many :attendances, dependent: :destroy
-  has_many :edition_attendances, through: :attendances, class_name: "Edition", source: :edition
+  has_many :editions, through: :attendances
 
   has_many :ratings, dependent: :destroy do
     def for(edition)
@@ -13,7 +13,6 @@ class Critic < ApplicationRecord
     end
   end
   has_many :selections, through: :ratings
-  has_many :editions, through: :selections
   has_many :films, through: :selections
 
   validates :first_name, :last_name, presence: true
