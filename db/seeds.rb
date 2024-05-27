@@ -48,11 +48,11 @@ if Rails.env.development?
   puts "\n\nCreating 2 editions per festival..."
 
   Festival.all.each do |festival|
-    (1..2).each do |i|
-      year = 2023 + i
+    2.times do |i|
+      year = Date.current.year + i
 
       festival.editions.find_or_create_by!(year: year) do |edition|
-        edition.code = Faker::Alphanumeric.alpha(number: 6).upcase
+        edition.code = festival.name + year.to_s[-2..-1]
         edition.start_date = Faker::Date.between(from: Date.new(year, 1, 1), to: Date.new(year, 12, 31))
         edition.end_date = edition.start_date + rand(7..14).days
       end
@@ -61,50 +61,68 @@ if Rails.env.development?
     print "."
   end
 
+  puts "\n\nCreating 100 films..."
+
+  100.times do
+    Film.find_or_create_by!(title: Faker::Movie.unique.title) do |film|
+      film.original_title = [film.title, nil].sample
+      film.director = Faker::Name.name
+      film.country = ISO3166::Country.codes.sample
+      film.year = rand(1900..Date.current.year)
+      film.overall_average_rating = rand(0.0..5.0)
+    end
+  end
+
   puts "\n\nPopulating editions..."
 
   Edition.all.each do |edition|
-    puts "\n\n-> #{edition.code} #{edition.year}"
+    puts "\n\n-> #{edition.code}"
+    print "--> Adding critics"
+
+    Critic.all.sample(rand(8..20)).each do |critic|
+      edition.attendances.find_or_create_by!(critic: critic)
+      print "."
+    end
+
+    puts
     print "--> Creating categories"
 
     # Create up to 10 categories
-    Faker::Hipster.words(number: rand(10) + 1).each do |category_name|
+    Faker::Hipster.words(number: rand(12) + 5, spaces_allowed: true).each do |category_name|
       edition.categories.find_or_create_by!(name: category_name.capitalize)
       print "."
     end
 
     puts
-    print "--> Creating films"
-    # Create up to 20 films
-    (1..20).each do |j|
-      edition.films.find_or_create_by!(title: Faker::Movie.title) do |film|
-        film.original_title = [Faker::Movie.title, nil].sample
-        film.director = Faker::Name.name
-        film.country = ISO3166::Country.codes.sample
-        film.year = rand(1900..edition.year)
-        film.overall_average_rating = rand(0.0..5.0)
+    print "--> Creating selections"
+    # Create up to 50 selections
+    (rand(50) + 15).times do
+      edition.selections.find_or_create_by!(film: Film.all.sample) do |selection|
+        selection.category = edition.categories.sample
       end
 
       print "."
     end
 
     puts
-    print "--> Creating reviews"
-    # Create up to 25 selections
+    print "--> Creating ratings"
+    # Create ratings for up to 80% of selections
     edition.selections.each do |selection|
-      selection.category = edition.categories.sample
-
-      Critic.all.each do |critic|
+      edition.critics.each do |critic|
         next if rand(10) > 7
 
         selection.ratings.find_or_create_by!(critic: critic) do |rating|
-          rating.score = rand(1.0..5.0)
+          rating.skip_cache_average_ratings_callback = true
+          rating.score = (rand(1.0..5.0) * 2).round / 2.0
         end
 
         print "."
       end
     end
   end
+
+  Selection.find_each(&:cache_average_rating)
+  Film.find_each(&:cache_overall_average_rating)
 
   puts "\n\nDone.\n\n"
 end
