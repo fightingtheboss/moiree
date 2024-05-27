@@ -16,8 +16,10 @@ class Rating < ApplicationRecord
     message: ->(object, _) { "#{object.critic.name} has already rated #{object.film.title}" },
   }
 
-  after_create :cache_average_ratings
-  after_destroy :cache_average_ratings
+  attr_accessor :skip_cache_average_ratings_callback
+
+  after_create :cache_average_ratings, unless: :skip_cache_average_ratings_callback
+  after_destroy :cache_average_ratings, unless: :skip_cache_average_ratings_callback
 
   private
 
