@@ -19,7 +19,7 @@
 
     <section>
       <% @film.editions.order("editions.start_date DESC").each do |edition| %>
-        <h3 class="sticky top-7 left-0 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
+        <h3 id="<%= dom_id(edition) %>" class="sticky top-7 left-0 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
         <% if edition.ratings.any?%>
           <table class="border-collapse border-spacing-0 w-full mb-4">
             <thead>

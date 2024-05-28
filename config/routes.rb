@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :critics, only: [:show]
   resources :editions, only: [:show] do
     get :live, on: :member
+    resource :summary, only: [:show]
   end
   resources :films, only: [:show]
   resource  :password, only: [:edit, :update]
@@ -31,8 +32,6 @@ Rails.application.routes.draw do
         resources :categories, only: [:index, :update] do
           patch :reorder, on: :member
         end
-
-        resource :leaderboard, only: [:show]
 
         resources :selections do
           get :csv, on: :collection

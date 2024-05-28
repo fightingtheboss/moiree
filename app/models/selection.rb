@@ -15,4 +15,16 @@ class Selection < ApplicationRecord
   def cache_average_rating
     update(average_rating: ratings.where(critic: edition.critics).average(:score).to_f)
   end
+
+  def ratings_standard_deviation
+    number_of_ratings = ratings.size
+
+    return 0 if number_of_ratings < 2
+
+    variance = ratings.map { |r|
+      (r.score - average_rating)**2
+    }.sum / (number_of_ratings - 1)
+
+    Math.sqrt(variance)
+  end
 end

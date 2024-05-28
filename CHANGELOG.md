@@ -1,5 +1,20 @@
 # Changelog
 
+## 2024-05-28
+- Add summary view and controller for a festival for when it's done
+  - Top 3 in Competition
+  - Top 5 across the rest
+  - Number of 5 star ratings
+  - Number of 0 star ratings
+  - Most divisive film (with histogram of rating distribution)
+
+## 2024-05-26
+- Remap categorizations to belong_to selections rather than films
+  - category has_many selections
+  - selection belongs_to category
+  - Remove Categorizations model
+  - Update all dependent code
+
 ## 2024-05-23
 - Ensure average caches are updated when a rating is deleted
 - Ensure that the tweet is within the 280 character limit

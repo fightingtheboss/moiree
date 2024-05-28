@@ -5,7 +5,7 @@ class Category < ApplicationRecord
 
   has_many :selections
   has_many :films, through: :selections
-  has_many :ratings, through: :films
+  has_many :ratings, through: :selections
 
   validates :name, presence: true, uniqueness: { scope: :edition_id }
 
