@@ -22,15 +22,17 @@
     <% end %>
   </div>
 
-  <% if Current.user.admin? || (Current.user.critic? && Current.user.userable.edition_attendances.include?(@edition)) %>
-    <aside id="<%= dom_id(selection, :critic_rating) %>" class="mt-4">
-      <% unless critic_already_rated?(selection) || defined?(hide_rate_button) %>
-        <%= render partial: "admin/ratings/new_rating_button", locals: { festival: @festival, edition: @edition, selection: selection } %>
-      <% end %>
+  <% unless @edition.past? %>
+    <% if Current.user.admin? || (Current.user.critic? && Current.user.userable.editions.include?(@edition)) %>
+      <aside id="<%= dom_id(selection, :critic_rating) %>" class="mt-4">
+        <% unless critic_already_rated?(selection) || defined?(hide_rate_button) %>
+          <%= render partial: "admin/ratings/new_rating_button", locals: { festival: @festival, edition: @edition, selection: selection } %>
+        <% end %>
 
-      <% if critic_already_rated?(selection) %>
-        <%= render partial: "admin/ratings/edit_rating_button", locals: { festival: @festival, edition: @edition, selection: selection, rating: Current.user.userable.ratings.find_by(selection: selection) } %>
-      <% end %>
-    </aside>
+        <% if critic_already_rated?(selection) %>
+          <%= render partial: "admin/ratings/edit_rating_button", locals: { festival: @festival, edition: @edition, selection: selection, rating: Current.user.userable.ratings.find_by(selection: selection) } %>
+        <% end %>
+      </aside>
+    <% end %>
   <% end %>
 </li>

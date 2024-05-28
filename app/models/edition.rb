@@ -43,4 +43,8 @@ class Edition < ApplicationRecord
       (Date.current - start_date).to_i + 1
     end
   end
+
+  def past?
+    end_date + 1.day < Date.current
+  end
 end
