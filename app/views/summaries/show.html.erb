@@ -19,7 +19,7 @@
               <li class="relative overflow-hidden [counter-increment:list-counter] after:[content:counter(list-counter)] after:absolute after:-top-16 after:-right-16 after:w-32 after:h-32 after:rounded-full after:pl-[2rem] after:pt-[4.75rem] after:font-semibold after:text-xl shadow rounded mb-2 p-4 md:w-1/3 bg-[linear-gradient(to_left_bottom,_transparent,_#fffa_65%),_repeating-radial-gradient(circle_at_100%_0,#eef2ff_2px,#eef2ff_4px,#e0e7ff_4px,#e0e7ff_6px)]">
                 <h2 class="font-medium leading-tight pr-16"><%= link_to selection.film.title, film_path(selection.film, anchor: dom_id(@edition)), class: "hover:text-indigo-700 hover:italic" %></h2>
                 <h3 class="text-sm my-0.5"><%= selection.film.director %></h3>
-                <p class="text-sm text-slate-500">Avg <strong><%= selection.average_rating %></strong> from <%= pluralize(selection.ratings.size, "rating") %></p>
+                <p class="text-sm text-slate-500">Avg <strong><%= number_with_precision(selection.average_rating, precision: 2) %></strong> from <%= pluralize(selection.ratings.all.size, "rating") %></p>
               </li>
             <% end %>
           </ul>
@@ -37,7 +37,7 @@
                 <h4 class="text-xs uppercase tracking-wide font-light mb-1"><%= selection.category.name %></h4>
                 <h2 class="font-medium leading-tight pr-16"><%= link_to selection.film.title, film_path(selection.film, anchor: dom_id(@edition)), class: "hover:text-indigo-700 hover:italic" %></h2>
                 <h3 class="text-xs my-0.5"><%= selection.film.director %></h3>
-                <p class="text-xs text-slate-500">Avg <strong><%= selection.average_rating %></strong> from <%= pluralize(selection.ratings.size, "rating") %></p>
+                <p class="text-xs text-slate-500">Avg <strong><%= number_with_precision(selection.average_rating, precision: 2) %></strong> from <%= pluralize(selection.ratings.all.size, "rating") %></p>
               </div>
             </li>
           <% end %>
@@ -54,7 +54,7 @@
             <h4 class="text-xs uppercase tracking-wide font-light mb-1"><%= @bombe_moiree.category.name %></h4>
             <h2 class="font-medium leading-tight"><%= link_to @bombe_moiree.film.title, film_path(@bombe_moiree.film, anchor: dom_id(@edition)), class: "hover:text-indigo-700 hover:italic" %></h2>
             <h3 class="text-xs my-0.5"><%= @bombe_moiree.film.director %></h3>
-            <p class="text-xs text-slate-500">Avg <strong><%= @bombe_moiree.average_rating %></strong> from <%= pluralize(@bombe_moiree.ratings.size, "rating") %></p>
+            <p class="text-xs text-slate-500">Avg <strong><%= number_with_precision(@bombe_moiree.average_rating, precision: 1) %></strong> from <%= pluralize(@bombe_moiree.ratings.size, "rating") %></p>
           </div>
           <ul class="grid grid-flow-col gap-1 h-24 items-end my-8">
             <% @bombe_moiree_histogram.each do |score, count| %>
@@ -75,7 +75,7 @@
             <h4 class="text-xs uppercase tracking-wide font-light mb-1"><%= @most_divisive.category.name %></h4>
             <h2 class="font-medium leading-tight"><%= link_to @most_divisive.film.title, film_path(@most_divisive.film, anchor: dom_id(@edition)), class: "hover:text-indigo-700 hover:italic" %></h2>
             <h3 class="text-xs my-0.5"><%= @most_divisive.film.director %></h3>
-            <p class="text-xs text-slate-500">Avg <strong><%= @most_divisive.average_rating %></strong> from <%= pluralize(@most_divisive.ratings.size, "rating") %></p>
+            <p class="text-xs text-slate-500">Avg <strong><%= number_with_precision(@most_divisive.average_rating, precision: 1) %></strong> from <%= pluralize(@most_divisive.ratings.all.size, "rating") %></p>
           </div>
           <ul class="grid grid-flow-col gap-1 h-24 items-end my-8">
             <% @most_divisive_histogram.each do |score, count| %>

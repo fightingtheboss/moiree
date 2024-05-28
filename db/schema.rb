@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_26_035342) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_28_225028) do
   create_table "admins", force: :cascade do |t|
     t.string "username"
     t.datetime "created_at", null: false
@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_26_035342) do
     t.string "director"
     t.string "country"
     t.integer "year"
-    t.decimal "overall_average_rating", precision: 2, scale: 1
+    t.decimal "overall_average_rating"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
@@ -101,7 +101,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_26_035342) do
     t.integer "film_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "average_rating", precision: 2, scale: 1
+    t.decimal "average_rating"
     t.integer "category_id"
     t.index ["category_id"], name: "index_selections_on_category_id"
     t.index ["edition_id"], name: "index_selections_on_edition_id"
