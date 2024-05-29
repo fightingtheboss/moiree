@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Category < ApplicationRecord
-  belongs_to :edition
+  belongs_to :edition, touch: true
 
   has_many :selections
   has_many :films, through: :selections

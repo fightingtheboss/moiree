@@ -2,7 +2,7 @@
 
 class Rating < ApplicationRecord
   belongs_to :critic
-  belongs_to :selection
+  belongs_to :selection, touch: true
 
   has_one :edition, through: :selection
   has_one :film, through: :selection

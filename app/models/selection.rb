@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Selection < ApplicationRecord
-  belongs_to :edition, inverse_of: :selections
+  belongs_to :edition, inverse_of: :selections, touch: true
   belongs_to :film, inverse_of: :selections
   belongs_to :category, inverse_of: :selections
 
@@ -11,6 +11,8 @@ class Selection < ApplicationRecord
   validates :edition_id, uniqueness: { scope: :film_id }
 
   accepts_nested_attributes_for :film
+
+  after_touch :touch_edition
 
   def cache_average_rating
     update(average_rating: ratings.where(critic: edition.critics).average(:score).to_f)
@@ -26,5 +28,9 @@ class Selection < ApplicationRecord
     }.sum / (number_of_ratings - 1)
 
     Math.sqrt(variance)
+  end
+
+  def touch_edition
+    edition.touch
   end
 end
