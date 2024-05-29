@@ -2,7 +2,7 @@
 
 class Admin
   class EditionsController < AdminController
-    layout "editions", only: [:show]
+    layout "admin/editions", only: [:show]
 
     before_action :set_festival
     before_action :set_edition, only: [:show, :edit, :update, :destroy]

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::CategoriesController < ApplicationController
-  layout "editions"
+  layout "admin/editions"
 
   before_action :set_festival_and_edition
   before_action :set_category, only: [:reorder, :update]

@@ -2,7 +2,7 @@
 
 class Admin
   class AttendancesController < AdminController
-    layout "editions"
+    layout "admin/editions"
 
     before_action :set_festival_and_edition
 
