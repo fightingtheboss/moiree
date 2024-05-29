@@ -34,9 +34,6 @@ class SummariesController < ApplicationController
 
     @most_divisive = @edition.selections
       .includes(:ratings)
-      .joins(:ratings)
-      .group("selections.id")
-      .having("COUNT(ratings.id) >= 4")
       .sort_by(&:ratings_standard_deviation)
       .reverse
       .first

@@ -19,7 +19,7 @@ class Selection < ApplicationRecord
   def ratings_standard_deviation
     number_of_ratings = ratings.size
 
-    return 0 if number_of_ratings < 2
+    return 0 if number_of_ratings < 4
 
     variance = ratings.map { |r|
       (r.score - average_rating)**2
