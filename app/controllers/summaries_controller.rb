@@ -31,11 +31,15 @@ class SummariesController < ApplicationController
         .having("COUNT(ratings.id) >= 4")
         .order(average_rating: :asc)
         .first
-      @bombe_moiree_histogram = @bombe_moiree.ratings.group_by(&:score).transform_values(&:size)
-      (0..5).step(0.5).each do |score|
-        @bombe_moiree_histogram[score.to_d] ||= 0
+
+      if @bombe_moiree
+        @bombe_moiree_histogram = @bombe_moiree.ratings.group_by(&:score).transform_values(&:size)
+        (0..5).step(0.5).each do |score|
+          @bombe_moiree_histogram[score.to_d] ||= 0
+        end
+
+        @bombe_moiree_histogram = @bombe_moiree_histogram.sort.to_h
       end
-      @bombe_moiree_histogram = @bombe_moiree_histogram.sort.to_h
 
       @five_star_ratings = @edition.ratings.where({ score: 5.0 }).order("films.title")
       @zero_star_ratings = @edition.ratings.where({ score: 0.0 }).order("films.title")
@@ -45,11 +49,15 @@ class SummariesController < ApplicationController
         .sort_by(&:ratings_standard_deviation)
         .reverse
         .first
-      @most_divisive_histogram = @most_divisive.ratings.all.group_by(&:score).transform_values(&:size)
-      (0..5).step(0.5).each do |score|
-        @most_divisive_histogram[score.to_d] ||= 0
+
+      if @most_divisive
+        @most_divisive_histogram = @most_divisive.ratings.all.group_by(&:score).transform_values(&:size)
+        (0..5).step(0.5).each do |score|
+          @most_divisive_histogram[score.to_d] ||= 0
+        end
+
+        @most_divisive_histogram = @most_divisive_histogram.sort.to_h
       end
-      @most_divisive_histogram = @most_divisive_histogram.sort.to_h
     end
   end
 end

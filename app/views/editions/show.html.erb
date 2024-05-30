@@ -1,5 +1,7 @@
 <% description("Grid of critic ratings for #{@edition.code}") %>
 
+<%= render partial: "shared/edition_nav", locals: { edition: @edition } %>
+
 <div class="overflow-x-auto overflow-y-scroll h-[calc(100vh-2rem)] w-full">
   <%= turbo_frame_tag "edition-ratings" do %>
     <header class="p-4 text-left w-full sticky top-0 left-0">
@@ -8,18 +10,6 @@
           <h2 class="font-normal text-xs uppercase"><%= @edition.name %></h2>
           <h1 class="font-semibold text-2xl"><%= @edition.code %></h1>
           <p class="mt-1 text-sm">Ratings are out of 5.0</p>
-
-          <% if @edition.ratings.any? %>
-            <div class="mt-2 flex gap-4 items-center">
-              <% if params[:saf] == "false" || (params[:saf].nil? && @edition.current?) %>
-                <p class="text-sm font-semibold">Only showing films with ratings</p>
-                <%= link_to "Show all films", edition_path(@edition, request.query_parameters.merge(saf: true)), data: { "turbo-action": "advance" }, class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs" %>
-              <% elsif params[:saf] == "true" || params[:saf].nil? %>
-                <p class="text-sm font-semibold">Showing all films</p>
-                <%= link_to "Only show films with ratings", edition_path(@edition, request.query_parameters.merge(saf: false)), data: { "turbo-action": "advance" }, class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs" %>
-              <% end %>
-            </div>
-          <% end %>
         </div>
         <div class="text-right">
           <% if params[:critics].present? %>
@@ -28,6 +18,17 @@
           <% end %>
         </div>
       </div>
+      <% if @edition.ratings.any? %>
+        <div class="mt-2 flex gap-4 items-center">
+          <% if params[:saf] == "false" || (params[:saf].nil? && @edition.current?) %>
+            <p class="text-sm font-semibold">Only showing films with ratings</p>
+            <%= link_to "Show all films", edition_path(@edition, request.query_parameters.merge(saf: true)), data: { "turbo-action": "advance" }, class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs" %>
+          <% elsif params[:saf] == "true" || params[:saf].nil? %>
+            <p class="text-sm font-semibold">Showing all films</p>
+            <%= link_to "Only show films with ratings", edition_path(@edition, request.query_parameters.merge(saf: false)), data: { "turbo-action": "advance" }, class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs" %>
+          <% end %>
+        </div>
+      <% end %>
     </header>
 
     <table class="border-separate border-spacing-0 bg-white table-fixed w-full overflow-clip">

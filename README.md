@@ -22,15 +22,19 @@ When an Admin is invited, their account is created and they're sent a link to re
 
 ## Roadmap
 - Make shareable cards and views for end of fest
-  - One for top 3 in Competition
-  - One for top 5 across the rest
-  - Ratings per film filtered by country, critic's country
-    - This could show the distribution graph, like on Letterboxd
-  - Highest rated category
-  - Critic's most liked countries
-  - Number of 5 star ratings
-  - Number of 0 star ratings
-- Have a view that shows all ratings by most recent
+  - Generate a dynamic SVG and convert to PNG (as suggested by ChatGPT) for sharing URLs
+    - This would have an SVG template (and maybe a dedicated controller?)
+    - Would need to install either image_processing or the vips gem
+  - Page caching for the summary!
+  - Stats
+    - One for top 3 in Competition
+    - One for top 5 across the rest
+    - Ratings per film filtered by country, critic's country
+      - This could show the distribution graph, like on Letterboxd
+    - Highest rated category
+    - Critic's most liked countries
+    - Number of 5 star ratings
+    - Number of 0 star ratings
 - Replace star rating range input with something more universal
 - Grid sorting and filtering
   - Need to show film country

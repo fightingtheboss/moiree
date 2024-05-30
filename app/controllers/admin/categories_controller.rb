@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::CategoriesController < ApplicationController
-  layout "admin/editions"
+  layout :editions_layout
 
   before_action :set_festival_and_edition
   before_action :set_category, only: [:reorder, :update]
@@ -50,5 +50,11 @@ class Admin::CategoriesController < ApplicationController
   def set_festival_and_edition
     @edition = Edition.includes(:festival).friendly.find(params[:edition_id])
     @festival = @edition.festival
+  end
+
+  def editions_layout
+    return "turbo_rails/frame" if turbo_frame_request?
+
+    "admin/editions"
   end
 end

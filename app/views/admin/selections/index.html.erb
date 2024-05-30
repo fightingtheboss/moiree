@@ -48,7 +48,7 @@
         <% if @selections.any? %>
           <%= render @selections %>
         <% else %>
-          <li>
+          <li class="md:col-span-full">
             No films in this edition yet.
             <%= link_to "Add film", new_admin_festival_edition_selection_path(@festival, @edition),
               data: {

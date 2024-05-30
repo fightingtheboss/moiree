@@ -2,7 +2,7 @@
 
 class Admin
   class EditionsController < AdminController
-    layout "admin/editions", only: [:show]
+    layout :editions_layout, only: [:new, :edit]
 
     before_action :set_festival
     before_action :set_edition, only: [:show, :edit, :update, :destroy]
@@ -59,6 +59,12 @@ class Admin
 
     def set_edition
       @edition = Edition.friendly.find(params[:id])
+    end
+
+    def editions_layout
+      return "turbo_rails/frame" if turbo_frame_request?
+
+      "admin"
     end
   end
 end

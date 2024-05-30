@@ -1,0 +1,13 @@
+<nav>
+  <ul class="flex bg-white text-slate-500 px-4 font-medium">
+    <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if controller_name == "editions" && action_name == "show" %>">
+      <%= link_to "Grid", edition_path(edition), class: "inline-block", data: { "turbo-frame": "top" } %>
+    </li>
+    <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if controller_name == "editions" && action_name == "live" %>">
+      <%= link_to "Live", live_edition_path(edition), class: "inline-block", data: { "turbo-frame": "top" } %>
+    </li>
+    <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if controller_name == "summaries" %>">
+      <%= link_to "Summary", edition_summary_path(edition), class: "inline-block", data: { "turbo-frame": "top" } %>
+    </li>
+  </ul>
+</nav>

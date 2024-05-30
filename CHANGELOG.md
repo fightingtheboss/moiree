@@ -1,5 +1,12 @@
 # Changelog
 
+## 2024-05-29
+- Add a nav bar to reach the Grid, Live, and Summary views
+  - Not restricting access to these yet, but I think the Summary view shouldn't be accessible before some threshold is met
+    - Threshold should be either Edition.past? or a certain number of reviews
+    - Link should just be greyed out, rather than hidden, and route should redirect (?) or at least handle the low/no content situation
+- Have a view that shows all ratings by most recent
+
 ## 2024-05-28
 - Add summary view and controller for a festival for when it's done
   - Top 3 in Competition

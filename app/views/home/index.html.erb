@@ -16,11 +16,11 @@
         <h2 class="font-semibold mb-4">Current <%= "festival".pluralize(@current.size) %></h2>
 
         <% @current.each do |edition| %>
-          <%= link_to edition_path(edition), class: "block" do %>
-            <article class="mb-4 bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow">
-              <header class="mb-4">
-                <h2 class="text-xs uppercase mb-2"><%= edition.name %></h2>
-                <h1 class="font-semibold text-xl"><%= edition.code %></h1>
+          <article class="mb-4 bg-white flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow">
+            <%= link_to edition_path(edition), class: "block" do %>
+              <header class="mb-1 px-6 pt-6 pb-2">
+                <h2 class="text-xs uppercase mb-1"><%= edition.name %></h2>
+                <h1 class="font-semibold text-xl leading-tight"><%= edition.code %></h1>
                 <div>
                   <time datetime="<%= edition.start_date.to_date %>" class="text-sm"><%= edition.start_date.strftime("%b %d, %Y") %></time>
                   <span class="text-sm"> --> </span>
@@ -28,43 +28,39 @@
                 </div>
               </header>
 
-              <ul class="text-xs flex">
+              <ul class="text-xs flex mb-4 px-6">
                 <li class="mr-1 px-2 py-1 bg-violet-500 text-white rounded"><strong><%= edition.categories.size %></strong> Categories</li>
                 <li class="mr-1 px-2 py-1 bg-fuchsia-500 text-white rounded"><strong><%= edition.films.size %></strong> Films</li>
                 <li class="px-2 py-1 bg-teal-500 text-white rounded"><strong><%= edition.ratings.size %></strong> Ratings</li>
               </ul>
+            <% end %>
 
-              <% if edition.ratings.any? %>
-                <section>
-                  <header class="my-4">
+            <% if edition.ratings.any? %>
+              <section class="bg-indigo-50 rounded-t-md p-6 border-indigo-100/50 border">
+                <header class="mb-4 flex justify-between">
+                  <div>
                     <h3 class="text-lg font-semibold">Latest ratings</h3>
                     <p class="text-sm">Ratings are out of 5</p>
-                  </header>
-                  <ul class="md:grid md:grid-cols-5 md:gap-2">
-                    <% edition.ratings.includes(:critic).order("created_at DESC").limit(5).each do |rating| %>
-                      <li class="flex flex-col justify-between bg-indigo-500 text-white py-4 px-2 shadow-sm rounded-md text-center mb-2 md:mb-0">
-                        <p class="text-sm mb-1"><strong><%= rating.critic.name %></strong> rated</p>
-                        <div class="mb-2">
-                          <h4 class="text-lg leading-tight"><%= rating.film.title %></h4>
-                          <p class="mt-1"><strong class="text-2xl"><%= display_rating(rating.score) %></strong></p>
-                        </div>
-                        <p class="text-xs text-slate-100"><%= time_ago_in_words(rating.created_at) %> ago</p>
-                      </li>
-                    <% end %>
-                  </ul>
-                </section>
-              <% end %>
-            </article>
-          <% end %>
+                  </div>
+                  <div>
+                    <%= link_to "See the live feed -->", live_edition_path(edition), class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs" %>
+                  </div>
+                </header>
+                <ul class="md:grid md:grid-cols-5 md:gap-2">
+                  <%= render edition.ratings.includes(:critic).order("created_at DESC").limit(5) %>
+                </ul>
+              </section>
+            <% end %>
+          </article>
         <% end %>
       <% end %>
 
       <% if @upcoming.any? || @past.any? %>
-        <% [["Upcoming", @upcoming], ["Past", @past]].each do |(label, festivals)| %>
-          <% if festivals.any? %>
-            <h2 class="font-semibold mb-4"><%= label %> <%= "festival".pluralize(festivals.size) %></h2>
+        <% [["Upcoming", @upcoming], ["Past", @past]].each do |(label, editions)| %>
+          <% if editions.any? %>
+            <h2 class="font-semibold mb-4"><%= label %> <%= "festival".pluralize(editions.size) %></h2>
             <ul class="grid grid-cols-1 md:grid-cols-3 md:gap-2">
-              <%= render festivals %>
+              <%= render editions %>
             </ul>
           <% end %>
         <% end %>

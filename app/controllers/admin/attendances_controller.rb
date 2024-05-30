@@ -2,7 +2,7 @@
 
 class Admin
   class AttendancesController < AdminController
-    layout "admin/editions"
+    layout :editions_layout
 
     before_action :set_festival_and_edition
 
@@ -97,6 +97,12 @@ class Admin
     def set_festival_and_edition
       @edition = Edition.includes(:festival).friendly.find(params[:edition_id])
       @festival = @edition.festival
+    end
+
+    def editions_layout
+      return "turbo_rails/frame" if turbo_frame_request?
+
+      "admin/editions"
     end
   end
 end
