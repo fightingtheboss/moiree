@@ -35,6 +35,11 @@ When an Admin is invited, their account is created and they're sent a link to re
     - Critic's most liked countries
     - Number of 5 star ratings
     - Number of 0 star ratings
+    - Number of critics
+    - Number of ratings
+    - Critic with most ratings (easily tie, so need to handle that)
+    - Critic who had a blast (most 5 star ratings / highest average rating)
+    - Critic who was least impressed (lowest average rating)
 - Replace star rating range input with something more universal
 - Grid sorting and filtering
   - Need to show film country
