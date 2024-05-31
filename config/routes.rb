@@ -15,7 +15,11 @@ Rails.application.routes.draw do
   resources :editions, only: [:show] do
     get :live, on: :member
     resource :summary, only: [:show]
-    get 'svg/:text', to: 'svgs#show', defaults: { format: 'svg' }, as: :svg
+    resource :share, only: [] do
+      get :overview, to: "shares#overview", defaults: { format: "svg" }, as: :share_overview
+      get :summary, to: "shares#summary", defaults: { format: "svg" }, as: :share_summary
+      get "stat/:template", to: "shares#stat", defaults: { format: "svg" }, as: :share_stat
+    end
   end
   resources :films, only: [:show]
   resource :password, only: [:edit, :update]

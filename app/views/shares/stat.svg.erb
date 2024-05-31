@@ -13,10 +13,10 @@
   <rect width="100%" height="100%" fill="url(#background)" />
   <rect x="50" y="50" width="700" height="700" rx="10" fill="white" />
 
-  <text x="100" y="120" font-family="Arial" font-size="18" fill="black"><%= @edition.name.upcase %></text>
+  <text x="100" y="120" font-family="Arial" font-size="24" fill="black"><%= @edition.name.upcase %></text>
   <text x="100" y="170" font-family="Arial" font-size="48" font-weight="700" fill="black"><%= @edition.code %></text>
-  <text x="100" y="210" font-family="Arial" font-size="18" fill="black"><%= @edition.start_date.strftime("%b %d, %Y") %> — <%= @edition.end_date.strftime("%b %d, %Y") %></text>
-  <text x="100" y="250" font-family="Arial" font-size="18" fill="black"><%= edition_url(@edition) %></text>
+  <text x="100" y="210" font-family="Arial" font-size="24" fill="black"><%= @edition.start_date.strftime("%b %d, %Y") %> — <%= @edition.end_date.strftime("%b %d, %Y") %></text>
+  <text x="100" y="250" font-family="Arial" font-size="24" fill="black"><%= edition_url(@edition) %></text>
 
   <image href="<%= image_url("moiree-logo.svg") %>" x="558" y="92" width="160" height="160" />
 
@@ -25,12 +25,12 @@
   <rect x="82" y="532" width="302" height="192" fill="url(#grad)" rx="10" />
   <rect x="416" y="532" width="302" height="192" fill="url(#grad)" rx="10" />
 
-  <text x="233" y="360" font-family="Arial" font-size="24" font-weight="700" text-anchor="middle" fill="black">CATEGORIES</text>
+  <text x="233" y="360" font-family="Arial" font-size="32" font-weight="700" text-anchor="middle" fill="black">CATEGORIES</text>
   <text x="233" y="460" font-family="Arial" font-size="92" font-weight="700" text-anchor="middle" fill="black"><%= @edition.categories.size %></text>
-  <text x="567" y="360" font-family="Arial" font-size="24" font-weight="700" text-anchor="middle" fill="black">FILMS</text>
+  <text x="567" y="360" font-family="Arial" font-size="32" font-weight="700" text-anchor="middle" fill="black">FILMS</text>
   <text x="567" y="460" font-family="Arial" font-size="92" font-weight="700" text-anchor="middle" fill="black"><%= @edition.selections.size %></text>
-  <text x="233" y="588" font-family="Arial" font-size="24" font-weight="700" text-anchor="middle" fill="black">CRITICS</text>
+  <text x="233" y="588" font-family="Arial" font-size="32" font-weight="700" text-anchor="middle" fill="black">CRITICS</text>
   <text x="233" y="688" font-family="Arial" font-size="92" font-weight="700" text-anchor="middle" fill="black"><%= @edition.critics.size %></text>
-  <text x="567" y="588" font-family="Arial" font-size="24" font-weight="700" text-anchor="middle" fill="black">RATINGS</text>
+  <text x="567" y="588" font-family="Arial" font-size="32" font-weight="700" text-anchor="middle" fill="black">RATINGS</text>
   <text x="567" y="688" font-family="Arial" font-size="92" font-weight="700" text-anchor="middle" fill="black"><%= @edition.ratings.size %></text>
 </svg>
