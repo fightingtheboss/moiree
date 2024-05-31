@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :editions, only: [:show] do
     get :live, on: :member
     resource :summary, only: [:show]
+    get 'svg/:text', to: 'svgs#show', defaults: { format: 'svg' }, as: :svg
   end
   resources :films, only: [:show]
   resource :password, only: [:edit, :update]
