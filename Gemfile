@@ -58,6 +58,8 @@ gem "thruster", require: false
 
 gem "mission_control-jobs"
 
+gem "image_processing"
+
 gem "bugsnag"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
