@@ -58,10 +58,16 @@
       <% if @upcoming.any? || @past.any? %>
         <% [["Upcoming", @upcoming], ["Past", @past]].each do |(label, editions)| %>
           <% if editions.any? %>
-            <h2 class="font-semibold mb-4"><%= label %> <%= "festival".pluralize(editions.size) %></h2>
-            <ul class="grid grid-cols-1 md:grid-cols-3 md:gap-2">
-              <%= render editions %>
-            </ul>
+            <section class="mb-8">
+              <h2 class="mb-4 uppercase text-sm bg-indigo-900 p-4 text-white">
+                <span class="font-extrabold tracking-[1rem]"><%= label %></span>
+                <span class="tracking-wide">&nbsp;</span>
+                <span class="tracking-[1.2rem]"><%= "festival".pluralize(editions.size) %></span>
+              </h2>
+              <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 md:gap-2">
+                <%= render editions %>
+              </ul>
+            </section>
           <% end %>
         <% end %>
       <% end %>

@@ -20,6 +20,8 @@ module.exports = {
           "repeating-radial-gradient(circle at 46% 45%, #fff, #777 0.05rem, #fff 0.4rem)",
         "logo-radial-gradient-overlay":
           "repeating-radial-gradient(circle at 46% 45%, #4f46e5, #fff 0.1em, #4f46e5 0.3em)",
+        "radial-gradient":
+          "linear-gradient(to left bottom, transparent, #fffa 65%), repeating-radial-gradient(circle at 100% 0%,#eef2ff 2px,#eef2ff 4px,#e0e7ff 4px,#e0e7ff 6px)",
       },
       animation: {
         "appear-then-fade": "appear-then-fade 7s both",
