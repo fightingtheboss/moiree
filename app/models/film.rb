@@ -20,6 +20,8 @@ class Film < ApplicationRecord
 
   friendly_id :slug_candidates, use: :slugged
 
+  before_create :map_country_to_iso_code
+
   def cache_overall_average_rating
     update(overall_average_rating: ratings.average(:score).to_f)
   end
@@ -40,5 +42,13 @@ class Film < ApplicationRecord
       [:title, :year],
       [:title, :year, :country],
     ]
+  end
+
+  def map_country_to_iso_code
+    countries = country.split(",").map(&:strip)
+
+    return if countries.all?(/^\w{2}$/)
+
+    self.country = countries.map { |c| ISO3166::Country.find_country_by_any_name(c).alpha2 }.join(",")
   end
 end

@@ -3,6 +3,18 @@
 require "test_helper"
 
 class FilmTest < ActiveSupport::TestCase
+  test "should convert country to ISO code before saving" do
+    film = Film.create!(title: "Test", director: "Test", country: "Canada, United States of America", year: 2022)
+
+    assert_equal "CA,US", film.country
+  end
+
+  test "should not change country value if all countries are already ISO codes" do
+    film = Film.create!(title: "Test", director: "Test", country: "CA,US", year: 2022)
+
+    assert_equal "CA,US", film.country
+  end
+
   test "#ratings should return the Ratings associated with the Film" do
     film = films(:base)
     rating = ratings(:base)
