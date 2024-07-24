@@ -15,6 +15,12 @@ class FilmTest < ActiveSupport::TestCase
     assert_equal "CA,US", film.country
   end
 
+  test "#countries should return the common names of the countries" do
+    film = films(:with_multiple_countries)
+
+    assert_equal ["United States", "United Kingdom"], film.countries
+  end
+
   test "#ratings should return the Ratings associated with the Film" do
     film = films(:base)
     rating = ratings(:base)
