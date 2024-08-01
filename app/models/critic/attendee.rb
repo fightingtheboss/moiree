@@ -9,7 +9,7 @@ module Critic::Attendee
   end
 
   def publication_for(edition:)
-    @cached_publication ||= attendances.find_by(edition: edition)&.publication || publication
+    attendances.find_by(edition: edition)&.publication || publication
   end
 
   def has_custom_publication?(edition:)
