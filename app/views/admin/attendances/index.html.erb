@@ -14,7 +14,7 @@
       data-sortable-url-value="<%= admin_festival_edition_attendances_path(@festival, @edition) %>"
       class="min-h-28 [&:not(:has(>li))]:bg-indigo-50">
       <% @attendances.each do |attendance| %>
-        <%= render partial: "admin/attendances/critic", locals: { critic: attendance.critic, attendance: attendance } %>
+        <%= render partial: "admin/attendances/critic", locals: { critic: attendance.critic, attendance: attendance, edition: @edition } %>
       <% end %>
     </ul>
   </div>
@@ -33,9 +33,7 @@
       data-sortable-sort-value="false"
       data-sortable-group-value="attendances"
       class="">
-      <% @remaining_critics.each do |critic| %>
-        <%= render partial: "admin/attendances/critic", locals: { critic: critic } %>
-      <% end %>
+      <%= render partial: "admin/attendances/critic", collection: @remaining_critics %>
     </ul>
   </div>
 </div>

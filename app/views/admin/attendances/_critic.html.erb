@@ -1,12 +1,28 @@
 <li id="<%= dom_id(critic) %>" data-critic-id="<%= critic.id %>" <%= "data-attendance-id=#{attendance.id}" if defined?(attendance) %>>
-  <article class="bg-white mb-2 p-4 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow hover:cursor-grab active:cursor-grabbing">
-    <header class="">
-      <h1 class="font-semibold">
-        <%= link_to critic.name, critic_url(critic), class: "hover:italic hover:text-indigo-700", target: "_top" %>
-      </h1>
-      <h2 class="text-sm font-mono leading-relaxed hidden md:block"><%= critic.email %></h2>
-      <h4 class="text-sm leading-relaxed hidden md:block"><%= critic.publication %></h4>
-      <h3 class="text-sm leading-relaxed hidden md:block"><%= "#{Country[critic.country].emoji_flag} #{Country[critic.country].common_name}" %></h3>
+  <article class="bg-white mb-2 p-4 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow hover:cursor-grab active:cursor-grabbing group">
+    <header class="flex justify-between mb-4">
+      <div>
+        <h1 class="font-semibold">
+          <%= link_to critic.name, critic_url(critic), class: "hover:italic hover:text-indigo-700", target: "_top" %>
+        </h1>
+        <h2 class="text-sm font-mono leading-relaxed hidden md:block"><%= critic.email %></h2>
+        <h4 class="text-sm leading-relaxed hidden md:block"><%= defined?(edition) ? critic.publication_for(edition: edition) : critic.publication %></h4>
+        <h3 class="text-sm leading-relaxed hidden md:block"><%= "#{Country[critic.country].emoji_flag} #{Country[critic.country].common_name}" %></h3>
+      </div>
+
+      <% if defined?(attendance) && policy(attendance).edit? %>
+        <div class="opacity-0 group-hover:opacity-100">
+          <%= link_to "Set publication", edit_admin_festival_edition_attendance_path(@festival, edition, attendance),
+              data: {
+                turbo_frame: "modal",
+                controller: "modal",
+                action: "modal#show",
+                "modal-dialog-param": "global-modal"
+              },
+              class: "inline-block text-xs text-indigo-500 hover:text-indigo-700 hover:underline"
+          %>
+        </div>
+      <% end %>
     </header>
   </article>
 </li>

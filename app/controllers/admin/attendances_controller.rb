@@ -66,6 +66,56 @@ class Admin
       end
     end
 
+    def edit
+      @attendance = Attendance.find(params[:id])
+    end
+
+    def update
+      @attendance = Attendance.find(params[:id])
+
+      if @attendance.update(attendance_params)
+        respond_to do |format|
+          format.html do
+            redirect_to(
+              admin_festival_edition_attendances_path(@festival, @edition),
+              notice: "Updated the publication for #{@attendance.critic.name} to #{@attendance.publication}.",
+            )
+          end
+
+          format.turbo_stream do
+            flash.now[:notice] =
+              "Updated the publication for #{@attendance.critic.name} to #{@attendance.publication} for #{@edition.code}"
+
+            render(turbo_stream: [
+              turbo_stream.prepend("flash", partial: "layouts/flash"),
+              turbo_stream.replace(
+                helpers.dom_id(@attendance.critic),
+                partial: "admin/attendances/critic",
+                locals: { critic: @attendance.critic, attendance: @attendance, edition: @edition },
+              ),
+            ])
+          end
+        end
+      else
+        respond_to do |format|
+          format.html do
+            flash.now[:alert] = @attendance.errors.full_messages.join(", ")
+            render(:new, status: :unprocessable_entity)
+          end
+
+          format.turbo_stream do
+            flash.now[:alert] = @attendance.errors.full_messages.join(", ")
+            render(
+              turbo_stream: [
+                turbo_stream.prepend("flash", partial: "layouts/flash"),
+              ],
+              status: :unprocessable_entity,
+            )
+          end
+        end
+      end
+    end
+
     def destroy
       @attendance = Attendance.find(params[:id])
       @attendance.destroy
@@ -91,7 +141,7 @@ class Admin
     private
 
     def attendance_params
-      params.require(:attendance).permit(:critic_id)
+      params.require(:attendance).permit(:critic_id, :publication)
     end
 
     def set_festival_and_edition

@@ -1,0 +1,25 @@
+<div class="my-4 max-w-screen-sm mx-auto">
+  <%= turbo_frame_tag "modal" do %>
+    <h1 class="text-2xl font-semibold mb-4">Set publication for <%= @attendance.critic.name %> at <%= @edition.code %></h1>
+
+    <%= form_with(model:  [:admin, @festival, @edition, @attendance]) do |form| %>
+      <%= render partial: "shared/errors", locals: { model: @attendance } %>
+
+      <div class="mb-4">
+        <h1 class="font-semibold"><%= @attendance.critic.name %></h1>
+        <h2 class="text-sm font-mono leading-relaxed hidden md:block"><%= @attendance.critic.email %></h2>
+        <h4 class="text-sm leading-relaxed hidden md:block"><%= @attendance.critic.publication_for(edition: @edition) %></h4>
+        <h3 class="text-sm leading-relaxed hidden md:block"><%= "#{Country[@attendance.critic.country].emoji_flag} #{Country[@attendance.critic.country].common_name}" %></h3>
+      </div>
+
+      <div class="mb-4">
+        <%= form.label :publication, class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= form.text_field :publication, value: @attendance.critic.publication_for(edition: @edition), required: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+      </div>
+
+      <div>
+        <%= form.submit "Set publication", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

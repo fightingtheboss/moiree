@@ -12,7 +12,7 @@
   <% if @critic.ratings.any? %>
     <section>
       <% @editions.each do |edition| %>
-        <h3 class="sticky top-8 left-0 z-20 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
+        <h3 class="sticky top-8 left-0 z-20 text-sm px-4 py-1 bg-indigo-900 text-white"><span class="font-semibold uppercase"><%= edition.code %></span><%= if  / rating for  @critic.publication_for(edition: edition) %></h3>
         <% if @ratings.for(edition).any? %>
           <table class="border-collapse border-spacing-0 w-full mb-4">
             <thead>

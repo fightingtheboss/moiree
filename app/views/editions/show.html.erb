@@ -43,7 +43,7 @@
                   <p class="text-sm leading-tight ml-1">
                     <%= link_to critic.name, critic_url(critic), target: "_top", class: "hover:italic hover:text-indigo-700" %>
                   </p>
-                  <p class="text-sm font-light leading-tight"><%= critic.publication %></p>
+                  <p class="text-sm font-light leading-tight"><%= critic.publication_for(edition: @edition) %></p>
                 </div>
                 <p class="font-normal text-xs opacity-0 group-hover:opacity-100 grow-0 shrink"><%= link_to "Hide", edition_path(@edition, request.query_parameters.merge("critics[]" => critic.id)), data: { "turbo-action": "advance" } %></p>
                 <p class="text-sm mt-2 grow-0 shrink"><%= Country[critic.country].emoji_flag %></p>
