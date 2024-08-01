@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_28_225028) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_30_043424) do
   create_table "admins", force: :cascade do |t|
     t.string "username"
     t.datetime "created_at", null: false
@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_28_225028) do
     t.integer "edition_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "publication"
     t.index ["critic_id"], name: "index_attendances_on_critic_id"
     t.index ["edition_id"], name: "index_attendances_on_edition_id"
   end
