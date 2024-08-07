@@ -46,6 +46,7 @@ class SummariesController < ApplicationController
 
       @most_divisive = @edition.selections
         .includes(:ratings)
+        .where.not(ratings: { id: nil })
         .sort_by(&:ratings_standard_deviation)
         .reverse
         .first
