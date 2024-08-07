@@ -18,8 +18,7 @@ class Rating < ApplicationRecord
 
   attr_accessor :skip_cache_average_ratings_callback
 
-  after_create :cache_average_ratings, unless: :skip_cache_average_ratings_callback
-  after_destroy :cache_average_ratings, unless: :skip_cache_average_ratings_callback
+  after_commit :cache_average_ratings, unless: :skip_cache_average_ratings_callback
 
   private
 
