@@ -8,15 +8,19 @@
           <span class="inline-block">Moirée</span>
         </h1>
       </div>
-      <p class="hidden md:block font-normal text-indigo-700 md:text-2xl text-center pb-4 z-10 -my-12 absolute left-[50%] -translate-x-1/2">Critic ratings from film festivals around the world</p>
+      <p class="hidden md:block font-normal text-indigo-700 md:text-2xl text-center pb-4 z-10 -my-12 absolute left-[50%] -translate-x-1/2 w-full px-4">Critic ratings from film festivals around the world</p>
     </header>
 
     <section class="mx-4">
       <% if @current.any? %>
-        <h2 class="font-semibold mb-4">Current <%= "festival".pluralize(@current.size) %></h2>
+        <h2 class="mb-4 uppercase text-sm bg-indigo-900 p-4 text-white">
+          <span class="font-extrabold tracking-[1rem]">Current</span>
+          <span class="tracking-wide">&nbsp;</span>
+          <span class="tracking-[1.2rem]"><%= "festival".pluralize(@current.size) %></span>
+        </h2>
 
         <% @current.each do |edition| %>
-          <article class="mb-4 bg-white flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow">
+          <article class="mb-4 bg-white flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow bg-radial-gradient">
             <%= link_to edition_path(edition), class: "block" do %>
               <header class="mb-1 px-6 pt-6 pb-2">
                 <h2 class="text-xs uppercase mb-1"><%= edition.name %></h2>
@@ -36,7 +40,7 @@
             <% end %>
 
             <% if edition.ratings.any? %>
-              <section class="bg-indigo-50 rounded-t-md p-6 border-indigo-100/50 border">
+              <section class="bg-white/50 rounded-t-md p-6 border-indigo-100/50 border">
                 <header class="mb-4 flex justify-between">
                   <div>
                     <h3 class="text-lg font-semibold">Latest ratings</h3>
