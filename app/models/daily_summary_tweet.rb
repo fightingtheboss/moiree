@@ -91,7 +91,7 @@ class DailySummaryTweet
   end
 
   def film_list_items(selections)
-    selections.map { |selection| "• #{selection.film.title} → #{selection.average_rating}" }.join("\n")
+    selections.map { |selection| "• #{selection.film.title} → #{selection.average_rating.round(2)}" }.join("\n")
   end
 
   def line_break
