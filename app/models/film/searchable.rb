@@ -8,7 +8,7 @@ module Film::Searchable
       films = blank_returns_none ? none : all
 
       if query.present?
-        films = where("films.title LIKE :query", query: "%#{query}%")
+        films = where("films.title LIKE :query OR films.normalized_title LIKE :query", query: "%#{query}%")
       end
 
       if edition_id.present?
@@ -22,7 +22,7 @@ module Film::Searchable
         end
       end
 
-      films.uniq
+      films.order(title: :asc).uniq
     end
 
     def search_within_edition(query, edition_id)

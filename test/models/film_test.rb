@@ -15,6 +15,12 @@ class FilmTest < ActiveSupport::TestCase
     assert_equal "CA,US", film.country
   end
 
+  test "should normalize title before saving" do
+    film = Film.create!(title: "Éåîü", director: "Test", country: "CA,US", year: 2022)
+
+    assert_equal "Eaiu", film.normalized_title
+  end
+
   test "#countries should return the common names of the countries" do
     film = films(:with_multiple_countries)
 
@@ -128,7 +134,7 @@ class FilmTest < ActiveSupport::TestCase
       import_result = Film.import(file, edition)
 
       assert_equal 1, import_result.skipped.size
-      assert_equal "Festival Film has different directors (Sarah Polley) from imported film (Edward Yang)",
+      assert_equal "Féstival Film has different directors (Sarah Polley) from imported film (Edward Yang)",
         import_result.errors.first
     end
   end

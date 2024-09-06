@@ -20,7 +20,7 @@ class Film < ApplicationRecord
 
   friendly_id :slug_candidates, use: :slugged
 
-  before_create :map_country_to_iso_code
+  before_create :map_country_to_iso_code, :normalize_title
 
   def cache_overall_average_rating
     update(overall_average_rating: ratings.average(:score).to_f)
@@ -50,5 +50,9 @@ class Film < ApplicationRecord
     return if countries.all?(/^\w{2}$/)
 
     self.country = countries.map { |c| ISO3166::Country.find_country_by_any_name(c).alpha2 }.join(",")
+  end
+
+  def normalize_title
+    self.normalized_title = I18n.transliterate(title)
   end
 end

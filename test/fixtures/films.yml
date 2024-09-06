@@ -1,7 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 base:
-  title: Festival Film
+  title: Féstival Film
+  normalized_title: Festival Film
   original_title:
   director: Sarah Polley
   country: CA
@@ -9,6 +10,7 @@ base:
 
 with_original_title:
   title: With Original Title
+  normalized_title: With Original Title
   original_title: Avec Titre Original
   director: Spike Jones
   country: US
@@ -16,6 +18,7 @@ with_original_title:
 
 with_multiple_countries:
   title: With Multiple Countries
+  normalized_title: With Multiple Countries
   original_title:
   director: Christopher Nolan
   country: US, GB
@@ -23,6 +26,7 @@ with_multiple_countries:
 
 with_multiple_directors:
   title: With Mulitple Directors
+  normalized_title: With Mulitple Directors
   original_title:
   director: Joel Coen, Ethan Coen
   country: US

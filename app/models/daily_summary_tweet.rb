@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class DailySummaryTweet
-  include ActionView::Helpers::TextHelper
+  # TODO: This class might be better as a ViewObject or a regular view with a template
+  #       Including these helpers here is a bit of a smell
+  include ActionView::Helpers::TextHelper, ActiveSupport::NumberHelper
 
   attr_reader :edition
 
@@ -91,7 +93,9 @@ class DailySummaryTweet
   end
 
   def film_list_items(selections)
-    selections.map { |selection| "• #{selection.film.title} → #{selection.average_rating.round(2)}" }.join("\n")
+    selections.map do |selection|
+      "• #{selection.film.title} → #{number_to_rounded(selection.average_rating, precision: 2)}"
+    end.join("\n")
   end
 
   def line_break

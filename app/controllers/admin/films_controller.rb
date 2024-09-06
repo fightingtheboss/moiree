@@ -8,7 +8,7 @@ class Admin
       if params[:edition_id].present?
         @edition = Edition.friendly.find(params[:edition_id])
         @festival = @edition.festival
-        @selections = @edition.selections.includes(:category, :film).where(film: @films)
+        @selections = @edition.selections.includes(:category, :film).where(film: @films).order("films.title")
 
         render(
           partial: "admin/selections/search_results",
