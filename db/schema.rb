@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_30_043424) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_30_035538) do
   create_table "admins", force: :cascade do |t|
     t.string "username"
     t.datetime "created_at", null: false
@@ -84,6 +84,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_30_043424) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
+    t.string "normalized_title", null: false
     t.index ["slug"], name: "index_films_on_slug", unique: true
   end
 
