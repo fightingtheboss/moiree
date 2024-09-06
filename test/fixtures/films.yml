@@ -1,11 +1,19 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 base:
-  title: Féstival Film
+  title: Festival Film
   normalized_title: Festival Film
   original_title:
   director: Sarah Polley
   country: CA
+  year: 2024
+
+with_accented_title:
+  title: Folie à Exposé
+  normalized_title: Folie a Expose
+  original_title:
+  director: Todd Field
+  country: US
   year: 2024
 
 with_original_title:

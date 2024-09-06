@@ -53,6 +53,12 @@ class FilmTest < ActiveSupport::TestCase
     assert_includes Film.search(film.title), film
   end
 
+  test "#search with a query returns films that match the normalized title" do
+    film = films(:with_accented_title)
+
+    assert_includes Film.search(film.title), film
+  end
+
   test "#search with an edition_id returns films that are associated with the edition" do
     film = films(:base)
     edition = editions(:base)
@@ -134,7 +140,7 @@ class FilmTest < ActiveSupport::TestCase
       import_result = Film.import(file, edition)
 
       assert_equal 1, import_result.skipped.size
-      assert_equal "Féstival Film has different directors (Sarah Polley) from imported film (Edward Yang)",
+      assert_equal "Festival Film has different directors (Sarah Polley) from imported film (Edward Yang)",
         import_result.errors.first
     end
   end

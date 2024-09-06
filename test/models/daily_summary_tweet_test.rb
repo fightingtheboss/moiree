@@ -106,11 +106,11 @@ class DailySummaryTweetTest < ActiveSupport::TestCase
 
       Top 2 (avg)
       • With Original Title → 4.50
-      • Féstival Film → 3.50
+      • Festival Film → 3.50
 
       Bottom 2 (avg)
       • With Original Title → 4.50
-      • Féstival Film → 3.50
+      • Festival Film → 3.50
     TWEET
 
     assert_equal DailySummaryTweet.new(edition).text, tweet
@@ -150,11 +150,11 @@ class DailySummaryTweetTest < ActiveSupport::TestCase
 
       Top 2 (avg)
       • With Original Title → 4.50
-      • Féstival Film → 3.50
+      • Festival Film → 3.50
 
       Bottom 2 (avg)
       • With Original Title → 4.50
-      • Féstival Film → 3.50
+      • Festival Film → 3.50
     TWEET
 
     X::Client.any_instance.expects(:post).with("tweets", { text: tweet }.to_json).returns(true)
