@@ -44,7 +44,7 @@ module Sessions
     private
 
     def set_user
-      token = SignInToken.find_signed!(params[:sid])
+      token = SignInToken.find_signed!(CGI.unescape(params[:sid]))
       @user = token.user
     rescue StandardError
       redirect_to(new_sessions_passwordless_path, alert: "That sign in link is invalid")
