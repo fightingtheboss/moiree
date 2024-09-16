@@ -47,4 +47,9 @@ class Edition < ApplicationRecord
   def past?
     end_date + 1.day < Date.current
   end
+
+  def summary?
+    # TODO: Add a time zone to the edition model and use it to scope the date comparisons
+    start_date <= Date.current
+  end
 end
