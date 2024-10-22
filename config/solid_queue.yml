@@ -18,6 +18,9 @@ production:
  <<: *default
  dispatchers:
   - recurring_tasks:
+      backup_db_to_s3:
+        class: "BackupDbToS3Job"
+        schedule: "every day at 12:00am"
       daily_summary_tweet:
         class: "DailySummaryTweetJob"
         schedule: "every day at 11:50pm"
