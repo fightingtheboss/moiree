@@ -16,9 +16,9 @@ console_command = '/rails/bin/rails console'
 [http_service]
   internal_port = 3000
   force_https = true
-  auto_stop_machines = false
+  auto_stop_machines = "suspend"
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1
   processes = ['app']
 
 [checks]
@@ -44,3 +44,6 @@ console_command = '/rails/bin/rails console'
 [[statics]]
   guest_path = '/rails/public'
   url_prefix = '/'
+
+[env]
+  AWS_ROLE_ARN = 'arn:aws:iam::428476658087:role/MOIREE-FLY.IO'

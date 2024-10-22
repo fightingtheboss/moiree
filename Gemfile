@@ -66,6 +66,9 @@ gem "friendly_id", "~> 5.5.0"
 
 gem "x"
 
+# Using this for scheduled SQLite DB backups to S3 from Fly.io (with the help of Solid Queue)
+gem "aws-sdk-s3", "~> 1"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: [:mri, :windows]
