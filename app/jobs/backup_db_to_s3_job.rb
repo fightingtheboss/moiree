@@ -15,7 +15,9 @@ class BackupDbToS3Job < ApplicationJob
         region: "us-east-1",
       )
 
-      role_credentials.client.put_object(
+      client = Aws::S3::Client.new(credentials: role_credentials, region: "us-east-1")
+
+      client.put_object(
         bucket: "moiree",
         body: File.open("/tmp/latest.db.gz"),
         key: "moiree-production-#{Time.zone.now.strftime("%d%m%Y")}.db.gz",
