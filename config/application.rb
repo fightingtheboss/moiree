@@ -37,5 +37,10 @@ module Moiree
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.active_model.i18n_customize_full_message = true
+
+    # Configuration for Mission Control Jobs
+    # https://github.com/rails/mission_control-jobs?tab=readme-ov-file#authentication
+    config.mission_control.jobs.base_controller_class = "Admin::AdminController"
+    config.mission_control.jobs.http_basic_auth_enabled = false
   end
 end
