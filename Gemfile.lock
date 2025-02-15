@@ -212,7 +212,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.2-x86_64-linux-gnu)
       racc (~> 1.4)
-    ostruct (0.6.1)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -397,13 +396,12 @@ DEPENDENCIES
   letter_opener
   mission_control-jobs
   mocha
-  ostruct
   positioning
   puma (>= 5.0)
   pundit (~> 2.3)
   rails (= 8.0.1)
   rails_live_reload
-  rubocop (~> 1.62)
+  rubocop (~> 1)
   rubocop-shopify
   selenium-webdriver
   solid_queue

@@ -73,7 +73,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: [:mri, :windows]
 
-  gem "rubocop", "~> 1.62", require: false
+  gem "rubocop", "~> 1", require: false
   gem "rubocop-shopify", require: false
 end
 
