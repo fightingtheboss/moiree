@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-ruby "3.2.2"
+ruby "3.4.2"
 
 # Use specific branch of Rails
 gem "rails", github: "rails/rails", branch: "7-1-stable"
