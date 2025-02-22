@@ -117,6 +117,7 @@ GEM
     countries (6.0.0)
       unaccent (~> 0.3)
     crass (1.0.6)
+    csv (3.3.2)
     date (3.4.1)
     debug (1.9.1)
       irb (~> 1.10)
@@ -429,6 +430,7 @@ DEPENDENCIES
   bugsnag
   capybara
   countries (~> 6.0)
+  csv
   debug
   dockerfile-rails (>= 1.6)
   faker
