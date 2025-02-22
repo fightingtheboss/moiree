@@ -71,6 +71,9 @@ gem "x"
 # Using this for scheduled SQLite DB backups to S3 from Fly.io (with the help of Solid Queue)
 gem "aws-sdk-s3", "~> 1"
 
+# Used for replicating SQLite DB to S3 for backups
+gem "litestream"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: [:mri, :windows]
