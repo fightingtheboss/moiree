@@ -1,9 +1,9 @@
 // For format details, see https://containers.dev/implementors/json_reference/.
 // For config options, see the README at: https://github.com/devcontainers/templates/tree/main/src/ruby
 {
-  "name": "devcontainer",
+  "name": "moiree-dev",
   "dockerComposeFile": "compose.yaml",
-  "service": "rails-app",
+  "service": "moiree",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
   // Features to add to the dev container. More info: https://containers.dev/features.

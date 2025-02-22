@@ -1,7 +1,7 @@
-name: "devcontainer"
+name: "moiree-dev"
 
 services:
-  rails-app:
+  moiree:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
