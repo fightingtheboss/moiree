@@ -48,6 +48,8 @@ gem "tzinfo-data", platforms: [:windows, :jruby]
 gem "bootsnap", require: false
 
 gem "solid_queue"
+gem "solid_cache"
+gem "solid_cable"
 
 gem "mission_control-jobs"
 

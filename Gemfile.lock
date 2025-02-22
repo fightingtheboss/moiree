@@ -309,6 +309,15 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    solid_cable (3.0.7)
+      actioncable (>= 7.2)
+      activejob (>= 7.2)
+      activerecord (>= 7.2)
+      railties (>= 7.2)
+    solid_cache (1.0.7)
+      activejob (>= 7.2)
+      activerecord (>= 7.2)
+      railties (>= 7.2)
     solid_queue (1.1.3)
       activejob (>= 7.1)
       activerecord (>= 7.1)
@@ -404,6 +413,8 @@ DEPENDENCIES
   rubocop (~> 1)
   rubocop-shopify
   selenium-webdriver
+  solid_cable
+  solid_cache
   solid_queue
   sprockets-rails
   sqlite3 (~> 2.1)
