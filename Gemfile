@@ -34,10 +34,6 @@ gem "jbuilder"
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
-# Generates a pre-built authentication system into a Rails app
-# Can likely be removed once satisfied with the generated code
-gem "authentication-zero", "~> 3.0"
-
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
 
@@ -46,12 +42,19 @@ gem "tzinfo-data", platforms: [:windows, :jruby]
 
 gem "csv"
 
-# Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", require: false
-
+# Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
 gem "solid_queue"
 gem "solid_cache"
 gem "solid_cable"
+
+# Reduces boot times through caching; required in config/boot.rb
+gem "bootsnap", require: false
+
+# Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
+gem "kamal", require: false
+
+# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
+gem "thruster", require: false
 
 gem "mission_control-jobs"
 
