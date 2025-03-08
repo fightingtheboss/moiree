@@ -81,7 +81,8 @@ gem "litestream"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: [:mri, :windows]
+  # Lazy loading the debug gem based on the discussion here: https://github.com/ruby/debug/issues/797
+  gem "debug", platforms: [:mri, :windows], require: "debug/prelude"
 
   gem "rubocop", "~> 1", require: false
   gem "rubocop-shopify", require: false
