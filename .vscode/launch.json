@@ -16,14 +16,6 @@
       "type": "rdbg",
       "name": "Attach with rdbg",
       "request": "attach"
-    },
-    {
-      "type": "rdbg",
-      "name": "Run test on current line with rdbg",
-      "request": "launch",
-      "useBundler": true,
-      "script": "./bin/rspec",
-      "args": ["${file}:${lineNumber}"]
     }
   ]
 }
