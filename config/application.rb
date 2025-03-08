@@ -38,6 +38,9 @@ module Moiree
 
     config.active_model.i18n_customize_full_message = true
 
+    # `to_time` will always preserve the full timezone rather than offset of the receiver in Rails 8.1.
+    config.active_support.to_time_preserves_timezone = :zone
+
     # Configuration for Mission Control Jobs
     # https://github.com/rails/mission_control-jobs?tab=readme-ov-file#authentication
     config.mission_control.jobs.base_controller_class = "Admin::AdminController"
