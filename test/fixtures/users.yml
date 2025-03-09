@@ -11,3 +11,9 @@ critic:
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   userable: base (Critic)
+
+unverified_user:
+  email: unverified@moire.reviews
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: false
+  userable: base (Critic)

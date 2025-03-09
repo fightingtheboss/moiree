@@ -54,10 +54,14 @@ class ApplicationPolicy
   private
 
   def admin?
-    user&.admin?
+    return false unless user
+
+    user.verified? && user.admin?
   end
 
   def critic?
-    user&.critic?
+    return false unless user
+
+    user.verified? && user.critic?
   end
 end
