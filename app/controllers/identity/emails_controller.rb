@@ -2,6 +2,8 @@
 
 module Identity
   class EmailsController < ApplicationController
+    require_authentication
+
     before_action :set_user
 
     layout "sessions", only: [:edit]
@@ -20,7 +22,7 @@ module Identity
     private
 
     def set_user
-      @user = Current.user
+      @user = current_user
     end
 
     def user_params

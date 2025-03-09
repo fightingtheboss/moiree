@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class PasswordsController < ApplicationController
+  require_authentication
+
   before_action :set_user
 
-  layout "sessions", only: [:edit]
-
   def edit
+    render(layout: "sessions")
   end
 
   def update
@@ -19,7 +20,7 @@ class PasswordsController < ApplicationController
   private
 
   def set_user
-    @user = Current.user
+    @user = current_user
   end
 
   def user_params

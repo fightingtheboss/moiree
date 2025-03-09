@@ -10,7 +10,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     sign_in_as @user
 
-    get sessions_url
+    get sign_in_url
     assert_response :success
   end
 
@@ -33,7 +33,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "That email or password is incorrect", flash[:alert]
 
     get admin_festivals_url
-    assert_redirected_to magic_url
+    assert_redirected_to sign_in_url
   end
 
   test "should sign out" do

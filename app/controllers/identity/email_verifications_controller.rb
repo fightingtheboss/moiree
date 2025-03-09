@@ -2,7 +2,7 @@
 
 module Identity
   class EmailVerificationsController < ApplicationController
-    skip_before_action :authenticate, only: :show
+    require_authentication only: :create
 
     before_action :set_user, only: :show
 

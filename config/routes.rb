@@ -17,8 +17,8 @@ Rails.application.routes.draw do
     resource :summary, only: [:show]
   end
   resources :films, only: [:show]
-  resource  :password, only: [:edit, :update]
-  resources :sessions, only: [:index, :show, :destroy]
+  resource :password, only: [:edit, :update]
+  resource :session, only: [:destroy]
 
   namespace :admin do
     root "festivals#index"
