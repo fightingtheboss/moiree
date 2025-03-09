@@ -2,7 +2,7 @@
 
 module Sessions
   class PasswordlessesController < ApplicationController
-    skip_before_action :authenticate
+    include LiteFS
 
     before_action :set_user, only: :edit
 
@@ -17,13 +17,11 @@ module Sessions
       # https://fly.io/docs/litefs/primary/
       # https://fly.io/docs/networking/dynamic-request-routing/#the-fly-replay-response-header
 
-      if File.exist?("/litefs/.primary")
-        primary_instance_id = File.read("/litefs/.primary").strip
+      if (primary_instance_id = litefs_primary_instance_id)
         response.headers["fly-replay"] = "instance=#{primary_instance_id}"
         head(:ok)
       else
-        session_record = @user.sessions.create!
-        cookies.signed.permanent[:session_token] = { value: session_record.id, httponly: true }
+        start_new_session_for(@user)
 
         revoke_tokens
 
