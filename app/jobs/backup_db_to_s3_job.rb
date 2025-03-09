@@ -20,7 +20,7 @@ class BackupDbToS3Job < ApplicationJob
       client.put_object(
         bucket: "moiree",
         body: File.open("/tmp/latest.db.gz"),
-        key: "moiree-production-#{Time.zone.now.strftime("%d%m%Y")}.db.gz",
+        key: "moiree-production-#{Time.zone.now.strftime("%Y%m%d")}.db.gz",
       )
     end
   end
