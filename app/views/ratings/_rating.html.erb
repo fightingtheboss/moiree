@@ -1,9 +1,9 @@
 <li class="flex flex-col justify-between bg-white p-4 shadow-sm rounded-md mb-2">
   <div class="">
-    <p class="text-xs text-slate-600 mb-1"><%= time_ago_in_words(rating.created_at).capitalize %> ago</p>
+    <time datetime="<%= rating.created_at.strftime("%Y-%m-%dT%H:M%z") %>" title="<%= rating.created_at.strftime("%b %d, %Y") %>" class="text-xs text-slate-600 mb-1"><%= time_ago_in_words(rating.created_at).capitalize %> ago</time>
     <p class="text-sm mb-2 leading-tight"><strong class="font-medium"><%= rating.critic.name %></strong> rated</p>
-    <h2 class="text-xs uppercase tracking-wide font-light"><%= rating.selection.category.name %></h2>
-    <h1 class="text-lg leading-tight"><%= link_to link_to rating.film.title, film_path(rating.film), class: "hover:italic hover:text-indigo-700" %></h1>
+    <h2 class="text-xs uppercase tracking-wide"><%= rating.selection.category.name %></h2>
+    <h1 class="text-lg leading-tight my-0.5"><%= link_to link_to rating.film.title, film_path(rating.film), class: "hover:italic hover:text-indigo-700" %></h1>
     <p class="text-sm mb-3"><%= rating.film.director %></p>
   </div>
   <p class="text-center bg-indigo-50 rounded-sm px-2 py-1"><strong class="text-2xl"><%= display_rating(rating.score) %></strong></p>
