@@ -58,6 +58,6 @@ module Authentication
   end
 
   def current_user
-    Current.user
+    Current.user if authenticated?
   end
 end
