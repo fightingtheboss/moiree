@@ -47,3 +47,4 @@ console_command = '/rails/bin/rails console'
 
 [env]
   AWS_ROLE_ARN = 'arn:aws:iam::428476658087:role/MOIREE-FLY.IO'
+  SOLID_QUEUE_IN_PUMA = true
