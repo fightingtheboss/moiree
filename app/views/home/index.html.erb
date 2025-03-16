@@ -2,8 +2,8 @@
 
 <div class="min-h-[calc(100vh-1.25rem)] flex flex-col justify-between">
   <div>
-    <header class="bg-white relative mb-4 shadow">
-      <div class="grid place-content-center bg-logo-radial-gradient contrast-[2000] after:bg-logo-radial-gradient-overlay after:absolute after:top-0 after:left-0 after:right-0 after:bottom-0 after:mix-blend-lighten">
+    <header class="bg-white relative mb-4 shadow-sm">
+      <div class="grid place-content-center bg-logo-radial-gradient contrast-2000 after:bg-logo-radial-gradient-overlay after:absolute after:top-0 after:left-0 after:right-0 after:bottom-0 after:mix-blend-lighten">
         <h1 class="font-black uppercase text-7xl md:text-8xl pt-8 pb-8 md:pb-12 px-4">
           <span class="inline-block">Moirée</span>
         </h1>
@@ -20,7 +20,7 @@
         </h2>
 
         <% @current.each do |edition| %>
-          <article class="mb-4 bg-white flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow bg-radial-gradient">
+          <article class="mb-4 bg-white flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow bg-radial-gradient">
             <%= link_to edition_path(edition), class: "block" do %>
               <header class="mb-1 px-6 pt-6 pb-2">
                 <h2 class="text-xs uppercase mb-1"><%= edition.name %></h2>
@@ -33,9 +33,9 @@
               </header>
 
               <ul class="text-xs flex mb-4 px-6">
-                <li class="mr-1 px-2 py-1 bg-violet-500 text-white rounded"><strong><%= edition.categories.size %></strong> Categories</li>
-                <li class="mr-1 px-2 py-1 bg-fuchsia-500 text-white rounded"><strong><%= edition.films.size %></strong> Films</li>
-                <li class="px-2 py-1 bg-teal-500 text-white rounded"><strong><%= edition.ratings.size %></strong> Ratings</li>
+                <li class="mr-1 px-2 py-1 bg-violet-500 text-white rounded-sm"><strong><%= edition.categories.size %></strong> Categories</li>
+                <li class="mr-1 px-2 py-1 bg-fuchsia-500 text-white rounded-sm"><strong><%= edition.films.size %></strong> Films</li>
+                <li class="px-2 py-1 bg-teal-500 text-white rounded-sm"><strong><%= edition.ratings.size %></strong> Ratings</li>
               </ul>
             <% end %>
 
@@ -47,7 +47,7 @@
                     <p class="text-sm">Ratings are out of 5</p>
                   </div>
                   <div>
-                    <%= link_to "See the live feed -->", live_edition_path(edition), class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs" %>
+                    <%= link_to "See the live feed -->", live_edition_path(edition), class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-xs" %>
                   </div>
                 </header>
                 <ul class="md:grid md:grid-cols-5 md:gap-2">

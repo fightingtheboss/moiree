@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "new-film-search-results" do %>
   <% if films.any? %>
     <% films.each do |film| %>
-      <li class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow hover:cursor-pointer my-1 md:my-0">
+      <li class="bg-white p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow hover:cursor-pointer my-1 md:my-0">
         <%= link_to new_admin_festival_edition_selection_path(festival, edition, film_id: film.id), data: { "turbo-frame": "add-film-to-edition" } do %>
           <%= render partial: "admin/films/film_detail", locals: { film: film } %>
         <% end %>

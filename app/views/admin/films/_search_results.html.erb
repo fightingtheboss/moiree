@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "search-results" do %>
   <% if films.any? %>
     <% films.each do |film| %>
-      <li class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow hover:cursor-pointer my-1 md:my-0">
+      <li class="bg-white p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow hover:cursor-pointer my-1 md:my-0">
         <%= render partial: "admin/films/film", locals: { film: film } %>
       </li>
     <% end %>

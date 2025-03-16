@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
@@ -24,7 +28,7 @@
     <% end %>
   </head>
 
-  <body class="bg-slate-50">
+  <body class="bg-slate-50 font-inter">
     <header class="flex justify-between items-center bg-indigo-900 text-white px-4 py-0.5">
       <h1 class="uppercase text-xs font-black">
         <%= link_to "Moirée", root_path %>
@@ -44,7 +48,7 @@
     <%= content_for?(:content) ? yield(:content) : yield %>
 
     <dialog id="global-modal" class="rounded-md shadow-md">
-      <div class="min-w-[50vw] max-w-full md:max-w-[75vw] p-8 rounded shadow flex flex-col items-center relative">
+      <div class="min-w-[50vw] max-w-full md:max-w-[75vw] p-8 rounded-sm shadow-sm flex flex-col items-center relative">
         <header class="absolute top-8 right-8">
           <form method="dialog">
             <button type="submit" aria-label="close" class="text-2xl">&times;</button>
@@ -56,7 +60,7 @@
           <%= turbo_frame_tag "modal" %>
 
           <form method="dialog" class="absolute bottom-8 right-8" data-controller="modal" data-action="submit->modal#clearModal">
-            <button type="submit" class="bg-white hover:bg-slate-50 text-black border border-slate-300 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cancel</button>
+            <button type="submit" class="bg-white hover:bg-slate-50 text-black border border-slate-300 font-semibold py-2 px-4 rounded-sm focus:outline-hidden focus:shadow-outline">Cancel</button>
           </form>
         </div>
       </div>

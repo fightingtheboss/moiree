@@ -1,5 +1,5 @@
 <li id="<%= dom_id(critic) %>">
-  <article class="bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow group">
+  <article class="bg-white p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow group">
     <header class="flex justify-between mb-4">
       <div>
         <h1 class="font-semibold">
@@ -27,10 +27,10 @@
 
     <footer class="flex justify-between items-center">
       <div class="flex gap-2">
-        <div class="px-2 py-1 bg-violet-500 text-white text-xs rounded hover:bg-violet-700">
+        <div class="px-2 py-1 bg-violet-500 text-white text-xs rounded-sm hover:bg-violet-700">
           <%= pluralize(critic.editions.size, "edition") %>
         </div>
-        <div class="px-2 py-1 bg-teal-500 text-white text-xs rounded hover:bg-teal-700">
+        <div class="px-2 py-1 bg-teal-500 text-white text-xs rounded-sm hover:bg-teal-700">
           <%= link_to pluralize(critic.ratings.size, "rating"), critic_url(critic), target: "_top" %>
         </div>
       </div>

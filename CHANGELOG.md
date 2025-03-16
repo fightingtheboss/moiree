@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025-03-16
+- Upgrade to Tailwind v4
+
+## 2025-03-09
+- Upgrade to Rails 8
+  - Upgrade Solid Queue, Cache and Cable to use separate DBs
+  - Improve Authentication based on the Rails generator
+  - App now runs in a devcontainer locally
+
 ## 2024-05-29
 - Add a nav bar to reach the Grid, Live, and Summary views
   - Summary empty state can handle empty state

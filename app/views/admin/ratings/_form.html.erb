@@ -2,7 +2,7 @@
   <% if Current.user.userable.is_a?(Admin) %>
     <div class="mb-4">
       <%= form.label :critic_id, class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= form.collection_select :critic_id, edition.critics.where.not(id: selection.critic_ids), :id, :name, { prompt: "Select a critic" }, { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" } %>
+      <%= form.collection_select :critic_id, edition.critics.where.not(id: selection.critic_ids), :id, :name, { prompt: "Select a critic" }, { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" } %>
       <p class="text-xs mt-2 text-slate-600">This list will not include critics who've already reviewed this film at this festival.</p>
     </div>
   <% else %>
@@ -15,18 +15,18 @@
     <datalist id="rating-values" class="flex flex-col justify-between [writing-mode:vertical-lr] w-full mt-1">
       <option value="0" label="💣" class="p-0">
       <option value="0.5" class="p-0">
-      <option value="1" label="★" class="p-0 bg-gradient-to-br from-indigo-200 to-indigo-700 bg-clip-text text-transparent">
+      <option value="1" label="★" class="p-0 bg-linear-to-br from-indigo-200 to-indigo-700 bg-clip-text text-transparent">
       <option value="1.5" class="p-0">
-      <option value="2" label="★★" class="p-0 bg-gradient-to-br from-indigo-200 to-indigo-700 bg-clip-text text-transparent">
+      <option value="2" label="★★" class="p-0 bg-linear-to-br from-indigo-200 to-indigo-700 bg-clip-text text-transparent">
       <option value="2.5" class="p-0">
-      <option value="3" label="★★★" class="p-0 bg-gradient-to-br from-indigo-200 to-indigo-700 bg-clip-text text-transparent">
+      <option value="3" label="★★★" class="p-0 bg-linear-to-br from-indigo-200 to-indigo-700 bg-clip-text text-transparent">
       <option value="3.5" class="p-0">
-      <option value="4" label="★★★★" class="p-0 bg-gradient-to-br from-indigo-200 to-indigo-700 bg-clip-text text-transparent">
+      <option value="4" label="★★★★" class="p-0 bg-linear-to-br from-indigo-200 to-indigo-700 bg-clip-text text-transparent">
       <option value="4.5" class="p-0">
       <option value="5" label="🔥" class="p-0">
     </datalist>
   </div>
   <div class="flex items-center justify-between mt-8">
-    <%= form.submit class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+    <%= form.submit class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-sm focus:outline-hidden focus:shadow-outline" %>
   </div>
 <% end %>

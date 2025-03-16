@@ -12,7 +12,7 @@
         <h1 class="text-2xl font-bold"><%= @edition.code %></h1>
       </div>
       <% if policy(@edition).edit? %>
-        <%= link_to "Edit", edit_admin_festival_edition_path(@festival, @edition), data: { turbo_frame: "modal", controller: "modal", action: "modal#show", "modal-dialog-param": "global-modal" }, class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-sm" %>
+        <%= link_to "Edit", edit_admin_festival_edition_path(@festival, @edition), data: { turbo_frame: "modal", controller: "modal", action: "modal#show", "modal-dialog-param": "global-modal" }, class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-sm" %>
       <% end %>
     </header>
     <nav>

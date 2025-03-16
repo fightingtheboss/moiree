@@ -24,12 +24,12 @@
           <table class="border-collapse border-spacing-0 w-full mb-4">
             <thead>
               <tr class="sticky top-[3.4rem] left-0">
-                <th class="border border-indigo-100 border-l-0 px-2 pl-4 py-1 text-left bg-indigo-700 text-white text-sm">Average rating</th>
+                <th class="border border-indigo-100 border-l-0 px-2 pl-4 py-1 text-left bg-indigo-700 text-white text-sm w-4/5">Average rating</th>
                 <th class="border border-indigo-100 border-r-0 px-2 py-1 bg-indigo-700 text-white text-sm"><%= number_with_precision(@film.ratings.for(edition).average(:score), precision: 1) %></th>
               </tr>
-              <tr class="sticky top-[5.1rem] left-0 shadow">
-                <th class="border border-indigo-100 border-l-0 text-left px-4 py-1 bg-indigo-50 text-sm">Critic</th>
-                <th class="border border-indigo-100 border-r-0 px-4 py-1 bg-indigo-50 text-sm">Rating</th>
+              <tr class="sticky top-[5.1rem] left-0 shadow-sm">
+                <th class="border border-indigo-100 border-l-0 text-left px-4 py-1 bg-indigo-50 text-sm w-4/5">Critic</th>
+                <th class="border border-indigo-100 border-r-0 px-4 py-1 bg-indigo-50 text-sm w-1/5">Rating</th>
               </tr>
             </thead>
             <tbody>

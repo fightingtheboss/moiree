@@ -22,10 +22,10 @@
         <div class="mt-2 flex gap-4 items-center">
           <% if params[:saf] == "false" || (params[:saf].nil? && @edition.current?) %>
             <p class="text-sm font-semibold">Only showing films with ratings</p>
-            <%= link_to "Show all films", edition_path(@edition, request.query_parameters.merge(saf: true)), data: { "turbo-action": "advance" }, class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs" %>
+            <%= link_to "Show all films", edition_path(@edition, request.query_parameters.merge(saf: true)), data: { "turbo-action": "advance" }, class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-xs" %>
           <% elsif params[:saf] == "true" || params[:saf].nil? %>
             <p class="text-sm font-semibold">Showing all films</p>
-            <%= link_to "Only show films with ratings", edition_path(@edition, request.query_parameters.merge(saf: false)), data: { "turbo-action": "advance" }, class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs" %>
+            <%= link_to "Only show films with ratings", edition_path(@edition, request.query_parameters.merge(saf: false)), data: { "turbo-action": "advance" }, class: "inline-block bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-xs" %>
           <% end %>
         </div>
       <% end %>

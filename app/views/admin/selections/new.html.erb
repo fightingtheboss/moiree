@@ -6,8 +6,8 @@
       <%= form_with url: admin_festival_edition_search_for_film_to_add_path(@festival, @edition), method: :get, data: { turbo_frame: "new-film-search-results", controller: "search" } do |form| %>
         <%= form.label :query, "Search films by title", class: "block font-semibold mb-2" %>
         <div class="flex space-x-3">
-          <%= form.text_field :query, data: { action: "input->search#search"}, class: "w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
-          <%= form.submit "Search", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs" %>
+          <%= form.text_field :query, data: { action: "input->search#search"}, class: "w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+          <%= form.submit "Search", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-xs" %>
         </div>
         <p class="mt-3 text-sm leading-6 text-gray-600">Use this search to add a film that has already played at another festival</p>
         <%= form.hidden_field "modal_keep_open", value: true %>
@@ -34,19 +34,19 @@
           <% else %>
             <div class="mb-4">
               <%= form.label :title, class: "block text-gray-700 text-sm font-bold mb-2" %>
-              <%= form.text_field :title, placeholder: "e.g. Anatomy of a Fall", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+              <%= form.text_field :title, placeholder: "e.g. Anatomy of a Fall", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
             </div>
             <div class="mb-4">
               <%= form.label :original_title, class: "block text-gray-700 text-sm font-bold mb-2" %>
-              <%= form.text_field :original_title, placeholder: "e.g. Anatomie d'une chute", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+              <%= form.text_field :original_title, placeholder: "e.g. Anatomie d'une chute", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
             </div>
             <div class="mb-4">
               <%= form.label :year, class: "block text-gray-700 text-sm font-bold mb-2" %>
-              <%= form.number_field :year, minimum: 2023, step: 1, value: Time.now.year, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+              <%= form.number_field :year, minimum: 2023, step: 1, value: Time.now.year, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
             </div>
             <div class="mb-4">
               <%= form.label :director, class: "block text-gray-700 text-sm font-bold mb-2" %>
-              <%= form.text_field :director, placeholder: "e.g. Joel Coen, Ethan Coen", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+              <%= form.text_field :director, placeholder: "e.g. Joel Coen, Ethan Coen", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
               <p class="mt-3 text-sm leading-6 text-gray-600">If there are multiple directors, enter them as a comma-separated list.</p>
             </div>
             <div class="mb-4">
@@ -54,7 +54,7 @@
               <div id="film-countries">
                 <%= render partial: "admin/films/country_select" %>
               </div>
-              <%= link_to "Add another country", admin_films_add_country_path, data: { "turbo-stream": true }, class: "inline-block mt-4 bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs" %>
+              <%= link_to "Add another country", admin_films_add_country_path, data: { "turbo-stream": true }, class: "inline-block mt-4 bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-xs" %>
             </div>
           <% end %>
 
@@ -75,13 +75,13 @@
                 <%= selection_form.radio_button :category_id, "-1", class: "peer text-indigo-500 focus:ring-indigo-500" %> <span class="inline-block ml-2 text-indigo-400 peer-checked:text-indigo-500">Add a new category</span>
 
                 <div class="hidden peer-checked:block mt-3">
-                  <%= text_field_tag :new_category, nil, placeholder: "e.g. Special Presentations", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+                  <%= text_field_tag :new_category, nil, placeholder: "e.g. Special Presentations", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
                 </div>
               <% end %>
             <% end %>
           </div>
           <div class="flex items-center justify-between mt-8">
-            <%= form.submit "Add film to edition", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+            <%= form.submit "Add film to edition", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-sm focus:outline-hidden focus:shadow-outline" %>
           </div>
         <% end %>
       <% end %>

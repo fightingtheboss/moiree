@@ -1,6 +1,6 @@
-<li class="sm:basis-1/2 md:basis-1/12 grow last:flex-grow-0 first:md:basis-1/2">
+<li class="sm:basis-1/2 md:basis-1/12 grow last:grow-0 md:first:basis-1/2">
   <%= link_to edition.past? ? edition_summary_path(edition) : edition_path(edition), class: "block bg-radial-gradient" do %>
-    <article class="mb-4 bg-white p-6 flex flex-col justify-between shadow-sm rounded hover:shadow-lg transition-shadow md:min-h-64 bg-radial-gradient border-2 border-indigo-100">
+    <article class="mb-4 bg-white p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow md:min-h-64 bg-radial-gradient border-2 border-indigo-100">
       <header class="mb-4">
         <h2 class="text-xs uppercase mb-2"><%= edition.name %></h2>
         <h1 class="font-semibold text-xl"><%= edition.code %></h1>
@@ -11,10 +11,10 @@
         </div>
       </header>
       <ul class="text-xs flex justify-between lg:justify-start">
-        <li class="mr-1 px-2 py-1 bg-indigo-500 text-white rounded"><strong><%= edition.critics.count %></strong> Critics</li>
-        <li class="mr-1 px-2 py-1 bg-violet-500 text-white rounded"><strong><%= edition.categories.count %></strong> Categories</li>
-        <li class="mr-1 px-2 py-1 bg-fuchsia-500 text-white rounded"><strong><%= edition.films.count %></strong> Films</li>
-        <li class="px-2 py-1 bg-teal-500 text-white rounded"><strong><%= edition.ratings.count %></strong> Ratings</li>
+        <li class="mr-1 px-2 py-1 bg-indigo-500 text-white rounded-sm"><strong><%= edition.critics.count %></strong> Critics</li>
+        <li class="mr-1 px-2 py-1 bg-violet-500 text-white rounded-sm"><strong><%= edition.categories.count %></strong> Categories</li>
+        <li class="mr-1 px-2 py-1 bg-fuchsia-500 text-white rounded-sm"><strong><%= edition.films.count %></strong> Films</li>
+        <li class="px-2 py-1 bg-teal-500 text-white rounded-sm"><strong><%= edition.ratings.count %></strong> Ratings</li>
       </ul>
     </article>
   <% end %>

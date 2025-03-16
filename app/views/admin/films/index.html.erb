@@ -3,13 +3,13 @@
     <%= form_with url: admin_films_search_path, method: :get, data: { turbo_frame: "search-results", controller: "search" } do |form| %>
       <%= form.label :query, "Search by title", class: "font-semibold" %>
       <div class="flex space-x-3">
-        <%= form.text_field :query, data: { action: "input->search#search"}, class: "w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+        <%= form.text_field :query, data: { action: "input->search#search"}, class: "w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
 
         <% if edition %>
           <%= hidden_field_tag :edition_id, @edition.id %>
         <% end %>
 
-        <%= form.submit "Search", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded text-xs" %>
+        <%= form.submit "Search", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-xs" %>
       </div>
     <% end %>
   </search>

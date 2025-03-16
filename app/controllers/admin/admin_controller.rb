@@ -6,6 +6,14 @@ class Admin
 
     require_authentication
 
-    layout "admin"
+    layout :admin_layout
+
+    private
+
+    def admin_layout
+      return "turbo_rails/frame" if turbo_frame_request?
+
+      "admin"
+    end
   end
 end
