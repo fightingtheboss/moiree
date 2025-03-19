@@ -63,7 +63,7 @@ gem "bugsnag"
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-gem "countries", "~> 6.0", require: "countries/global"
+gem "countries", "~> 7.1", require: "countries/global"
 
 gem "pundit", "~> 2.3"
 
