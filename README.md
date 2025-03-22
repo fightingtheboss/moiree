@@ -16,30 +16,37 @@ When an Admin is invited, their account is created and they're sent a link to re
 
 ## Stack
 - Ruby on Rails
+  - v8
 - Turbo
 - Tailwind
+  - v4
 
+## Database backup
+- The app is currently deployed to Fly.io
+- We use SQLite in production
+- The SQLite database is backed up every day at midnight via a Solid Queue job (BackupDbToS3Job)
+- Credentials are coordinated between Fly and AWS via OIDC IdP: [Configure fly.io as a OIDC IdP](https://fly.io/blog/oidc-cloud-roles/)
 
 ## Roadmap
 - Make shareable cards and views for end of fest
   - Generate a dynamic SVG and convert to PNG (as suggested by ChatGPT) for sharing URLs
     - This would have an SVG template (and maybe a dedicated controller?)
     - Would need to install either image_processing or the vips gem
-  - Page caching for the summary!
-  - Stats
-    - One for top 3 in Competition
-    - One for top 5 across the rest
-    - Ratings per film filtered by country, critic's country
-      - This could show the distribution graph, like on Letterboxd
-    - Highest rated category
-    - Critic's most liked countries
-    - Number of 5 star ratings
-    - Number of 0 star ratings
-    - Number of critics
-    - Number of ratings
-    - Critic with most ratings (easily tie, so need to handle that)
-    - Critic who had a blast (most 5 star ratings / highest average rating)
-    - Critic who was least impressed (lowest average rating)
+- Page caching for the summary!
+- Stats
+  - One for top 3 in Competition
+  - One for top 5 across the rest
+  - Ratings per film filtered by country, critic's country
+    - This could show the distribution graph, like on Letterboxd
+  - Highest rated category
+  - Critic's most liked countries
+  - Number of 5 star ratings
+  - Number of 0 star ratings
+  - Number of critics
+  - Number of ratings
+  - Critic with most ratings (easily tie, so need to handle that)
+  - Critic who had a blast (most 5 star ratings / highest average rating)
+  - Critic who was least impressed (lowest average rating)
 - Replace star rating range input with something more universal
 - Grid sorting and filtering
   - Need to show film country
@@ -51,7 +58,16 @@ When an Admin is invited, their account is created and they're sent a link to re
 - Add TMDb integration to get Film data and images
   - Make this super simple
     - Provide a field for the TMDB link to the film with a link out to TMDB to help admin find it
+      - Could also be the IMDB url, since TMDB has those
     - Use that link on save to fetch the data from the API and cache it
       - This can include extended metadata and URLs to images (posters and banners)
   - Maybe this is an option for Admins to do a search or an automated matching of the entered film data
     - I think it should be automatable if we have the title, directors and year as criteria
+
+### Kamal Deployments (worth exploring)
+- Install the litestream-ruby gem and configure it to stream the backups to S3
+  - This should replace my ad-hoc job
+- Install kamal
+- Setup a small server on Hetzner and do a deploy
+  - Deploy from a kamal branch rather than main since this will require changes to Dockerfile
+- If all works as expected, perhaps move everything over to the new server?
