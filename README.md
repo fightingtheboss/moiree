@@ -28,10 +28,6 @@ When an Admin is invited, their account is created and they're sent a link to re
 - Credentials are coordinated between Fly and AWS via OIDC IdP: [Configure fly.io as a OIDC IdP](https://fly.io/blog/oidc-cloud-roles/)
 
 ## Roadmap
-- Make shareable cards and views for end of fest
-  - Generate a dynamic SVG and convert to PNG (as suggested by ChatGPT) for sharing URLs
-    - This would have an SVG template (and maybe a dedicated controller?)
-    - Would need to install either image_processing or the vips gem
 - Page caching for the summary!
 - Stats
   - One for top 3 in Competition

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2025-03-23
+- Add shareable cards and views for end of fest
+  - Only for editions views for the time being
+  - Cached when the edition is no longer being updated
+
 ## 2025-03-16
 - Upgrade to Tailwind v4
 
