@@ -58,7 +58,7 @@ gem "thruster", require: false
 
 gem "mission_control-jobs"
 
-gem "image_processing"
+gem "image_processing", "~> 1.0"
 
 gem "bugsnag"
 
