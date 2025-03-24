@@ -14,3 +14,8 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym "RESTful"
 # end
+
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+	# Treat TMDB as an acronym so Rails' inflector maps 'tmdb' <-> 'TMDB'
+	inflect.acronym 'TMDB'
+end
