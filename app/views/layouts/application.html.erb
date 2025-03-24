@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Moirée</title>
+    <title>MOIRÉE</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -28,6 +28,8 @@
     <% end %>
 
     <meta name="description" content="<%= content_for(:description) %>">
+
+    <%= content_for(:open_graph) %>
 
     <%= content_for(:head) %>
   </head>

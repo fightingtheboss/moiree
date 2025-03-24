@@ -1,4 +1,5 @@
 <% description("Grid of critic ratings for #{@edition.code}") %>
+<% open_graph(@edition) %>
 
 <%= render partial: "shared/edition_nav", locals: { edition: @edition } %>
 

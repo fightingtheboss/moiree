@@ -1,5 +1,8 @@
 <%= render partial: "shared/edition_nav", locals: { edition: @edition } %>
 
+<% description(@edition.current? ? "Live ratings for #{@edition.code}" : "Rating chronology for #{@edition.code}") %>
+<% open_graph(@edition) %>
+
 <div <%= "data-controller=refresh" if @edition.current? %>>
   <header class="p-4 text-left w-full">
     <div class="">

@@ -1,5 +1,8 @@
 <%= render partial: "shared/edition_nav", locals: { edition: @edition } %>
 
+<% description("Summary of ratings for #{@edition.code}") %>
+<% open_graph(@edition) %>
+
 <div>
   <header class="p-4 text-left w-full">
     <div class="flex justify-between">
