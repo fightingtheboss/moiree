@@ -16,9 +16,9 @@ Rails.application.routes.draw do
     get :live, on: :member
     resource :summary, only: [:show]
     resource :share, only: [] do
-      get :overview, to: "shares#overview", defaults: { format: "svg" }, as: :share_overview
-      get :summary, to: "shares#summary", defaults: { format: "svg" }, as: :share_summary
-      get "stat/:template", to: "shares#stat", defaults: { format: "svg" }, as: :share_stat
+      get :overview, to: "shares#overview", defaults: { format: "png" }
+      get :summary, to: "shares#summary", defaults: { format: "png" }
+      get "stat/:template", to: "shares#stat", defaults: { format: "png" }
     end
   end
   resources :films, only: [:show]
