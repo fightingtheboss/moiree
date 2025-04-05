@@ -58,10 +58,10 @@ gem "bootsnap", require: false
 
 gem "mission_control-jobs"
 
-gem "bugsnag"
-
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
+
+gem "bugsnag"
 
 gem "countries", "~> 7.0", require: "countries/global"
 
