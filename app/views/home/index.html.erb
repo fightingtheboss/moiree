@@ -2,18 +2,18 @@
 
 <div class="min-h-[calc(100vh-1.25rem)] flex flex-col justify-between">
   <div>
-    <header class="bg-white relative mb-4 shadow-sm">
+    <header class="bg-white sticky w-full top-7 -z-10 overflow-hidden">
       <div class="grid place-content-center bg-logo-radial-gradient contrast-2000 after:bg-logo-radial-gradient-overlay after:absolute after:top-0 after:left-0 after:right-0 after:bottom-0 after:mix-blend-lighten">
-        <h1 class="font-black uppercase text-7xl md:text-8xl pt-8 pb-8 md:pb-12 px-4">
+        <h1 class="font-black uppercase text-[26vw] xl:text-[22.5rem] italic leading-tight px-4">
           <span class="inline-block">Moirée</span>
         </h1>
       </div>
-      <p class="hidden md:block font-normal text-indigo-700 md:text-2xl text-center pb-4 z-10 -my-12 absolute left-[50%] -translate-x-1/2 w-full px-4">Critic ratings from film festivals around the world</p>
+      <p class="font-medium italic tracking-tight text-indigo-700 bg-linear-to-b from-white/45 to-slate-50 md:text-xl text-center p-2 md:p-4 z-10 -my-12 absolute bottom-12 left-[50%] -translate-x-1/2 w-full">Critic ratings from film festivals around the world</p>
     </header>
 
-    <section class="mx-4">
+    <section class="bg-slate-50 p-4 mt-4">
       <% if @current.any? %>
-        <h2 class="mb-4 uppercase text-sm bg-indigo-900 p-4 text-white">
+        <h2 class="sticky top-0 mb-4 uppercase text-sm bg-indigo-900 p-4 text-white">
           <span class="font-extrabold tracking-[1rem]">Current</span>
           <span class="tracking-wide">&nbsp;</span>
           <span class="tracking-[1.2rem]"><%= "festival".pluralize(@current.size) %></span>
@@ -63,7 +63,7 @@
         <% [["Upcoming", @upcoming], ["Past", @past]].each do |(label, editions)| %>
           <% if editions.any? %>
             <section class="mb-8">
-              <h2 class="mb-4 uppercase text-sm bg-indigo-900 p-4 text-white">
+              <h2 class="sticky top-0 mb-4 uppercase text-sm bg-indigo-900 p-4 text-white">
                 <span class="font-extrabold tracking-[1rem]"><%= label %></span>
                 <span class="tracking-wide">&nbsp;</span>
                 <span class="tracking-[1.2rem]"><%= "festival".pluralize(editions.size) %></span>
