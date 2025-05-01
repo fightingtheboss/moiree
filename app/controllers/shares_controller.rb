@@ -3,6 +3,8 @@
 class SharesController < ApplicationController
   before_action :set_edition
 
+  require "vips"
+
   def overview
     if stale?(@edition)
       respond_to do |format|
@@ -10,19 +12,16 @@ class SharesController < ApplicationController
         format.png do
           svg = render_to_string("shares/overview", formats: :svg, layout: false, locals: { edition: @edition })
 
-          vips_image = Vips::Image.svgload_buffer(svg, access: :sequential, dpi: 300)
-
           logo = ImageProcessing::Vips
-            .source(Rails.root.join("app/assets/images/moiree-logo.png"))
-            .resize_to_limit(160, 160)
-            .call
+            .source(Rails.root.join("app/assets/images/moiree-logo-160.png"))
+            .call(save: false)
 
           summary = ImageProcessing::Vips
-            .source(vips_image)
+            .source(Vips::Image.svgload_buffer(svg, access: :sequential, dpi: 300))
             .resize_to_fill(1100, 530)
             .loader(page: 0, density: 300) # Adjust density for higher resolution
             .convert("png")
-            .call
+            .call(save: false)
 
           image = ImageProcessing::Vips
             .source(Rails.root.join("app/assets/images/moiree-bg-sm.png"))
