@@ -79,6 +79,9 @@ gem "aws-sdk-s3", "~> 1"
 # Used for replicating SQLite DB to S3 for backups
 gem "litestream"
 
+# Used for tracking performance and errors
+gem "newrelic_rpm"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   # Lazy loading the debug gem based on the discussion here: https://github.com/ruby/debug/issues/797
