@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=sentient@1,2&display=swap');
 @import 'tailwindcss';
 
 /*
@@ -16,6 +18,8 @@
 
 @theme {
   --font-inter: Inter, var(--font-sans);
+  --font-cormorant: 'Cormorant', var(--font-serif);
+  --font-sentient: 'Sentient', var(--font-serif);
 
   --background-image-logo-radial-gradient: repeating-radial-gradient(
     circle at 46% 45%,
