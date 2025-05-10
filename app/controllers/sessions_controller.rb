@@ -14,7 +14,12 @@ class SessionsController < ApplicationController
   def create
     if (user = User.authenticate_by(params.permit(:email, :password)))
       start_new_session_for(user)
-      redirect_to(after_authentication_url)
+
+      if user.critic? && (current_edition = user.critic.editions.current.first)
+        redirect_to(admin_festival_edition_path(current_edition.festival, current_edition))
+      else
+        redirect_to(after_authentication_url)
+      end
     else
       redirect_to(sign_in_path(email_hint: params[:email]), alert: "That email or password is incorrect")
     end

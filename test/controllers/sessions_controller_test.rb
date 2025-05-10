@@ -42,4 +42,22 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     delete session_url(@user.sessions.last)
     assert_redirected_to root_url
   end
+
+  test "should redirect critic to admin edition path when critic has current edition" do
+    critic_user = users(:critic)
+    edition = editions(:base)
+    edition.update!(start_date: Date.current - 1.day, end_date: Date.current + 1.day, year: Date.current.year)
+
+    post sign_in_url, params: { email: critic_user.email, password: "Secret1*3*5*" }
+    assert_redirected_to admin_festival_edition_path(festivals(:base), edition)
+  end
+
+  test "should redirect to after_authentication_url when critic has no current edition" do
+    critic_user = users(:critic)
+    # Ensure critic has no current editions
+    critic_user.critic.editions.current.destroy_all
+
+    post sign_in_url, params: { email: critic_user.email, password: "Secret1*3*5*" }
+    assert_redirected_to root_url # Assuming after_authentication_url resolves to root_url
+  end
 end
