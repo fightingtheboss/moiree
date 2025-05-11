@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_03_133631) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_11_014501) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -132,6 +132,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_03_133631) do
     t.decimal "score", precision: 2, scale: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "review_url"
     t.index ["critic_id"], name: "index_ratings_on_critic_id"
     t.index ["selection_id"], name: "index_ratings_on_selection_id"
   end
