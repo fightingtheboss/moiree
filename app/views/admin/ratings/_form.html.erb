@@ -9,7 +9,7 @@
     <%= form.hidden_field :critic_id, value: Current.user.userable.id %>
   <% end %>
   <div class="mb-4">
-    <%= form.label :score, class: "block text-gray-700 text-sm font-bold mb-2" %>
+    <%= form.label :score, "Rating", class: "block text-gray-700 text-sm font-bold mb-2" %>
     <%= form.range_field :score, min: 0, max: 5, step: 0.5, list: "rating-values", class: "block w-full border-0 py-1.5 text-gray-900 sm:text-sm sm:leading-6" %>
 
     <datalist id="rating-values" class="flex flex-col justify-between [writing-mode:vertical-lr] w-full mt-1">
@@ -25,6 +25,19 @@
       <option value="4.5" class="p-0">
       <option value="5" label="🔥" class="p-0">
     </datalist>
+  </div>
+  <div class="mb-4">
+    <div>
+      <%= form.label :impression, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <p class="text-xs mt-1 text-slate-600">Your short impressions of the film (optional)</p>
+      <p class="text-xs mt-1 mb-2 text-slate-600">500 character limit</p>
+    </div>
+    <%= form.textarea :impression, rows: 5, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :review_url, "Review URL", class: "block text-gray-700 text-sm font-bold mb-2" %>
+    <p class="text-xs mt-1 mb-2 text-slate-600">You can link to your full review, if you have one (optional)</p>
+    <%= form.text_field :review_url, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
   </div>
   <div class="flex items-center justify-between mt-8">
     <%= form.submit class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-sm focus:outline-hidden focus:shadow-outline" %>

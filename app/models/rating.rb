@@ -15,6 +15,12 @@ class Rating < ApplicationRecord
     scope: :critic_id,
     message: ->(object, _) { "#{object.critic.name} has already rated #{object.film.title}" },
   }
+  validates :review_url, format: {
+    with: URI.regexp(["https"]),
+    message: "must be a valid URL",
+    allow_blank: true,
+  }
+  validates :impression, length: { maximum: 500 }, allow_blank: true
 
   attr_accessor :skip_cache_average_ratings_callback
 

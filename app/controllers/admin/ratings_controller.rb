@@ -126,7 +126,7 @@ class Admin
     end
 
     def rating_params
-      params.require(:rating).permit(:score, :critic_id)
+      params.require(:rating).permit(:score, :impression, :review_url, :critic_id)
     end
   end
 end
