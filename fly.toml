@@ -48,9 +48,9 @@ console_command = '/rails/bin/rails console'
     grace_period = '10s'
 
 [[vm]]
-  memory = '1gb'
+  memory = '2gb'
   cpu_kind = 'shared'
-  cpus = 1
+  cpus = 4
 
 [[statics]]
   guest_path = '/rails/public'
@@ -59,3 +59,4 @@ console_command = '/rails/bin/rails console'
 [env]
   AWS_ROLE_ARN = 'arn:aws:iam::428476658087:role/MOIREE-FLY.IO'
   SOLID_QUEUE_IN_PUMA = true
+  WEB_CONCURRENCY = 4
