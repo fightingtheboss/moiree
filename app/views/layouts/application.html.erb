@@ -56,5 +56,24 @@
     <main>
       <%= content_for?(:content) ? yield(:content) : yield %>
     </main>
+
+    <dialog id="global-modal" class="rounded-md shadow-md">
+      <div class="min-w-[50vw] max-w-full md:max-w-[75vw] p-8 rounded-sm shadow-sm flex flex-col items-center relative">
+        <header class="absolute top-8 right-8">
+          <form method="dialog">
+            <button type="submit" aria-label="close" class="text-2xl">&times;</button>
+          </form>
+        </header>
+
+        <div class="w-full" data-controller="modal" data-action="turbo:submit-end->modal#submitEnd">
+
+          <%= turbo_frame_tag "modal" %>
+
+          <form method="dialog" class="absolute bottom-8 right-8">
+            <button type="submit" class="bg-white hover:bg-slate-50 text-black border border-slate-300 font-semibold py-2 px-4 rounded-sm focus:outline-hidden focus:shadow-outline">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
   </body>
 </html>
