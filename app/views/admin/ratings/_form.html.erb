@@ -36,8 +36,9 @@
   </div>
   <div class="mb-4">
     <%= form.label :review_url, "Review URL", class: "block text-gray-700 text-sm font-bold mb-2" %>
-    <p class="text-xs mt-1 mb-2 text-slate-600">You can link to your full review, if you have one (optional)</p>
-    <%= form.text_field :review_url, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+    <p class="text-xs mt-1 text-slate-600">Link to your full review, if you have one (optional)</p>
+    <p class="text-xs mt-1 mb-2 text-slate-500">You can come back and add this later, too</p>
+    <%= form.text_field :review_url, placeholder: "e.g. https://cinemasope.ca/my-article", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
   </div>
   <div class="flex items-center justify-between mt-8">
     <%= form.submit class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-sm focus:outline-hidden focus:shadow-outline" %>
