@@ -36,7 +36,32 @@
                     <h3><%= rating.film.year %></h3>
                   </td>
                   <td class="border border-indigo-100 p-2 text-center"><%= rating.selection.category.name %></td>
-                  <td class="border border-indigo-100 border-r-0 p-2 text-center"><%= display_rating(rating.score) %></td>
+                  <td class="relative border border-indigo-100 border-r-0 p-2 text-center">
+                    <%= display_rating(rating.score) %>
+
+                    <% if rating.impression.present? || rating.review_url.present? %>
+                      <%= link_to rating_path(rating),
+                          data: {
+                            turbo_frame: "modal",
+                            controller: "modal",
+                            action: "modal#show",
+                            "modal-dialog-param": "global-modal"
+                          },
+                          class: "absolute bottom-1 left-0 z-[5] py-2 w-full group flex justify-center items-center gap-1 mt-4" do %>
+                        <% if rating.impression.present? %>
+                          <div class="flex items-center gap-2">
+                            <%= inline_svg_tag("icons/waveform-path.svg", class: "w-3 fill-indigo-500 group-hover:fill-indigo-900") %>
+                          </div>
+                        <% end %>
+
+                        <% if rating.review_url.present? %>
+                          <div class="flex items-center gap-2">
+                            <%= inline_svg_tag("icons/link.svg", class: "w-3 fill-indigo-500 group-hover:fill-indigo-900") %>
+                          </div>
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                  </td>
                 </tr>
               <% end %>
             </tbody>

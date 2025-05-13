@@ -1,7 +1,7 @@
 <% description("Critic ratings for #{@film.title} across #{@film.editions.size} festivals") %>
 
 <article>
-  <header class="sticky top-0 left-0 w-full bg-white py-1 overflow-y-auto whitespace-nowrap">
+  <header class="sticky top-0 left-0 z-30 w-full bg-white py-1 overflow-y-auto whitespace-nowrap">
     <div class="flex items-center gap-2 px-4 w-fit">
       <h1 class="font-semibold text-sm"><%= @film.title %></h1><span>•</span>
       <h2 class="text-sm"><%= @film.director %></h2><span>•</span>
@@ -19,15 +19,15 @@
 
     <section>
       <% @film.editions.order("editions.start_date DESC").each do |edition| %>
-        <h3 id="<%= dom_id(edition) %>" class="sticky top-7 left-0 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
+        <h3 id="<%= dom_id(edition) %>" class="sticky top-7 left-0 z-20 text-sm uppercase font-semibold px-4 py-1 bg-indigo-900 text-white"><%= edition.code %></h3>
         <% if edition.ratings.any?%>
           <table class="border-collapse border-spacing-0 w-full mb-4">
             <thead>
-              <tr class="sticky top-[3.4rem] left-0">
+              <tr class="sticky top-[3.4rem] left-0 z-10">
                 <th class="border border-indigo-100 border-l-0 px-2 pl-4 py-1 text-left bg-indigo-700 text-white text-sm w-4/5">Average rating</th>
                 <th class="border border-indigo-100 border-r-0 px-2 py-1 bg-indigo-700 text-white text-sm"><%= number_with_precision(@film.ratings.for(edition).average(:score), precision: 1) %></th>
               </tr>
-              <tr class="sticky top-[5.1rem] left-0 shadow-sm">
+              <tr class="sticky top-[5.1rem] left-0 z-10 shadow-sm">
                 <th class="border border-indigo-100 border-l-0 text-left px-4 py-1 bg-indigo-50 text-sm w-4/5">Critic</th>
                 <th class="border border-indigo-100 border-r-0 px-4 py-1 bg-indigo-50 text-sm w-1/5">Rating</th>
               </tr>
@@ -41,7 +41,32 @@
                     </h1>
                     <h2><%= rating.critic.publication %></h2>
                   </td>
-                  <td class="border border-indigo-100 border-r-0 p-2 text-center"><%= display_rating(rating.score) %></td>
+                  <td class="relative h-20 border border-indigo-100 border-r-0 p-2 text-center">
+                    <%= display_rating(rating.score) %>
+
+                    <% if rating.impression.present? || rating.review_url.present? %>
+                      <%= link_to rating_path(rating),
+                          data: {
+                            turbo_frame: "modal",
+                            controller: "modal",
+                            action: "modal#show",
+                            "modal-dialog-param": "global-modal"
+                          },
+                          class: "absolute bottom-0 left-0 z-[5] py-2 w-full group flex justify-center items-center gap-1 mt-4" do %>
+                        <% if rating.impression.present? %>
+                          <div class="flex items-center gap-2">
+                            <%= inline_svg_tag("icons/waveform-path.svg", class: "w-3 fill-indigo-500 group-hover:fill-indigo-900") %>
+                          </div>
+                        <% end %>
+
+                        <% if rating.review_url.present? %>
+                          <div class="flex items-center gap-2">
+                            <%= inline_svg_tag("icons/link.svg", class: "w-3 fill-indigo-500 group-hover:fill-indigo-900") %>
+                          </div>
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                  </td>
                 </tr>
               <% end %>
             </tbody>
