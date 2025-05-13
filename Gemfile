@@ -73,6 +73,8 @@ gem "friendly_id", "~> 5.5.0"
 
 gem "x"
 
+gem "inline_svg"
+
 # Using this for scheduled SQLite DB backups to S3 from Fly.io (with the help of Solid Queue)
 gem "aws-sdk-s3", "~> 1"
 
