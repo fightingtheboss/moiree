@@ -42,6 +42,24 @@
       #e0e7ff 4px,
       #e0e7ff 6px
     );
+    --background-image-radial-gradient-center:
+    linear-gradient(to left bottom, transparent, #fffa 65%),
+    repeating-radial-gradient(
+      circle at 50% 50%,
+      #eef2ff 2px,
+      #eef2ff 4px,
+      #e0e7ff 4px,
+      #e0e7ff 6px
+    );
+    --background-image-radial-gradient-backdrop:
+    linear-gradient(to left bottom, transparent, #fffa 65%),
+    repeating-radial-gradient(
+      circle at 50% 50%,
+      transparent 2px,
+      transparent 4px,
+      #615fff 4px,
+      #615fff 6px
+    );
 
   --animate-appear-then-fade: appear-then-fade 7s both;
 
@@ -59,7 +77,7 @@
 
 @layer theme {
   :root {
-    --default-font-feature-settings: 'zero' 1, 'ss01' 1, 'ss08' 1;
+    --default-font-feature-settings: 'zero' 1, 'ss01' 1, 'ss08' 1, "cv11" 1;
   }
 
   @supports (font-variation-settings: normal) {
