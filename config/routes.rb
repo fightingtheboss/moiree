@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   end
   resources :films, only: [:show]
   resource :password, only: [:edit, :update]
+  resources :ratings, only: [:show]
   resource :session, only: [:destroy]
 
   namespace :admin do
