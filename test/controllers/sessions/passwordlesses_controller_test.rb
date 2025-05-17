@@ -19,7 +19,7 @@ module Sessions
 
     test "edit action when litefs primary exists" do
       # Stub the helper method directly
-      Sessions::PasswordlessesController.any_instance.stubs(:litefs_primary_instance_id).returns("instance-123")
+      Sessions::PasswordlessesController.any_instance.expects(:litefs_primary_instance_id).returns("instance-123")
 
       get edit_sessions_passwordless_path(sid: @signed_id)
 
@@ -29,7 +29,7 @@ module Sessions
 
     test "edit action when litefs primary does not exist" do
       # Stub the helper method to return nil
-      Sessions::PasswordlessesController.any_instance.stubs(:litefs_primary_instance_id).returns(nil)
+      Sessions::PasswordlessesController.any_instance.expects(:litefs_primary_instance_id).returns(nil)
 
       assert_difference -> { @user.sessions.count }, 1 do
         get edit_sessions_passwordless_path(sid: @signed_id)

@@ -10,9 +10,7 @@ module LiteFS
 
   included do
     helper_method :litefs_primary_instance_id
-  end
 
-  class_methods do
     def litefs_primary_instance_id
       if File.exist?("/litefs/.primary")
         File.read("/litefs/.primary").strip
