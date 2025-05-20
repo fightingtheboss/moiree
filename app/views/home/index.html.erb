@@ -40,9 +40,9 @@
             <% end %>
 
             <% if current_user&.admin? || (current_user&.critic? && edition.critics.include?(current_user.critic)) %>
-              <%= link_to admin_festival_edition_path(edition.festival, edition), class: "absolute top-8 right-8 bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-xs" do %>
+              <%= link_to admin_festival_edition_path(edition.festival, edition), class: "absolute top-4 right-4 md:top-8 md:right-8 bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-xs" do %>
                 <%= inline_svg_tag("icons/plus-circle.svg", class: "inline-block w-4 fill-white") %>
-                <span class="ml-1 pr-1 inline-block">Add a rating</span>
+                <span class="ml-1 pr-1 inline-block">Rate a film</span>
               <% end %>
             <% end %>
 
