@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_11_034709) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_22_010502) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -126,6 +126,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_034709) do
     t.index ["slug"], name: "index_films_on_slug", unique: true
   end
 
+  create_table "podcasts", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description"
+    t.integer "user_id", null: false
+    t.string "url"
+    t.string "slug", null: false
+    t.boolean "platform", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_podcasts_on_slug", unique: true
+    t.index ["user_id"], name: "index_podcasts_on_user_id"
+  end
+
   create_table "ratings", force: :cascade do |t|
     t.integer "critic_id", null: false
     t.integer "selection_id", null: false
@@ -182,6 +195,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_034709) do
   add_foreign_key "attendances", "editions"
   add_foreign_key "categories", "editions"
   add_foreign_key "editions", "festivals"
+  add_foreign_key "podcasts", "users"
   add_foreign_key "ratings", "critics"
   add_foreign_key "ratings", "selections"
   add_foreign_key "selections", "categories"
