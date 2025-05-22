@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+base:
+  title: First Episode
+  description: Description of the first episode
+  podcast: base
+  url: https://podcast.example.com/episode/1
+
+with_embed:
+  title: Episode with Embed
+  description: Description of the episode with embed
+  podcast: base
+  url: https://podcast.example.com/episode/1
+  embed: |
+    <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2096620470&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
