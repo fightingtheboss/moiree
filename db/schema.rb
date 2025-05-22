@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_22_010502) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_22_041239) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -126,6 +126,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_010502) do
     t.index ["slug"], name: "index_films_on_slug", unique: true
   end
 
+  create_table "podcast_episodes", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.integer "podcast_id", null: false
+    t.string "url"
+    t.text "embed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["podcast_id"], name: "index_podcast_episodes_on_podcast_id"
+  end
+
   create_table "podcasts", force: :cascade do |t|
     t.string "title", null: false
     t.text "description"
@@ -195,6 +206,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_010502) do
   add_foreign_key "attendances", "editions"
   add_foreign_key "categories", "editions"
   add_foreign_key "editions", "festivals"
+  add_foreign_key "podcast_episodes", "podcasts"
   add_foreign_key "podcasts", "users"
   add_foreign_key "ratings", "critics"
   add_foreign_key "ratings", "selections"
