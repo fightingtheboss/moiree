@@ -1,0 +1,8 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+base:
+  title: MOIRÉE Podcast
+  description: This is a test description for the podcast.
+  user: critic
+  url: https://podcast.example.com
+  slug: moiree-podcast
