@@ -10,6 +10,8 @@ class Podcast < ApplicationRecord
 
   validates :title, :slug, presence: true
 
+  accepts_nested_attributes_for(:episodes, allow_destroy: true)
+
   private
 
   def slug_candidates
