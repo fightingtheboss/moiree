@@ -58,11 +58,12 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: "moir.ee", protocol: "https" }
 
-  if Rails.application.credentials.sendgrid
+  if Rails.application.credentials.aws_ses
     ActionMailer::Base.smtp_settings = {
-      user_name: Rails.application.credentials.sendgrid.fetch(:username),
-      password: Rails.application.credentials.sendgrid.fetch(:password),
-      address: "smtp.sendgrid.net",
+      user_name: Rails.application.credentials.aws_ses.fetch(:smtp_username),
+      password: Rails.application.credentials.aws_ses.fetch(:smtp_password),
+      domain: Rails.application.credentials.aws_ses.fetch(:domain),
+      address: "email-smtp.us-east-1.amazonaws.com",
       port: 587,
       authentication: :plain,
       enable_starttls_auto: true,
