@@ -16,11 +16,17 @@ class Film < ApplicationRecord
     end
   end
 
+  normalizes :title, with: lambda(&:strip)
+  normalizes :director, with: lambda(&:strip)
+  normalizes :country, with: Normalizers::Country.new
+
   validates :title, :director, :country, :year, presence: true
+  validates :year, numericality: { only_integer: true, greater_than_or_equal_to: 1888, less_than_or_equal_to: Date.current.year }, allow_blank: true
+  validate :country_codes_must_be_valid
+
+  before_save :normalize_title, if: :title_changed?
 
   friendly_id :slug_candidates, use: :slugged
-
-  before_create :map_country_to_iso_code, :normalize_title
 
   def cache_overall_average_rating
     update(overall_average_rating: ratings.average(:score).to_f)
@@ -31,7 +37,10 @@ class Film < ApplicationRecord
   end
 
   def countries
-    country.split(",").map(&:strip).map { |c| Country[c].common_name }
+    country.split(",").map(&:strip).map do |c|
+      country_obj = Country[c] || Country.find_country_by_any_name(c)
+      country_obj&.common_name || c
+    end
   end
 
   private
@@ -44,12 +53,12 @@ class Film < ApplicationRecord
     ]
   end
 
-  def map_country_to_iso_code
-    countries = country.split(",").map(&:strip)
+  def country_codes_must_be_valid
+    invalid = country.split(",").map(&:strip).reject do |c|
+      Country[c] || Country.find_country_by_any_name(c)
+    end
 
-    return if countries.all?(/^\w{2}$/)
-
-    self.country = countries.map { |c| ISO3166::Country.find_country_by_any_name(c).alpha2 }.join(",")
+    errors.add(:country, "contains unknown country name(s) or codes: #{invalid.join(", ")}") if invalid.any?
   end
 
   def normalize_title

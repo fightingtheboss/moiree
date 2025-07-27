@@ -3,9 +3,15 @@
 require "test_helper"
 
 class FilmTest < ActiveSupport::TestCase
-  test "should convert country to ISO code before saving" do
-    film = Film.create!(title: "Test", director: "Test", country: "Canada, United States of America", year: 2022)
+  test "should add validation error for unknown country names" do
+    film = Film.new(title: "Test", director: "Test", country: "Atlantis, CA", year: 2022)
+    refute film.valid?
+    assert_includes film.errors[:country].join, "Atlantis"
+    assert_match(/unknown country/i, film.errors[:country].join)
+  end
 
+  test "should normalize country to ISO codes when given valid names and codes" do
+    film = Film.create!(title: "Test", director: "Test", country: "Canada, US", year: 2022)
     assert_equal "CA,US", film.country
   end
 
@@ -25,6 +31,21 @@ class FilmTest < ActiveSupport::TestCase
     film = films(:with_multiple_countries)
 
     assert_equal ["United States", "United Kingdom"], film.countries
+  end
+
+  test "#countries returns original string for unknown country codes" do
+    film = Film.new(title: "Test", director: "Test", country: "ZZ,US", year: 2022)
+    assert_equal ["ZZ", "United States"], film.countries
+  end
+
+  test "#countries returns original string for unknown country names" do
+    film = Film.new(title: "Test", director: "Test", country: "Atlantis,US", year: 2022)
+    assert_equal ["Atlantis", "United States"], film.countries
+  end
+
+  test "#countries handles extra whitespace and mixed input" do
+    film = Film.new(title: "Test", director: "Test", country: "  US ,  Canada ,Atlantis ", year: 2022)
+    assert_equal ["United States", "Canada", "Atlantis"], film.countries
   end
 
   test "#ratings should return the Ratings associated with the Film" do
@@ -142,6 +163,29 @@ class FilmTest < ActiveSupport::TestCase
       assert_equal 1, import_result.skipped.size
       assert_equal "Festival Film has different directors (Sarah Polley) from imported film (Edward Yang)",
         import_result.errors.first
+    end
+  end
+
+  test "::import should not import a film with an unknown country" do
+    file = fixture_file_upload("invalid_country.csv", "text/csv")
+    edition = editions(:base)
+
+    assert_no_difference "Film.count" do
+      result = Film.import(file, edition)
+      assert_equal 1, result.skipped.size
+      assert_match(/Atlantis/, result.errors.first)
+      assert_match(/unknown country/i, result.errors.first)
+    end
+  end
+
+  test "::import should import film with valid country names and codes" do
+    file = fixture_file_upload("valid_country.csv", "text/csv")
+    edition = editions(:base)
+
+    assert_difference "Film.count", 1 do
+      result = Film.import(file, edition)
+      assert_empty result.errors
+      assert_equal "CA", Film.last.country
     end
   end
 

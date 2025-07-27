@@ -27,17 +27,20 @@ module Film::Importable
           end
         end
 
-        film.update(row.to_hash)
-
-        film.selections.create(
-          edition: edition,
-          category: category,
-        ) if film.editions.exclude?(edition)
+        film.assign_attributes(row.to_hash)
 
         if film.valid?
+          film.save
+
+          film.selections.create(
+            edition: edition,
+            category: category,
+          ) if film.editions.exclude?(edition)
+
           result.imported << film
         else
-          result.errors << film.errors.full_messages
+          result.errors << "#{film.title}: #{film.errors.full_messages.join(", ")}"
+          result.skipped << film
         end
       end
 
