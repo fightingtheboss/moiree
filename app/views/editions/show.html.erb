@@ -44,10 +44,10 @@
                   <p class="text-sm leading-tight ml-1">
                     <%= link_to critic.name, critic_url(critic), target: "_top", class: "hover:italic hover:text-indigo-700" %>
                   </p>
-                  <p class="text-sm font-light leading-tight"><%= critic.publication_for(edition: @edition) %></p>
+                  <p class="text-sm font-light leading-tight"><%= critic.publication %></p>
                 </div>
                 <p class="font-normal text-xs opacity-0 group-hover:opacity-100 grow-0 shrink"><%= link_to "Hide", edition_path(@edition, request.query_parameters.merge("critics[]" => critic.id)), data: { "turbo-action": "advance" } %></p>
-                <p class="text-sm mt-2 grow-0 shrink"><%= Country[critic.country].emoji_flag %></p>
+                <p class="text-sm mt-2 grow-0 shrink"><%= critic.country_emoji %></p>
               </div>
             </th>
           <% end %>
@@ -68,7 +68,7 @@
                 <h4 class="text-sm leading-tight text-ellipsis overflow-hidden">
                   <%= link_to selection.film.title, film_url(selection.film), target: "_top", class: "hover:italic hover:text-indigo-700" %>
                 </h4>
-                <h5 class="mt-1 font-light text-sm leading-tight"><%= selection.film.directors.join(", ") %></h5>
+                <h5 class="mt-1 font-light text-sm leading-tight"><%= @film_directors[selection.film] %></h5>
               </th>
               <td class="border p-2 text-center font-semibold"><%= number_with_precision(selection.average_rating, precision: 1) %></td>
               <% @critics.each do |critic| %>
