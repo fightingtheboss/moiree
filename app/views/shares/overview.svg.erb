@@ -31,7 +31,7 @@
   <text x="100" y="210" class="inter-text" font-size="24" fill="black"><%= @edition.start_date.strftime("%b %d, %Y") %> — <%= @edition.end_date.strftime("%b %d, %Y") %></text>
   <text x="100" y="250" class="inter-text" font-size="24" fill="black"><%= edition_url(@edition) %></text>
 
-  <image href="<%= image_url("moiree-logo.svg") %>" x="950" y="92" width="160" height="160" />
+  <image href="<%= image_url("moiree-logo-v2.svg") %>" x="950" y="92" width="160" height="160" />
 
   <% 4.times do |i| %>
     <rect x="<%= 82 + (i * (247 + 16)) %>" y="308" width="247" height="192" fill="url(#grad)" rx="10" />
