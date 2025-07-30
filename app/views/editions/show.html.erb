@@ -46,10 +46,9 @@
         <% @selections_by_category.each do |category, selections| %>
           <tbody class="">
             <tr>
-              <th colspan="2" class="sticky left-0 top-48 z-30 bg-indigo-900 text-white text-left">
+              <th class="sticky left-0 top-48 z-30 bg-indigo-900 text-white text-left w-full" colspan="100%">
                 <h3 class="px-2 py-1 text-xs uppercase"><%= category.name %></h3>
               </th>
-              <th colspan="1000" class="bg-indigo-900 text-white sticky top-48 z-20">&nbsp;</th>
             </tr>
             <%= render partial: "selection_row", collection: selections, as: :selection, locals: { ratings: @ratings, critics: @critics, film_directors: @film_directors }, cache: true %>
           </tbody>
