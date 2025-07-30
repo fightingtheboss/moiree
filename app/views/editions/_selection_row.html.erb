@@ -1,0 +1,40 @@
+<tr class=" hover:bg-indigo-600/10">
+  <th scope="row" class="border p-2 sticky left-0 z-10 bg-white text-left">
+    <h4 class="text-sm leading-tight text-ellipsis overflow-hidden">
+      <%= link_to selection.film.title, film_url(selection.film), target: "_top", class: "hover:italic hover:text-indigo-700" %>
+    </h4>
+    <h5 class="mt-1 font-light text-sm leading-tight"><%= film_directors[selection.film] %></h5>
+  </th>
+  <td class="border p-2 text-center font-semibold"><%= number_with_precision(selection.average_rating, precision: 1) %></td>
+  <% critics.each do |critic| %>
+    <% if (rating = ratings[critic][selection]) %>
+      <td class="border p-2 h-20 text-center relative hover:border-indigo-600 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10">
+        <%= display_rating(rating.score) %>
+        <% if rating.impression.present? || rating.review_url.present? %>
+          <%= link_to rating_path(rating),
+              data: {
+                turbo_frame: "modal",
+                controller: "modal",
+                action: "modal#show",
+                "modal-dialog-param": "global-modal"
+              },
+              class: "absolute bottom-0 left-0 z-[5] py-2 w-full group flex justify-center items-center gap-1 mt-4" do %>
+            <% if rating.impression.present? %>
+              <div class="flex items-center gap-2">
+                <%= inline_svg_tag("icons/waveform-path.svg", class: "w-3 fill-indigo-500 group-hover:fill-indigo-900") %>
+              </div>
+            <% end %>
+
+            <% if rating.review_url.present? %>
+              <div class="flex items-center gap-2">
+                <%= inline_svg_tag("icons/link.svg", class: "w-3 fill-indigo-500 group-hover:fill-indigo-900") %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      </td>
+    <% else %>
+      <td class="border p-2 text-center relative hover:border-indigo-600 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10">&nbsp;</td>
+    <% end %>
+  <% end %>
+</tr>

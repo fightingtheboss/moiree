@@ -1,0 +1,12 @@
+<th scope="col" class="group border border-indigo-100 h-48 p-2 sticky top-0 z-10 bg-white w-24 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10">
+  <div class="flex flex-col justify-between items-stretch max-h-44 h-full w-full relative z-10">
+    <div class="[writing-mode:vertical-rl] text-left basis-full grow">
+      <p class="text-sm leading-tight ml-1">
+        <%= link_to critic.name, critic_url(critic), target: "_top", class: "hover:italic hover:text-indigo-700" %>
+      </p>
+      <p class="text-sm font-light leading-tight"><%= critic.publication %></p>
+    </div>
+    <p class="font-normal text-xs opacity-0 group-hover:opacity-100 grow-0 shrink"><%= link_to "Hide", edition_path(@edition, request.query_parameters.merge("critics[]" => critic.id)), data: { "turbo-action": "advance" } %></p>
+    <p class="text-sm mt-2 grow-0 shrink"><%= critic.country_emoji %></p>
+  </div>
+</th>
