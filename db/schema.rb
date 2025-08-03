@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_22_041239) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_03_174145) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -134,7 +134,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_041239) do
     t.text "embed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
     t.index ["podcast_id"], name: "index_podcast_episodes_on_podcast_id"
+    t.index ["slug"], name: "index_podcast_episodes_on_slug", unique: true
   end
 
   create_table "podcasts", force: :cascade do |t|
