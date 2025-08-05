@@ -1,0 +1,5 @@
+<%= turbo_stream.append params[:target_collection_id] do %>
+  <%= render partial: "admin/podcasts/episodes/episode", locals: { episode: @episode } %>
+<% end %>
+<%= turbo_stream.update "modal", "" %>
+<%= turbo_stream.remove "episodes-empty" %>

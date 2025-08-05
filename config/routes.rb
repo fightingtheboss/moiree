@@ -62,6 +62,10 @@ Rails.application.routes.draw do
       resource :invitation, only: [:new, :create]
     end
 
+    resources :podcasts do
+      resources :episodes, module: :podcasts
+    end
+
     resources :users, only: [:index, :destroy] do
       collection do
         get :critics

@@ -1,0 +1,16 @@
+<%= link_to admin_podcast_episode_path(episode.podcast, episode), class: "block" do %>
+  <article class="mb-4 bg-white p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow">
+    <header class="mb-4">
+      <h1 class="font-semibold text-xl"><%= episode.title %></h1>
+    </header>
+    <% if episode.description.present? %>
+      <p class="mb-4 text-sm text-gray-700"><%= truncate(episode.description, length: 120) %></p>
+    <% end %>
+    <% if episode.url.present? %>
+      <div class="text-xs text-blue-600 underline mb-2"><%= episode.url %></div>
+    <% end %>
+    <div class="text-xs text-gray-500">
+      Created: <%= episode.created_at.strftime("%b %d, %Y") %>
+    </div>
+  </article>
+<% end %>

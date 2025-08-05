@@ -1,0 +1,25 @@
+<div class="min-w-full max-w-md">
+  <%= render partial: "shared/errors", locals: { model: podcast_episode } %>
+
+  <%= form_with(model: [:admin, podcast_episode]) do |form| %>
+    <div class="mb-4">
+      <%= form.label :title, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.text_field :title, placeholder: "Episode Title", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+    </div>
+    <div class="mb-4">
+      <%= form.label :description, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.text_area :description, placeholder: "Episode Description", rows: 4, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+    </div>
+    <div class="mb-4">
+      <%= form.label :url, "URL", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.url_field :url, placeholder: "e.g. https://podcast.com", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+    </div>
+    <div class="mb-4">
+      <%= form.label :embed, "HTML Embed Code", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.text_area :embed, placeholder: "<iframe src='https://podcast.com/embed/episode' frameborder='0'></iframe>", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+    </div>
+    <div class="flex items-center justify-between mt-8">
+      <%= form.submit class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-sm focus:outline-hidden focus:shadow-outline" %>
+    </div>
+  <% end %>
+</div>
