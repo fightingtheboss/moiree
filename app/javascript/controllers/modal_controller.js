@@ -29,7 +29,13 @@ export default class extends Controller {
         { once: true }
       );
     } else {
-      dialog.showModal();
+      dialog.addEventListener(
+        "turbo:frame-load",
+        () => {
+          dialog.showModal();
+        },
+        { once: true }
+      );
     }
   }
 
