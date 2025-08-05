@@ -63,7 +63,9 @@ Rails.application.routes.draw do
     end
 
     resources :podcasts do
-      resources :episodes, module: :podcasts
+      resources :episodes, module: :podcasts do
+        post :webhook, on: :collection
+      end
     end
 
     resources :users, only: [:index, :destroy] do

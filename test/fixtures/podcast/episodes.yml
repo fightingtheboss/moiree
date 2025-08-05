@@ -2,9 +2,12 @@
 
 base:
   title: First Episode
+  summary: Summary of the first episode
   description: Description of the first episode
   podcast: base
   url: https://podcast.example.com/episode/1
+  published_at: 2023-01-01 10:00:00 UTC
+  duration: 3600
 
 with_embed:
   title: Episode with Embed
