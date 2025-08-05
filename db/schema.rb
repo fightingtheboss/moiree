@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_03_174145) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_05_201338) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -135,7 +135,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_03_174145) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
+    t.text "summary"
+    t.datetime "published_at"
+    t.integer "duration"
     t.index ["podcast_id"], name: "index_podcast_episodes_on_podcast_id"
+    t.index ["published_at"], name: "index_podcast_episodes_on_published_at"
     t.index ["slug"], name: "index_podcast_episodes_on_slug", unique: true
   end
 
