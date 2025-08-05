@@ -135,6 +135,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_05_201338) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
+    t.string "provider_id"
     t.text "summary"
     t.datetime "published_at"
     t.integer "duration"

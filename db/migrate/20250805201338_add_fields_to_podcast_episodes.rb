@@ -2,6 +2,7 @@
 
 class AddFieldsToPodcastEpisodes < ActiveRecord::Migration[8.0]
   def change
+    add_column(:podcast_episodes, :provider_id, :string)
     add_column(:podcast_episodes, :summary, :text)
     add_column(:podcast_episodes, :published_at, :datetime)
     add_column(:podcast_episodes, :duration, :integer)
