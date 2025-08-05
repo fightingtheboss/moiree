@@ -28,6 +28,39 @@ When an Admin is invited, their account is created and they're sent a link to re
 - Credentials are coordinated between Fly and AWS via OIDC IdP: [Configure fly.io as a OIDC IdP](https://fly.io/blog/oidc-cloud-roles/)
 
 ## Roadmap
+- Podcasts
+  - Index of podcasts and episodes
+    - Need to add a link to this in the top menu for all users
+    - Since this is on the only podcast, should probably skip over the podcast index view for now and go straight to the MOIRÉE podcast episodes
+  - Ability to add new podcast episodes
+    - Listen for webhooks when new episodes are published on transistor.fm
+      - Looks like I'll need a rake task to register for the webhoook initially
+    - Grab the details directly, so there's no need for double entry of details
+  - Sitewide banner to promote new episodes
+  - Show view with an embed of the player, a link to transistor.fm
+- Critics
+  - Add a public index of all critics who've rated for MOIRÉE
+  - Link to index in top menu bar
+  - Could eventually get images associated with critics
+- Concept of unrateable film
+  - Flag on the film
+  - Should be called out to both critics and to end users
+- Instagram integration
+  - Keep using the SVG approach for the time being
+    - Maybe just use it for the layout and then overlay/composite the text to be able to ensure custom fonts?
+  - Should be generated in a job that runs nighly during an active festival
+  - Need to use ActiveStorage to store the JPG files on S3 so they can be accessed by Instagram
+- Move generation of OG images to a scheduled job rather than it being part of the request
+  - No need for it to be exactly up to date, could even run it hourly during the festival
+- Homepage
+  - Continue to start with any ongoing festivals
+  - Highlight the most highly reviewed films for the year
+    - Maybe pull out the impressions and links for those films and show them in a stylized way
+  - Highlight most recent festival until the next one
+  - Show the latest podcast episode
+  - Continue to highlight upcoming festivals
+  - Provide links to all previous episodes
+  - Add social media links
 - Page caching for the summary!
 - Stats
   - One for top 3 in Competition
