@@ -33,20 +33,20 @@
       <% end %>
     </header>
 
-    <% cache @edition do %>
+    <% cache [@edition, params_cache_key] do %>
       <table class="border-separate border-spacing-0 bg-white table-fixed w-full overflow-clip">
         <thead class="">
           <tr class="">
             <th scope="col" class="border border-indigo-100 p-2 sticky top-0 left-0 z-20 bg-white w-[33vw] md:w-36 h-48">Film</th>
             <th scope="col" class="border border-indigo-100 p-2 sticky top-0 z-10 bg-white w-24 h-48">Avg</th>
-              <%= render partial: "critic_header", collection: @critics, as: :critic, cache: true %>
+            <%= render partial: "critic_header", collection: @critics, as: :critic, cache: true %>
           </tr>
         </thead>
 
         <% @selections_by_category.each do |category, selections| %>
           <tbody class="">
             <tr>
-              <th class="sticky left-0 top-48 z-30 bg-indigo-900 text-white text-left w-full" colspan="100%">
+              <th class="sticky left-0 top-48 z-30 bg-indigo-900 text-white text-left w-screen" colspan="100%">
                 <h3 class="px-2 py-1 text-xs uppercase"><%= category.name %></h3>
               </th>
             </tr>
