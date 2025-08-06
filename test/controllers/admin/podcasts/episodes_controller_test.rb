@@ -81,7 +81,7 @@ class Admin::Podcasts::EpisodesControllerTest < ActionDispatch::IntegrationTest
   test "request to webhook with draft episode does not create episode" do
     podcast = podcasts(:base)
 
-    assert_no_difference("Podcast::Episode.count") do
+    assert_no_difference("Episode.count") do
       post webhook_admin_podcast_episodes_path(podcast_id: podcast.id),
         params: {
           event_name: "episode_published",
@@ -109,7 +109,7 @@ class Admin::Podcasts::EpisodesControllerTest < ActionDispatch::IntegrationTest
   test "valid request to webhook creates episode" do
     podcast = podcasts(:base)
 
-    assert_difference("Podcast::Episode.count", 1) do
+    assert_difference("Episode.count", 1) do
       post webhook_admin_podcast_episodes_path(podcast_id: podcast.id),
         params: {
           event_name: "episode_published",
@@ -132,7 +132,7 @@ class Admin::Podcasts::EpisodesControllerTest < ActionDispatch::IntegrationTest
 
       assert_response(:ok)
 
-      episode = Podcast::Episode.last
+      episode = Episode.last
       assert_equal("episode_123", episode.provider_id)
       assert_equal("New Episode", episode.title)
       assert_equal("This is a new episode.", episode.summary)

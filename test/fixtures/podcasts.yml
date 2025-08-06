@@ -6,3 +6,11 @@ base:
   user: critic
   url: https://podcast.example.com
   slug: moiree-podcast
+
+with_platform:
+  title: MOIRÉE Podcast on Platform
+  description: This is a test description for the podcast on a specific platform.
+  user: critic
+  url: https://podcast.example.com
+  slug: moiree-podcast-platform
+  platform: true
