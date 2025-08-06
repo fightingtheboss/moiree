@@ -12,6 +12,8 @@ class Podcast < ApplicationRecord
 
   accepts_nested_attributes_for(:episodes, allow_destroy: true)
 
+  scope :platform, -> { where(platform: true) }
+
   private
 
   def slug_candidates

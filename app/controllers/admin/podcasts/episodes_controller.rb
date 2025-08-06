@@ -57,7 +57,8 @@ class Admin
       head(:bad_request) and return unless event_name == "episode_published"
       head(:ok) and return if episode_attributes[:status] == "draft"
 
-      @podcast = Podcast.first
+      @podcast = Podcast.platform.first
+
       @episode = @podcast.episodes.build(
         provider_id: episode_params[:id],
         title: episode_attributes[:title],
