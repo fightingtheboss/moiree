@@ -6,7 +6,7 @@ class Podcast < ApplicationRecord
   friendly_id :slug_candidates, use: :slugged
 
   belongs_to :user
-  has_many :episodes, dependent: :destroy, class_name: "Podcast::Episode"
+  has_many :episodes, dependent: :destroy
 
   validates :title, :slug, presence: true
 

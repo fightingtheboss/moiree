@@ -22,7 +22,23 @@ class Admin
           format.turbo_stream
         end
       else
-        render(:new)
+        respond_to do |format|
+          format.html { render(:new) }
+          format.turbo_stream do
+            flash.now[:alert] = @episode.errors.full_messages.to_sentence
+            render(
+              turbo_stream: [
+                turbo_stream.prepend("flash", partial: "layouts/flash"),
+                turbo_stream.update(
+                  "modal",
+                  partial: "admin/podcasts/episodes/form",
+                  locals: { podcast_episode: @episode, podcast: @podcast },
+                ),
+              ],
+              status: :unprocessable_entity,
+            )
+          end
+        end
       end
     end
 
@@ -34,7 +50,20 @@ class Admin
       authorize(@episode)
 
       if @episode.update(episode_params)
-        redirect_to(admin_podcast_path(@podcast), notice: "Episode updated")
+        respond_to do |format|
+          format.html { redirect_to(admin_podcasts_path, notice: "#{@episode.title} updated") }
+          format.turbo_stream do
+            flash.now[:notice] = "#{@episode.title} updated"
+            render(turbo_stream: [
+              turbo_stream.prepend("flash", partial: "layouts/flash"),
+              turbo_stream.update(
+                helpers.dom_id(@episode),
+                partial: "admin/podcasts/episodes/episode",
+                locals: { episode: @episode },
+              ),
+            ])
+          end
+        end
       else
         render(:edit)
       end
@@ -84,7 +113,7 @@ class Admin
     private
 
     def episode_params
-      params.expect(podcast_episode: [:title, :description, :url, :embed, :target_collection_id])
+      params.expect(episode: [:title, :summary, :description, :url, :embed, :published_at, :target_collection_id])
     end
 
     def podcast

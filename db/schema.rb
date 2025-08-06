@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_05_201338) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_06_164250) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -101,6 +101,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_05_201338) do
     t.index ["festival_id"], name: "index_editions_on_festival_id"
   end
 
+  create_table "episodes", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.integer "podcast_id", null: false
+    t.string "url"
+    t.text "embed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug"
+    t.string "provider_id"
+    t.text "summary"
+    t.datetime "published_at"
+    t.integer "duration"
+    t.index ["podcast_id"], name: "index_episodes_on_podcast_id"
+    t.index ["published_at"], name: "index_episodes_on_published_at"
+    t.index ["slug"], name: "index_episodes_on_slug", unique: true
+  end
+
   create_table "festivals", force: :cascade do |t|
     t.string "name"
     t.string "short_name"
@@ -124,24 +142,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_05_201338) do
     t.string "slug"
     t.string "normalized_title", null: false
     t.index ["slug"], name: "index_films_on_slug", unique: true
-  end
-
-  create_table "podcast_episodes", force: :cascade do |t|
-    t.string "title"
-    t.text "description"
-    t.integer "podcast_id", null: false
-    t.string "url"
-    t.text "embed"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.string "provider_id"
-    t.text "summary"
-    t.datetime "published_at"
-    t.integer "duration"
-    t.index ["podcast_id"], name: "index_podcast_episodes_on_podcast_id"
-    t.index ["published_at"], name: "index_podcast_episodes_on_published_at"
-    t.index ["slug"], name: "index_podcast_episodes_on_slug", unique: true
   end
 
   create_table "podcasts", force: :cascade do |t|
@@ -213,7 +213,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_05_201338) do
   add_foreign_key "attendances", "editions"
   add_foreign_key "categories", "editions"
   add_foreign_key "editions", "festivals"
-  add_foreign_key "podcast_episodes", "podcasts"
+  add_foreign_key "episodes", "podcasts"
   add_foreign_key "podcasts", "users"
   add_foreign_key "ratings", "critics"
   add_foreign_key "ratings", "selections"

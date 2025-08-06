@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-class Podcast::Episode < ApplicationRecord
+class Episode < ApplicationRecord
   include FriendlyId
-
-  self.table_name = "podcast_episodes"
 
   belongs_to :podcast
 
@@ -17,8 +15,8 @@ class Podcast::Episode < ApplicationRecord
   def slug_candidates
     [
       :title,
-      [:title, -> { podcast&.title }],
-      [:title, -> { podcast&.title }, -> { Time.current.to_i }],
+      [:title, -> { podcast.title }],
+      [:title, -> { podcast.title }, -> { Time.current.to_i }],
     ]
   end
 end

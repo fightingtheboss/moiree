@@ -1,4 +1,13 @@
-<%= link_to admin_podcast_episode_path(episode.podcast, episode), class: "block" do %>
+<%= link_to edit_admin_podcast_episode_path(episode.podcast, episode),
+  class: "block",
+  id: dom_id(episode),
+  data: {
+    turbo_frame: "modal",
+    controller: "modal",
+    action: "modal#show",
+    "modal-dialog-param": "global-modal",
+    "modal-target-param": dom_id(episode)
+  } do %>
   <article class="mb-4 bg-white p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow">
     <header class="mb-4">
       <h1 class="font-semibold text-xl"><%= episode.title %></h1>
