@@ -1,18 +1,20 @@
 <div id="<%= dom_id(podcast) %>" class="mb-4 border-b-4 border-white last:border-none">
   <article class="p-4 grid lg:grid-cols-3">
     <header class="text-sm mb-4">
-      <h1 class="font-medium text-lg"><%= podcast.title %></h1>
+      <h1 class="font-medium text-lg">
+        <%= podcast.title %>
+        <% if podcast.platform? %>
+          <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 ml-2 rounded-full align-text-top">Platform</span>
+        <% end %>
+      </h1>
       <% if podcast.url.present? %>
         <h2><%= link_to podcast.url, podcast.url, target: "_blank", class: "text-indigo-500 hover:text-indigo-700 hover:underline" %></h2>
       <% end %>
-      <h3 class="mt-2"><%= podcast.description %></h3>
-      <% if podcast.platform? %>
-        <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full">Platform</span>
-      <% end %>
+      <h3 class="my-2"><%= podcast.description %></h3>
       <% if policy(podcast).edit? %>
         <%= link_to "Edit", edit_admin_podcast_path(podcast), data: { turbo_frame: "modal", controller: "modal", action: "modal#show", "modal-dialog-param": "global-modal" }, class: "inline-block mr-4 lg:mr-0 lg:block text-indigo-500 hover:text-indigo-700 hover:underline my-3" %>
       <% end %>
-      <% if policy(Podcast::Episode).new? %>
+      <% if !podcast.platform? && policy(Podcast::Episode).new? %>
         <%= link_to "Add episode", new_admin_podcast_episode_path(podcast),
           data: {
             turbo_frame: "modal",
