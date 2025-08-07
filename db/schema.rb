@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_06_164250) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_06_184641) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -114,6 +114,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_06_164250) do
     t.text "summary"
     t.datetime "published_at"
     t.integer "duration"
+    t.integer "edition_id"
+    t.index ["edition_id"], name: "index_episodes_on_edition_id"
     t.index ["podcast_id"], name: "index_episodes_on_podcast_id"
     t.index ["published_at"], name: "index_episodes_on_published_at"
     t.index ["slug"], name: "index_episodes_on_slug", unique: true
@@ -213,6 +215,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_06_164250) do
   add_foreign_key "attendances", "editions"
   add_foreign_key "categories", "editions"
   add_foreign_key "editions", "festivals"
+  add_foreign_key "episodes", "editions"
   add_foreign_key "episodes", "podcasts"
   add_foreign_key "podcasts", "users"
   add_foreign_key "ratings", "critics"
