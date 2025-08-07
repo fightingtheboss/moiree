@@ -38,6 +38,7 @@ When an Admin is invited, their account is created and they're sent a link to re
     - Grab the details directly, so there's no need for double entry of details
   - Sitewide banner to promote new episodes
   - Show view with an embed of the player, a link to transistor.fm
+  - Associate each episode to an edition, optionally
 - Critics
   - Add a public index of all critics who've rated for MOIRÉE
   - Link to index in top menu bar

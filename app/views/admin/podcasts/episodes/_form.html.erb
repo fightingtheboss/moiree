@@ -24,7 +24,11 @@
     </div>
     <div class="mb-4">
       <%= form.label :published_at, "Published At", class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= form.datetime_select :published_at, include_blank: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+      <%= form.datetime_select :published_at, { include_blank: true }, { class: "rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" } %>
+    </div>
+    <div class="mb-4">
+      <%= form.label :edition_id, "Edition", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.select :edition_id, grouped_options_for_select(Festival.includes(:editions).map { |f| [f.name, f.editions.map { |e| [e.code, e.id] }] }, form.object.edition_id, prompt: "Select an Edition"), { }, { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" } %>
     </div>
     <div class="flex items-center justify-between mt-8">
       <%= form.submit class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-sm focus:outline-hidden focus:shadow-outline" %>

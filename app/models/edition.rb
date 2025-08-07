@@ -9,6 +9,7 @@ class Edition < ApplicationRecord
   has_many :critics, through: :attendances
 
   has_many :categories, dependent: :destroy
+  has_many :episodes, dependent: :destroy
 
   has_many :selections, dependent: :destroy
   has_many :films, through: :selections

@@ -113,7 +113,17 @@ class Admin
     private
 
     def episode_params
-      params.expect(episode: [:title, :summary, :description, :url, :embed, :published_at, :target_collection_id])
+      params.expect(
+        episode: [
+          :title,
+          :summary,
+          :description,
+          :url,
+          :embed,
+          :published_at,
+          :edition_id,
+        ],
+      )
     end
 
     def podcast

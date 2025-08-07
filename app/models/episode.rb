@@ -4,6 +4,7 @@ class Episode < ApplicationRecord
   include FriendlyId
 
   belongs_to :podcast
+  belongs_to :edition, optional: true
 
   validates :title, :url, presence: true
   validates :url, format: { with: URI::DEFAULT_PARSER.make_regexp(["https"]) }
