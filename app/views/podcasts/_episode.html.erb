@@ -1,0 +1,12 @@
+<li class="mx-2 mb-6 border-t border-t-indigo-700 pt-2">
+  <h3 class="font-semibold text-indigo-700 mb-2">
+    <%= link_to episode.title, podcast_episode_path(episode.podcast, episode) %>
+  </h3>
+  <% if episode.published_at %>
+    <h4 date-time="<%= episode.published_at.iso8601%>" class="text-sm text-gray-500 mb-2">
+      <%= episode.published_at.strftime("%B %d, %Y") %>
+    </h4>
+  <% end %>
+  <p class="font-sentient font-light mb-2"><%= truncate(episode.summary, length: 240) %></p>
+  <a href="<%= episode.url %>" target="_blank" class="text-sm"><%= episode.url %></a>
+</li>

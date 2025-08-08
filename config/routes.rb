@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   end
   resources :films, only: [:show]
   resource :password, only: [:edit, :update]
+  resources :podcasts, only: [:index, :show] do
+    resources :episodes, controller: "podcasts/episodes", only: [:show]
+  end
   resources :ratings, only: [:show]
   resource :session, only: [:destroy]
 
