@@ -14,10 +14,8 @@ amazon:
   region: us-east-1
   bucket: <%= Rails.application.credentials.dig(:aws_s3, :bucket) %>
   public: true
-  url: :public_url
-  host: https://assets.moir.ee
+  endpoint: https://assets.moir.ee
   upload:
-    acl: public-read
     cache_control: "public, max-age=31536000"
 
 # Remember not to checkin your GCS keyfile to a repository
