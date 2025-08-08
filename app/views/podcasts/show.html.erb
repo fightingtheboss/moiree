@@ -3,7 +3,7 @@
   <p class="font-sentient font-light"><%= @podcast.description %></p>
 
   <section class="p-4 bg-radial-gradient rounded-md shadow-lg my-4">
-    <h2 class="font-semibold text-sm uppercase tracking-wider pl-2 pb-2 text-indigo-700">Latest Episode</h2>
+    <h2 class="font-semibold text-sm uppercase tracking-wider pb-2 text-indigo-700">Latest Episode</h2>
     <article>
       <% if @latest_episode.embed %>
         <div><%=raw @latest_episode.embed %></div>
@@ -30,8 +30,8 @@
   </section>
 
   <% if @episodes.any? %>
-    <section class="p-4 bg-white rounded-md shadow-lg my-4">
-      <h2 class="font-semibold text-sm uppercase text-indigo-700 pl-2 pb-2 tracking-wider">Past Episodes</h2>
+    <section class="p-6 bg-white rounded-md shadow-lg my-4">
+      <h2 class="font-semibold text-sm uppercase text-indigo-700 pb-2 tracking-wider">Past Episodes</h2>
       <ul>
         <%= render partial: "podcasts/episode", collection: @episodes %>
       </ul>
