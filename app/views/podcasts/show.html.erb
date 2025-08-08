@@ -11,6 +11,15 @@
         <div class="font-sentient font-light mb-2 bg-white p-4 border-indigo-700 border rounded-bl-md rounded-br-md rounded-tr-md">
           <%=raw @latest_episode.description %>
         </div>
+        <div class="flex justify-between">
+          <% if @latest_episode.edition %>
+            <p class="inline-block text-xs text-gray-400 my-2">
+              Part of
+              <%= link_to @latest_episode.edition.code, edition_path(@latest_episode.edition), class: "text-indigo-700 underline" %>
+            </p>
+          <% end %>
+          <%= link_to @latest_episode.url, @latest_episode.url, target: "_blank", class: "inline-block my-2 text-xs text-gray-400" %>
+        </div>
       <% else %>
         <h1 class="font-semibold text-2xl mb-1"><%= @latest_episode.title %></h1>
         <p class=""><%= @latest_episode.published_at.strftime("%B %d, %Y") if @latest_episode.published_at %></p>

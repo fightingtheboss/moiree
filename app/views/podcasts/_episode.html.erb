@@ -8,5 +8,11 @@
     </h4>
   <% end %>
   <p class="font-sentient font-light mb-2"><%= truncate(episode.summary, length: 240) %></p>
-  <a href="<%= episode.url %>" target="_blank" class="text-sm"><%= episode.url %></a>
+  <% if episode.edition %>
+    <p class="text-xs text-gray-400 mb-2">
+      Part of
+      <%= link_to episode.edition.code, edition_path(episode.edition), class: "text-indigo-700 underline" %>
+    </p>
+  <% end %>
+  <%= link_to episode.url, episode.url, target: "_blank", class: "text-xs text-gray-400" %>
 </li>
