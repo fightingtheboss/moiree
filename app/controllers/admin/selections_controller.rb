@@ -171,6 +171,7 @@ class Admin
           :original_title,
           :director,
           :year,
+          :rateable,
           country: [],
         ],
       )

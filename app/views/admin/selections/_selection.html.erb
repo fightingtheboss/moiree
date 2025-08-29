@@ -22,10 +22,10 @@
     <% end %>
   </div>
 
-  <% unless @edition.past? && Current.critic_for?(edition: @edition) %>
+  <% if !@edition.past? && Current.critic_for?(edition: @edition) %>
     <% if Current.user.admin? || Current.critic_for?(edition: @edition) %>
       <aside id="<%= dom_id(selection, :critic_rating) %>" class="mt-4">
-        <% unless critic_already_rated?(selection) || defined?(hide_rate_button) %>
+        <% unless selection.film.rateable == false || critic_already_rated?(selection) || defined?(hide_rate_button) %>
           <%= render partial: "admin/ratings/new_rating_button", locals: { festival: @festival, edition: @edition, selection: selection } %>
         <% end %>
 
