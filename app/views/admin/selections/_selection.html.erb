@@ -22,7 +22,7 @@
     <% end %>
   </div>
 
-  <% if !@edition.past? && Current.critic_for?(edition: @edition) %>
+  <% if !@edition.past? || Current.user.admin? %>
     <% if Current.user.admin? || Current.critic_for?(edition: @edition) %>
       <aside id="<%= dom_id(selection, :critic_rating) %>" class="mt-4">
         <% unless selection.film.rateable == false || critic_already_rated?(selection) || defined?(hide_rate_button) %>
