@@ -3,6 +3,8 @@
 require "test_helper"
 
 class EditionTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   test "should not be valid if end_date is before start_date" do
     edition = editions(:base)
     edition.end_date = edition.start_date - 1.day
@@ -103,5 +105,21 @@ class EditionTest < ActiveSupport::TestCase
     rating = ratings(:base)
 
     assert edition.ratings.include?(rating)
+  end
+
+  test "attaches fallback share image after create if none exists" do
+    edition = Edition.create!(
+      festival: festivals(:base),
+      year: 2027,
+      code: "TIFF27",
+      start_date: Date.new(2027, 9, 9),
+      end_date: Date.new(2027, 9, 19),
+    )
+
+    perform_enqueued_jobs
+
+    edition.reload
+
+    assert edition.share_image.attached?, "Fallback share image should be attached after create"
   end
 end

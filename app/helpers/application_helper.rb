@@ -13,7 +13,7 @@ module ApplicationHelper
     tags = {
       title: edition.code,
       url: edition_url(edition),
-      image: overview_edition_share_url(edition),
+      image: edition.share_image.attached? ? url_for(edition.share_image) : overview_edition_share_url(edition, format: :png),
       description: content_for(:description),
       site_name: "MOIRÉE",
       locale: "en_US",

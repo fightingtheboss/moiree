@@ -1,0 +1,35 @@
+<svg width="100%" height="100%" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <style type="text/css">
+      .inter-text {
+        font-family: 'InterVariable', monospace;
+        font-feature-settings: "zero" 1, "ss01" 1, "ss08" 1, 'liga' 1, 'calt' 1;
+      }
+    </style>
+
+    <pattern id="background" patternUnits="userSpaceOnUse" width="1200" height="630">
+      <image xlink:href="<%= image_url("moiree-bg-sm.png") %>" x="0" y="0" width="1200" height="630" preserveAspectRatio="xMidYMid slice" />
+    </pattern>
+    <radialGradient id="grad" cx="100%" cy="0%" r="2%" fx="100%" fy="0%" spreadMethod="repeat">
+      <stop offset="0%" style="stop-color:#f6f6f6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f6f6f6;stop-opacity:1" />
+      <stop offset="50.1%" style="stop-color:#f0f0f0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0f0f0;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="bg-grad" cx="50%" cy="50%" r="2%" fx="50%" fy="50%" spreadMethod="repeat">
+      <stop offset="0%" style="stop-color:#f6f6f6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f6f6f6;stop-opacity:1" />
+      <stop offset="50.1%" style="stop-color:#f0f0f0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0f0f0;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#background)" />
+  <rect x="50" y="50" width="1100" height="530" rx="10" fill="white" />
+
+  <text x="100" y="300" class="inter-text" font-size="40" fill="black"><%= @edition.name.upcase %></text>
+  <text x="100" y="356" class="inter-text" font-size="64" font-weight="700" fill="black"><%= @edition.code %></text>
+  <text x="100" y="436" class="inter-text" font-size="40" fill="black"><%= @edition.start_date.strftime("%b %d, %Y") %> — <%= @edition.end_date.strftime("%b %d, %Y") %></text>
+  <text x="100" y="492" class="inter-text" font-size="24" fill="black"><%= edition_url(@edition) %></text>
+
+  <image href="<%= image_url("moiree-logo-v2.svg") %>" x="950" y="92" width="160" height="160" />
+</svg>
