@@ -48,7 +48,7 @@ console_command = '/rails/bin/rails console'
     grace_period = '10s'
 
 [[vm]]
-  memory = '2gb'
+  memory = '4gb'
   cpu_kind = 'shared'
   cpus = 4
 
