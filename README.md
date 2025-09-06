@@ -63,6 +63,17 @@ When an Admin is invited, their account is created and they're sent a link to re
   - Provide links to all previous episodes
   - Add social media links
 - Page caching for the summary!
+- When a critic is added to an edition, link their previous ratings for the same film to this edition
+  - This might be a copy of the existing Rating records or it might be an association
+    - Likely both: A new Rating for that Edition, but associated to the original rating
+      - Whole records are copied, including a pre-existing association ID, since we always want to point back to the source
+        - Only set the association ID if it's not already set
+        - The useful association is the edition_id, rather than the original rating_id, because we'll use it
+  - Looking this up when rendering the grid will only slow it down further, will need to ensure a simple way to preload these values
+  - Show them dimmed/greyed out in the grid with a popover that indicates which festival it was rated at
+  - Can be overridden just by adding a rating for that film at that edition
+    - Need to clear out the association in the case of overriding the Rating for this Edition
+  - Maybe this is a setting on the festival or edition, should ask Blake what he thinks the default should be
 - Stats
   - One for top 3 in Competition
   - One for top 5 across the rest
@@ -93,6 +104,8 @@ When an Admin is invited, their account is created and they're sent a link to re
       - This can include extended metadata and URLs to images (posters and banners)
   - Maybe this is an option for Admins to do a search or an automated matching of the entered film data
     - I think it should be automatable if we have the title, directors and year as criteria
+    - Do the search, show the user the results, then do the detail lookup once one of those options is selected
+      - Either search on blur or on a debounced keyup of title field
 
 ### Kamal Deployments (worth exploring)
 - Install the litestream-ruby gem and configure it to stream the backups to S3
