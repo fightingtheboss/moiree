@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class Admin
-  class Podcasts::EpisodesController < ApplicationController
+  class Podcasts::EpisodesController < AdminController
     before_action :podcast, only: [:new, :create, :edit, :update, :destroy]
     before_action :episode, only: [:edit, :update, :destroy]
     before_action :ensure_webhook_source, only: [:webhook]
+
+    allow_unauthenticated_access(only: :webhook)
 
     def new
       authorize(@podcast, :create?)
@@ -86,7 +88,7 @@ class Admin
       head(:bad_request) and return unless event_name == "episode_published"
       head(:ok) and return if episode_attributes[:status] == "draft"
 
-      @podcast = Podcast.platform.first
+      @podcast = Podcast.friendly.find(params[:podcast_id])
 
       @episode = @podcast.episodes.build(
         provider_id: episode_params[:id],
