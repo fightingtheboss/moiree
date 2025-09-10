@@ -6,6 +6,11 @@ class Admin
     before_action :episode, only: [:edit, :update, :destroy]
     before_action :ensure_webhook_source, only: [:webhook]
 
+    # Webhooks come from an external provider (Transistor.fm). They can't include
+    # the application's CSRF token, so we must skip the verification for this
+    # endpoint only.
+    skip_before_action :verify_authenticity_token, only: [:webhook]
+
     allow_unauthenticated_access(only: :webhook)
 
     def new
