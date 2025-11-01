@@ -33,13 +33,13 @@ class TMDB
 
   class << self
     def find(id)
-      response = request("movie/#{id}")
+      response = request("movie/#{id}?append_to_response=credits,images")
 
       tmdb_movie(response)
     end
 
     def search(query, year: nil)
-      response = request("search/movie?query=#{URI.encode(query)}&year=#{year}")
+      response = request("search/movie?query=#{URI.encode_uri_component(query)}&year=#{year}")
 
       response["results"].map do |result|
         tmdb_movie(result)
