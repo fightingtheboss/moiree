@@ -25,10 +25,24 @@ class Admin
       @edition = Edition.friendly.find(params[:edition_id])
       @festival = @edition.festival
 
-      render(
-        partial: "admin/films/new_film_search_results",
-        locals: { festival: @festival, edition: @edition, films: @films },
-      )
+      respond_to do |format|
+        format.html do
+          render(
+            partial: "admin/films/new_film_search_results",
+            locals: { festival: @festival, edition: @edition, films: @films },
+          )
+        end
+
+        format.turbo_stream do
+          render(
+            turbo_stream: turbo_stream.replace(
+              "new-film-search-results",
+              partial: "admin/films/new_film_search_results",
+              locals: { festival: @festival, edition: @edition, films: @films },
+            ),
+          )
+        end
+      end
     end
 
     def add_country

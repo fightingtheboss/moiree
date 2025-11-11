@@ -2,22 +2,6 @@
   <%= turbo_frame_tag "modal" do %>
     <h1 class="text-2xl font-semibold mb-4">New Film for <%= @edition.code %></h1>
 
-    <search class="">
-      <%= form_with url: admin_festival_edition_search_for_film_to_add_path(@festival, @edition), method: :get, data: { turbo_frame: "new-film-search-results", controller: "search" } do |form| %>
-        <%= form.label :query, "Search films by title", class: "block font-semibold mb-2" %>
-        <div class="flex space-x-3">
-          <%= form.text_field :query, data: { action: "input->search#search"}, class: "w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
-          <%= form.submit "Search", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-xs" %>
-        </div>
-        <p class="mt-3 text-sm leading-6 text-gray-600">Use this search to add a film that has already played at another festival</p>
-        <%= form.hidden_field "modal_keep_open", value: true %>
-      <% end %>
-    </search>
-
-    <ul id="<%= dom_id(@edition, :new_film) %>" class="w-full">
-      <%= turbo_frame_tag "new-film-search-results", class: "grid grid-cols-1 md:grid-cols-2 md:gap-2 my-4" %>
-    </ul>
-
     <%= turbo_frame_tag "add-film-to-edition", target: "search-results" do %>
       <%# Clear out any search results when this Turbo Frame is re-rendered %>
       <%= turbo_stream.update "new-film-search-results", "" %>
@@ -32,10 +16,15 @@
               <%= hidden_field_tag :film_id, @film.id %>
             </div>
           <% else %>
-            <div class="mb-4">
+            <div class="" data-controller="search" data-search-url-value="<%= admin_festival_edition_search_for_film_to_add_path(@festival, @edition) %>">
               <%= form.label :title, class: "block text-gray-700 text-sm font-bold mb-2" %>
-              <%= form.text_field :title, placeholder: "e.g. Anatomy of a Fall", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+              <%= form.text_field :title, placeholder: "e.g. Anatomy of a Fall", data: { action: "input->search#existing", "search-target": "query" }, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
             </div>
+
+            <ul id="<%= dom_id(@edition, :new_film) %>" class="w-full mb-4">
+              <%= turbo_frame_tag "new-film-search-results" %>
+            </ul>
+
             <div class="mb-4">
               <%= form.label :original_title, class: "block text-gray-700 text-sm font-bold mb-2" %>
               <%= form.text_field :original_title, placeholder: "e.g. Anatomie d'une chute", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>

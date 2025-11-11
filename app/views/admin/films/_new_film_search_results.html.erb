@@ -1,15 +1,14 @@
 <%= turbo_frame_tag "new-film-search-results" do %>
   <% if films.any? %>
-    <% films.each do |film| %>
-      <li class="bg-white p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow hover:cursor-pointer my-1 md:my-0">
-        <%= link_to new_admin_festival_edition_selection_path(festival, edition, film_id: film.id), data: { "turbo-frame": "add-film-to-edition" } do %>
-          <%= render partial: "admin/films/film_detail", locals: { film: film } %>
-        <% end %>
-      </li>
-    <% end %>
-  <% else %>
-    <li>
-      <p>No films found.</p>
-    </li>
+    <h3 class="text-xs leading-6 text-gray-600 mt-2">Similar films from other festivals</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 md:gap-2">
+      <% films.each do |film| %>
+        <li class="bg-white p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow hover:cursor-pointer my-1 border border-gray-200/50">
+          <%= link_to new_admin_festival_edition_selection_path(festival, edition, film_id: film.id), data: { "turbo-frame": "add-film-to-edition" } do %>
+            <%= render partial: "admin/films/film_detail", locals: { film: film } %>
+          <% end %>
+        </li>
+      <% end %>
+    </div>
   <% end %>
 <% end %>
