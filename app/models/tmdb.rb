@@ -35,14 +35,14 @@ class TMDB
     def find(id)
       response = request("movie/#{id}?append_to_response=credits,images")
 
-      tmdb_movie(response)
+      movie_from(response)
     end
 
     def search(query, year: nil)
       response = request("search/movie?query=#{URI.encode_uri_component(query)}&year=#{year}")
 
       response["results"].map do |result|
-        tmdb_movie(result)
+        movie_from(result)
       end
     end
 
@@ -51,7 +51,7 @@ class TMDB
         request("configuration")
       end
 
-      tmdb_configuration(raw)
+      configuration_from(raw)
     end
 
     def poster_url(path, size: "original")
@@ -83,7 +83,7 @@ class TMDB
       JSON.parse(response.body)
     end
 
-    def tmdb_movie(tmdb_response)
+    def movie_from(tmdb_response)
       Movie.new(
         id: tmdb_response["id"],
         title: tmdb_response["title"],
@@ -96,7 +96,7 @@ class TMDB
       )
     end
 
-    def tmdb_configuration(tmdb_response)
+    def configuration_from(tmdb_response)
       images = tmdb_response["images"]
 
       Configuration.new(
