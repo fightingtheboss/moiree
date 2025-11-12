@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_29_165438) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_11_200247) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -144,6 +144,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_165438) do
     t.string "slug"
     t.string "normalized_title", null: false
     t.boolean "rateable", default: true, null: false
+    t.text "summary"
+    t.integer "tmdb_id"
+    t.date "release_date"
+    t.string "poster_path"
+    t.string "backdrop_path"
     t.index ["slug"], name: "index_films_on_slug", unique: true
   end
 
