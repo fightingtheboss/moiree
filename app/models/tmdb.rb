@@ -10,6 +10,10 @@ class TMDB
     :backdrop_path,
     :original_language,
     :original_title,
+    :production_countries,
+    :origin_country,
+    :credits,
+    :images,
   ) do
     def poster_url(size: "original")
       return unless poster_path
@@ -21,6 +25,20 @@ class TMDB
       return unless backdrop_path
 
       TMDB.backdrop_url(backdrop_path, size: size)
+    end
+
+    def directors
+      credits["crew"].select { |c| c["job"] == "Director" }.map { |c| c["name"] }
+    end
+
+    def countries
+      if production_countries.any?
+        production_countries.map { |c| c["iso_3166_1"] }
+      elsif origin_country.any?
+        origin_country
+      else
+        []
+      end
     end
   end
 
@@ -38,7 +56,7 @@ class TMDB
       movie_from(response)
     end
 
-    def search(query, year: nil)
+    def search(query, year: nil, limit: 5)
       response = request("search/movie?query=#{URI.encode_uri_component(query)}&year=#{year}")
 
       response["results"].map do |result|
@@ -76,6 +94,8 @@ class TMDB
       req["Authorization"] = "Bearer #{access_token}"
       req["Accept"] = "application/json"
 
+      Rails.logger.info("TMDB request: #{req.method} #{uri}")
+
       response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
         http.request(req)
       end
@@ -93,6 +113,10 @@ class TMDB
         backdrop_path: tmdb_response["backdrop_path"],
         original_language: tmdb_response["original_language"],
         original_title: tmdb_response["original_title"],
+        production_countries: tmdb_response["production_countries"],
+        origin_country: tmdb_response["origin_country"],
+        credits: tmdb_response["credits"],
+        images: tmdb_response["images"],
       )
     end
 
