@@ -99,13 +99,17 @@
                 <%= form.label :release_date, class: "block text-gray-700 text-sm font-bold mb-2" %>
                 <%= form.date_field :release_date, class: "block w-full rounded-md border-0 py-1.5 text-gray-500 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", disabled: true %>
               </div>
-              <div class="mt-4">
-                <%= form.label :poster_path, class: "block text-gray-700 text-sm font-bold mb-2" %>
-                <%= form.text_field :poster_path, placeholder: "/path/to/poster.jpg", class: "block w-full rounded-md border-0 py-1.5 text-gray-500 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", disabled: true %>
-              </div>
-              <div class="mt-4">
-                <%= form.label :backdrop_path, class: "block text-gray-700 text-sm font-bold mb-2" %>
-                <%= form.text_field :backdrop_path, placeholder: "/path/to/backdrop.jpg", class: "block w-full rounded-md border-0 py-1.5 text-gray-500 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", disabled: true %>
+              <div class="mt-4 flex gap-4">
+                <div>
+                  <%= form.label :poster_path, "Poster", class: "block text-gray-700 text-sm font-bold mb-2" %>
+                  <img class="block w-full h-auto rounded-sm shadow-xs" src="<%= TMDB.poster_url(@film.poster_path) %>" alt="Poster image for <%= @film.title %>">
+                  <%= form.hidden_field :poster_path, value: @film.poster_path %>
+                </div>
+                <div class="flex-grow">
+                  <%= form.label :backdrop_path, "Backdrop", class: "block text-gray-700 text-sm font-bold mb-2" %>
+                  <img class="block w-full h-auto rounded-sm shadow-xs" src="<%= TMDB.backdrop_url(@film.backdrop_path) %>" alt="Backdrop image for <%= @film.title %>">
+                  <%= form.hidden_field :backdrop_path, value: @film.backdrop_path %>
+                </div>
               </div>
             </details>
           <% end %>
