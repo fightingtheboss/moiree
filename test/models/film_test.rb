@@ -189,6 +189,34 @@ class FilmTest < ActiveSupport::TestCase
     end
   end
 
+  test "::from_tmdb should return a new Film object with attributes from TMDB" do
+    tmdb_movie = stub(
+      title: "Test Film",
+      original_title: "Original Test Film",
+      directors: ["Director 1", "Director 2"],
+      countries: ["US", "CA"],
+      release_date: "2023-01-01",
+      overview: "This is a test film.",
+      poster_path: "/poster.jpg",
+      backdrop_path: "/backdrop.jpg",
+      id: 12345,
+    )
+    TMDB.stubs(:find).with(12345).returns(tmdb_movie)
+
+    film = Film.from_tmdb(12345)
+
+    assert_equal "Test Film", film.title
+    assert_equal "Original Test Film", film.original_title
+    assert_equal "Director 1, Director 2", film.director
+    assert_equal "US,CA", film.country
+    assert_equal 2023, film.year
+    assert_equal "This is a test film.", film.summary
+    assert_equal "2023-01-01", film.release_date
+    assert_equal "/poster.jpg", film.poster_path
+    assert_equal "/backdrop.jpg", film.backdrop_path
+    assert_equal 12345, film.tmdb_id
+  end
+
   private
 
   def fixture_file_upload(path, mime_type = nil)
