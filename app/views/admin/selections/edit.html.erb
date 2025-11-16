@@ -26,7 +26,7 @@
           <div id="film-countries">
             <% @selection.film.country.split(",").map(&:strip).each do |country_code| %>
               <%= render partial: "admin/films/country_select", locals: { country: country_code } %>
-          <% end %>
+            <% end %>
           </div>
           <%= link_to "Add another country", admin_films_add_country_path, data: { "turbo-stream": true }, class: "inline-block mt-4 bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-xs" %>
         </div>

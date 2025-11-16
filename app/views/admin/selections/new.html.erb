@@ -6,7 +6,7 @@
       <%# Clear out any search results when this Turbo Frame is re-rendered %>
       <%= turbo_stream.update "new-film-search-results", "" %>
 
-      <%= render partial: "shared/errors", locals: { model: @film } %>
+      <%= render partial: "shared/errors", locals: { model: @selection } %>
 
       <%= form_with(model: [:admin, @festival, @edition, @selection]) do |selection_form| %>
         <%= selection_form.fields_for :film, include_id: false do |form| %>
@@ -41,7 +41,13 @@
             <div class="mb-4">
               <%= form.label :country, class: "block text-gray-700 text-sm font-bold mb-2" %>
               <div id="film-countries">
-                <%= render partial: "admin/films/country_select" %>
+                <% if @film.country.present? %>
+                  <% @film.country.split(",").map(&:strip).each do |country_code| %>
+                    <%= render partial: "admin/films/country_select", locals: { country: country_code } %>
+                  <% end %>
+                <% else %>
+                  <%= render partial: "admin/films/country_select" %>
+                <% end %>
               </div>
               <%= link_to "Add another country", admin_films_add_country_path, data: { "turbo-stream": true }, class: "inline-block mt-4 bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-1 px-2 rounded-sm text-xs" %>
             </div>
@@ -71,11 +77,38 @@
           </div>
 
           <div class="my-8 border-t border-b border-t-gray-200 border-b-gray-200 py-2">
-            <%= selection_form.label :rateable, class: "block text-gray-700 text-sm font-semibold mb-2" do %>
-              <%= selection_form.check_box :rateable, checked: true, class: "text-indigo-500 focus:ring-indigo-500" %> <span class="inline-block ml-2">Rateable?</span>
+            <%= form.label :rateable, class: "block text-gray-700 text-sm font-semibold mb-2" do %>
+              <%= form.check_box :rateable, checked: true, class: "text-indigo-500 focus:ring-indigo-500" %> <span class="inline-block ml-2">Rateable?</span>
             <% end %>
-            <p class="mt-3 text-sm leading-6 text-gray-600">Uncheck this box if you don't want this film to be rated by critics</p>
+            <p class="mt-3 text-sm leading-6 text-gray-600">Uncheck this box if you don't want this film to be rated by critics. Applies to all festivals.</p>
           </div>
+
+          <% if @film.tmdb_id.present? %>
+            <details>
+              <summary class="cursor-pointer text-sm font-semibold text-gray-700 mb-4">TMDB Details</summary>
+
+              <div class="mt-4">
+                <%= form.label :tmdb_id, "TMDB ID", class: "block text-gray-700 text-sm font-bold mb-2" %>
+                <%= form.text_field :tmdb_id, class: "block w-full rounded-md border-0 py-1.5 text-gray-500 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", disabled: true %>
+              </div>
+              <div class="mt-4">
+                <%= form.label :summary, class: "block text-gray-700 text-sm font-bold mb-2" %>
+                <%= form.text_area :summary, rows: 4, placeholder: "A brief synopsis of the film", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+              </div>
+              <div class="mt-4">
+                <%= form.label :release_date, class: "block text-gray-700 text-sm font-bold mb-2" %>
+                <%= form.date_field :release_date, class: "block w-full rounded-md border-0 py-1.5 text-gray-500 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", disabled: true %>
+              </div>
+              <div class="mt-4">
+                <%= form.label :poster_path, class: "block text-gray-700 text-sm font-bold mb-2" %>
+                <%= form.text_field :poster_path, placeholder: "/path/to/poster.jpg", class: "block w-full rounded-md border-0 py-1.5 text-gray-500 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", disabled: true %>
+              </div>
+              <div class="mt-4">
+                <%= form.label :backdrop_path, class: "block text-gray-700 text-sm font-bold mb-2" %>
+                <%= form.text_field :backdrop_path, placeholder: "/path/to/backdrop.jpg", class: "block w-full rounded-md border-0 py-1.5 text-gray-500 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", disabled: true %>
+              </div>
+            </details>
+          <% end %>
 
           <div class="flex items-center justify-between mt-8">
             <%= form.submit "Add film to edition", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-sm focus:outline-hidden focus:shadow-outline" %>
