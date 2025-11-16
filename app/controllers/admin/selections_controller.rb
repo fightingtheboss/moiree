@@ -5,7 +5,14 @@ class Admin
     before_action :set_festival_and_edition
 
     def new
-      @film = params[:film_id] ? Film.find(params[:film_id]) : Film.new
+      @film = if params[:film_id]
+        Film.find(params[:film_id])
+      elsif params[:tmdb_id]
+        Film.from_tmdb(params[:tmdb_id])
+      else
+        Film.new
+      end
+
       @selection = @film.selections.build(edition: @edition)
     end
 
@@ -56,7 +63,7 @@ class Admin
             turbo_stream: [
               turbo_stream.update(
                 "modal",
-                template: "admin/ratings/edit",
+                template: "admin/selections/new",
                 locals: { festival: @festival, edition: @edition, selection: @selection },
               ),
               turbo_stream.prepend("flash", partial: "layouts/flash"),
@@ -172,6 +179,11 @@ class Admin
           :director,
           :year,
           :rateable,
+          :tmdb_id,
+          :summary,
+          :release_date,
+          :poster_path,
+          :backdrop_path,
           country: [],
         ],
       )
