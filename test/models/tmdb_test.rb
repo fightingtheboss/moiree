@@ -17,6 +17,10 @@ class TMDBTest < ActiveSupport::TestCase
       "backdrop_path" => "/backdrop.jpg",
       "original_language" => "en",
       "original_title" => "The Answer",
+      "production_countries" => [],
+      "origin_country" => [],
+      "credits" => { "crew" => [] },
+      "images" => {},
     }
 
     images = Data.define(:base_url, :secure_base_url, :backdrop_sizes, :logo_sizes, :poster_sizes, :profile_sizes, :still_sizes).new(
@@ -30,7 +34,7 @@ class TMDBTest < ActiveSupport::TestCase
     )
     config = TMDB::Configuration.new(images:, change_keys: [])
 
-    TMDB.expects(:request).with("movie/42").returns(movie_hash)
+    TMDB.expects(:request).with("movie/42?append_to_response=credits,images").returns(movie_hash)
     TMDB.stubs(:configuration).returns(config)
 
     movie = TMDB.find(42)
@@ -44,8 +48,8 @@ class TMDBTest < ActiveSupport::TestCase
   test "search returns movies built from results" do
     search_results = {
       "results" => [
-        { "id" => 1, "title" => "First", "overview" => nil, "release_date" => nil, "poster_path" => nil, "backdrop_path" => nil, "original_language" => nil, "original_title" => nil },
-        { "id" => 2, "title" => "Second", "overview" => nil, "release_date" => nil, "poster_path" => nil, "backdrop_path" => nil, "original_language" => nil, "original_title" => nil },
+        { "id" => 1, "title" => "First", "overview" => nil, "release_date" => nil, "poster_path" => nil, "backdrop_path" => nil, "original_language" => nil, "original_title" => nil, "production_countries" => [], "origin_country" => [], "credits" => nil, "images" => nil },
+        { "id" => 2, "title" => "Second", "overview" => nil, "release_date" => nil, "poster_path" => nil, "backdrop_path" => nil, "original_language" => nil, "original_title" => nil, "production_countries" => [], "origin_country" => [], "credits" => nil, "images" => nil },
       ],
     }
 
@@ -116,9 +120,90 @@ class TMDBTest < ActiveSupport::TestCase
       backdrop_path: nil,
       original_language: nil,
       original_title: nil,
+      production_countries: [],
+      origin_country: [],
+      credits: nil,
+      images: nil,
     )
 
     assert_nil movie.poster_url
     assert_nil movie.backdrop_url
+  end
+
+  test "directors returns the names of the directors" do
+    credits = { "crew" => [{ "job" => "Director", "name" => "Director 1" }, { "job" => "Writer", "name" => "Writer 1" }] }
+    movie = TMDB::Movie.new(
+      id: 1,
+      title: "Movie",
+      overview: nil,
+      release_date: nil,
+      poster_path: nil,
+      backdrop_path: nil,
+      original_language: nil,
+      original_title: nil,
+      production_countries: [],
+      origin_country: [],
+      credits: credits,
+      images: nil,
+    )
+
+    assert_equal ["Director 1"], movie.directors
+  end
+
+  test "countries returns production_countries when present" do
+    movie = TMDB::Movie.new(
+      id: 1,
+      title: "Movie",
+      overview: nil,
+      release_date: nil,
+      poster_path: nil,
+      backdrop_path: nil,
+      original_language: nil,
+      original_title: nil,
+      production_countries: [{ "iso_3166_1" => "US" }],
+      origin_country: [],
+      credits: nil,
+      images: nil,
+    )
+
+    assert_equal ["US"], movie.countries
+  end
+
+  test "countries returns origin_country when production_countries is empty" do
+    movie = TMDB::Movie.new(
+      id: 1,
+      title: "Movie",
+      overview: nil,
+      release_date: nil,
+      poster_path: nil,
+      backdrop_path: nil,
+      original_language: nil,
+      original_title: nil,
+      production_countries: [],
+      origin_country: ["GB"],
+      credits: nil,
+      images: nil,
+    )
+
+    assert_equal ["GB"], movie.countries
+  end
+
+  test "countries returns empty array when both are empty" do
+    movie = TMDB::Movie.new(
+      id: 1,
+      title: "Movie",
+      overview: nil,
+      release_date: nil,
+      poster_path: nil,
+      backdrop_path: nil,
+      original_language: nil,
+      original_title: nil,
+      production_countries: [],
+      origin_country: [],
+      credits: nil,
+      images: nil,
+    )
+
+    assert_equal [], movie.countries
   end
 end
