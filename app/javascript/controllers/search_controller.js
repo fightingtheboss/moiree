@@ -18,12 +18,25 @@ export default class extends Controller {
 
   // Local search for film
   existing() {
+    const query = this.queryTarget.value.trim();
+
+    if (query.length < 2) {
+      // Optionally clear previous results here
+      return;
+    }
+
+    if (query === this.previousQuery) {
+      return;
+    }
+
+    this.previousQuery = query;
+
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
       get(this.urlValue, {
-        query: { query: this.queryTarget.value },
+        query: { query: query },
         responseKind: "turbo-stream"
       });
-    }, 200);
+    }, 500);
   }
 }
