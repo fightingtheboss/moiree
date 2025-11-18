@@ -25,7 +25,7 @@ class Admin
       @edition = Edition.friendly.find(params[:edition_id])
       @festival = @edition.festival
 
-      @tmdb_results = TMDB.search(params[:query], year: @edition.year) if params[:query].present?
+      @tmdb_results = TMDB.search(params[:query], year: params[:year] || @edition.year) if params[:query].present?
 
       respond_to do |format|
         format.html do

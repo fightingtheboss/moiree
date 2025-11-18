@@ -3,7 +3,7 @@ import { get } from "@rails/request.js";
 
 // Connects to data-controller="search"
 export default class extends Controller {
-  static targets = ["query"];
+  static targets = ["query", "year"];
 
   static values = {
     url: String,
@@ -19,22 +19,24 @@ export default class extends Controller {
   // Local search for film
   existing() {
     const query = this.queryTarget.value.trim();
+    const year = this.yearTarget.value.trim();
 
     if (query.length < 2) {
       // Optionally clear previous results here
       return;
     }
 
-    if (query === this.previousQuery) {
+    if (query === this.previousQuery && year === this.previousYear) {
       return;
     }
 
     this.previousQuery = query;
+    this.previousYear = year;
 
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
       get(this.urlValue, {
-        query: { query: query },
+        query: { query: query, year: year },
         responseKind: "turbo-stream"
       });
     }, 500);

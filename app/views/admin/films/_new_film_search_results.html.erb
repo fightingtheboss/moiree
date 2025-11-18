@@ -12,8 +12,8 @@
     </div>
   <% end %>
 
-  <h3 class="text-xs leading-6 text-gray-600 mt-2">TMDB results</h3>
   <% if @tmdb_results.any? %>
+    <h3 class="text-xs leading-6 text-gray-600 mt-2">TMDB results</h3>
     <div class="grid grid-cols-1">
       <% @tmdb_results.each do |film| %>
         <li class="bg-white p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow hover:cursor-pointer my-1 border border-gray-200/50 bg-radial-gradient">
