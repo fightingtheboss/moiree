@@ -94,7 +94,7 @@ class TMDB
       req["Authorization"] = "Bearer #{access_token}"
       req["Accept"] = "application/json"
 
-      Rails.logger.info("TMDB request: #{req.method} #{uri}")
+      Rails.logger.info("  >>> TMDB request: #{req.method} #{uri}")
 
       response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
         http.request(req)

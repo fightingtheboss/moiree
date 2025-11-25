@@ -35,3 +35,7 @@ en:
           attributes:
             selection_id:
               format: "%{message}"
+  helpers:
+    submit:
+      film:
+        create: "Add %{model} to edition"

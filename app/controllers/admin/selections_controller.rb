@@ -17,10 +17,12 @@ class Admin
     end
 
     def create
+      film_id = params[:selection][:film_attributes].delete(:id)
+
       @selection = @edition.selections.build(selection_params_without_new_category)
 
-      if params[:film_id].present?
-        @film = Film.find(params[:film_id])
+      if film_id
+        @film = Film.find(film_id)
         @selection.film = @film
       else
         @film = @selection.film
@@ -76,7 +78,14 @@ class Admin
 
     def edit
       @selection = Selection.find(params[:id])
-      @film = @selection.film
+
+      @film = if params[:tmdb_id]
+        Film.from_tmdb(params[:tmdb_id])
+      else
+        @selection.film
+      end
+
+      @selection.film.assign_attributes(@film.attributes.except("id", "created_at", "updated_at"))
     end
 
     def update
@@ -91,6 +100,7 @@ class Admin
 
         @selection.category = category if category&.new_record?
 
+        @film.save!
         @selection.update!(selection_params_without_new_category)
       end
 
@@ -170,7 +180,6 @@ class Admin
 
     def selection_params
       params.require(:selection).permit(
-        :film_id,
         :category_id,
         film_attributes: [
           :id,

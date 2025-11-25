@@ -24,6 +24,7 @@ class Admin
       @films = Film.search_excluding_edition(params[:query], params[:edition_id])
       @edition = Edition.friendly.find(params[:edition_id])
       @festival = @edition.festival
+      @selection_id = params[:selection_id]
 
       @tmdb_results = TMDB.search(params[:query], year: params[:year] || @edition.year) if params[:query].present?
 
@@ -31,7 +32,13 @@ class Admin
         format.html do
           render(
             partial: "admin/films/new_film_search_results",
-            locals: { festival: @festival, edition: @edition, films: @films },
+            locals: {
+              festival: @festival,
+              edition: @edition,
+              films: @films,
+              tmdb_results: @tmdb_results,
+              selection_id: @selection_id,
+            },
           )
         end
 
@@ -40,7 +47,13 @@ class Admin
             turbo_stream: turbo_stream.replace(
               "new-film-search-results",
               partial: "admin/films/new_film_search_results",
-              locals: { festival: @festival, edition: @edition, films: @films },
+              locals: {
+                festival: @festival,
+                edition: @edition,
+                films: @films,
+                tmdb_results: @tmdb_results,
+                selection_id: @selection_id,
+              },
             ),
           )
         end
