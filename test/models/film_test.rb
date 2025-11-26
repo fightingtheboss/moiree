@@ -211,7 +211,7 @@ class FilmTest < ActiveSupport::TestCase
     assert_equal "US,CA", film.country
     assert_equal 2023, film.year
     assert_equal "This is a test film.", film.summary
-    assert_equal "2023-01-01", film.release_date
+    assert_equal "2023-01-01", film.release_date.to_fs(:db)
     assert_equal "/poster.jpg", film.poster_path
     assert_equal "/backdrop.jpg", film.backdrop_path
     assert_equal 12345, film.tmdb_id
