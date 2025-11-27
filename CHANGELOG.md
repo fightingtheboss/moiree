@@ -1,5 +1,28 @@
 # Changelog
 
+## 2025-11-27
+- Add TMDb integration to get Film data and images
+  - Automatically searches when adding or editing a film
+  - Searches TMDB by title and year (those are the only options on TMDB API)
+  - Stores high-level film info, including poster and backdrop image paths
+
+## 2025-08-15
+- Concept of unrateable film
+  - Flag on the film
+  - Films flagged are unrateable at any edition
+
+## 2025-08-08
+- Podcasts
+  - Index of podcasts and episodes
+    - Need to add a link to this in the top menu for all users
+    - Since this is on the only podcast, should probably skip over the podcast index view for now and go straight to the MOIRÉE podcast episodes
+  - Ability to add new podcast episodes
+    - Listen for webhooks when new episodes are published on transistor.fm
+      - Looks like I'll need a rake task to register for the webhoook initially
+    - Grab the details directly, so there's no need for double entry of details
+  - Show view with an embed of the player, a link to transistor.fm
+  - Associate each episode to an edition, optionally
+
 ## 2025-03-23
 - Add shareable cards and views for end of fest
   - Only for editions views for the time being

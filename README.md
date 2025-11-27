@@ -28,23 +28,11 @@ When an Admin is invited, their account is created and they're sent a link to re
 - Credentials are coordinated between Fly and AWS via OIDC IdP: [Configure fly.io as a OIDC IdP](https://fly.io/blog/oidc-cloud-roles/)
 
 ## Roadmap
-- Podcasts
-  - Index of podcasts and episodes
-    - Need to add a link to this in the top menu for all users
-    - Since this is on the only podcast, should probably skip over the podcast index view for now and go straight to the MOIRÉE podcast episodes
-  - Ability to add new podcast episodes
-    - Listen for webhooks when new episodes are published on transistor.fm
-      - Looks like I'll need a rake task to register for the webhoook initially
-    - Grab the details directly, so there's no need for double entry of details
-  - Sitewide banner to promote new episodes
-  - Show view with an embed of the player, a link to transistor.fm
-  - Associate each episode to an edition, optionally
 - Critics
   - Add a public index of all critics who've rated for MOIRÉE
   - Link to index in top menu bar
   - Could eventually get images associated with critics
 - Concept of unrateable film
-  - Flag on the film
   - Should be called out to both critics and to end users
 - Instagram integration
   - Keep using the SVG approach for the time being
@@ -94,18 +82,6 @@ When an Admin is invited, their account is created and they're sent a link to re
   - Add a filtering toolbar
     - Allows to filter down by category and country (means we need to show country somewhere)
     - Has a search for film by title to redraw the table
-
-### Nice-to-haves
-- Add TMDb integration to get Film data and images
-  - Make this super simple
-    - Provide a field for the TMDB link to the film with a link out to TMDB to help admin find it
-      - Could also be the IMDB url, since TMDB has those
-    - Use that link on save to fetch the data from the API and cache it
-      - This can include extended metadata and URLs to images (posters and banners)
-  - Maybe this is an option for Admins to do a search or an automated matching of the entered film data
-    - I think it should be automatable if we have the title, directors and year as criteria
-    - Do the search, show the user the results, then do the detail lookup once one of those options is selected
-      - Either search on blur or on a debounced keyup of title field
 
 ### Kamal Deployments (worth exploring)
 - Install the litestream-ruby gem and configure it to stream the backups to S3
