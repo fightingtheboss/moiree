@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class CriticsController < ApplicationController
+  def index
+    @critics = Critic.includes(:ratings).joins(:ratings).distinct.order(:name)
+  end
+
   def show
     @critic = Critic.includes(ratings: [:film, :edition]).friendly.find(params[:id])
     @editions = @critic.editions.order("start_date DESC").uniq

@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   post "magic", to: "sessions/passwordlesses#create"
   get  "verify", to: "sessions/passwordlesses#edit"
 
-  resources :critics, only: [:show]
+  resources :critics, only: [:index, :show]
   resources :editions, only: [:show] do
     get :live, on: :member
     resource :summary, only: [:show]
