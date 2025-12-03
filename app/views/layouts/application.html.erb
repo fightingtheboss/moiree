@@ -41,6 +41,7 @@
       </h1>
       <nav>
         <ul class="flex gap-4">
+          <li><%= link_to "Critics", critics_path, class: "text-xs font-medium hover:font-semibold" %></li>
           <li><%= link_to "Podcast", podcast_path(Podcast.platform.first), class: "text-xs font-medium hover:font-semibold" %></li>
           <% if current_user %>
             <li><%= link_to "Festivals", admin_festivals_path, class: "text-xs font-medium hover:font-semibold" %></li>
