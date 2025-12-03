@@ -5,9 +5,9 @@
         <h1 class="font-semibold">
           <%= link_to critic.name, critic_url(critic), class: "hover:italic hover:text-indigo-700", target: "_top" %>
         </h1>
-        <h2 class="text-sm font-mono leading-relaxed"><%= critic.email %></h2>
-        <h4 class="text-sm leading-relaxed"><%= critic.publication %></h4>
-        <h3 class="text-sm leading-relaxed"><%= "#{Country[critic.country].emoji_flag} #{Country[critic.country].common_name}" %></h3>
+        <h2 class="text-xs font-mono leading-relaxed"><%= critic.email %></h2>
+        <h4 class="text-xs leading-relaxed"><%= critic.publication %></h4>
+        <h3 class="text-xs leading-relaxed"><%= "#{Country[critic.country].emoji_flag} #{Country[critic.country].common_name}" %></h3>
       </div>
 
       <% if policy(critic).edit? %>
@@ -34,9 +34,12 @@
           <%= link_to pluralize(critic.ratings.size, "rating"), critic_url(critic), target: "_top" %>
         </div>
       </div>
-      <div>
-        <%= button_to "🗑️", admin_user_path(critic.user.id), method: :delete, data: { "turbo-confirm": "Are you sure you want to delete #{critic.name}? This action is irreversible."} %>
-      </div>
+
+      <% if policy(critic).edit? %>
+        <div>
+          <%= button_to "🗑️", admin_user_path(critic.user.id), method: :delete, data: { "turbo-confirm": "Are you sure you want to delete #{critic.name}? This action is irreversible."} %>
+        </div>
+      <% end %>
     </footer>
   </article>
 </li>
