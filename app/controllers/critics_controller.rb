@@ -2,7 +2,7 @@
 
 class CriticsController < ApplicationController
   def index
-    @critics = Critic.includes(:ratings).joins(:ratings).distinct.order(:name)
+    @critics = Critic.includes(:ratings).joins(:ratings).distinct.order(:first_name, :last_name)
   end
 
   def show

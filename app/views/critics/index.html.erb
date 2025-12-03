@@ -1,0 +1,32 @@
+<header class="bg-white py-1 px-4 overflow-y-auto whitespace-nowrap">
+  <h1 class="font-semibold text-sm">Critics</h1>
+</header>
+
+<div class="mx-4">
+  <ul id="critics-list" class="my-4">
+    <% @critics.each do |critic| %>
+      <li id="<%= dom_id(critic) %>" class="my-2">
+        <%= link_to(critic_url(critic)) do %>
+          <article class="sm:grid sm:grid-cols-[6fr_1fr_1fr] sm:gap-4 sm:items-start my-4 sm:my-0 rounded-sm group">
+            <header class="flex justify-between mb-2 sm:mb-4">
+              <div>
+                <h1 class="text-xl sm:text-4xl font-semibold group-hover:italic group-hover:text-indigo-700">
+                  <%= critic.name %>
+                </h1>
+                <h4 class="text-xs leading-relaxed"><%= critic.publication %></h4>
+                <h3 class="text-xs leading-relaxed"><%= "#{Country[critic.country].emoji_flag} #{Country[critic.country].common_name}" %></h3>
+              </div>
+            </header>
+
+            <div class="inline-block sm:block px-2 py-1 bg-violet-500 text-white text-xs leading-tight sm:text-lg md:text-2xl text-center rounded-sm hover:bg-violet-700">
+              <%= pluralize(critic.editions.size, "edition") %>
+            </div>
+            <div class="inline-block sm:block px-2 py-1 bg-teal-500 text-white text-xs leading-tight sm:text-lg md:text-2xl text-center rounded-sm hover:bg-teal-700">
+              <%= pluralize(critic.ratings.size, "rating") %>
+            </div>
+          </article>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>
