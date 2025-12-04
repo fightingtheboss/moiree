@@ -1,5 +1,9 @@
 # Changelog
 
+## 2025-12-03
+- Add a public index of all critics who've rated for MOIRÉE
+  - Link to index in top menu bar
+
 ## 2025-11-27
 - Add TMDb integration to get Film data and images
   - Automatically searches when adding or editing a film

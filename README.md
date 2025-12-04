@@ -28,10 +28,6 @@ When an Admin is invited, their account is created and they're sent a link to re
 - Credentials are coordinated between Fly and AWS via OIDC IdP: [Configure fly.io as a OIDC IdP](https://fly.io/blog/oidc-cloud-roles/)
 
 ## Roadmap
-- Critics
-  - Add a public index of all critics who've rated for MOIRÉE
-  - Link to index in top menu bar
-  - Could eventually get images associated with critics
 - Concept of unrateable film
   - Should be called out to both critics and to end users
 - Instagram integration
