@@ -7,7 +7,7 @@
     <% @critics.each do |critic| %>
       <li id="<%= dom_id(critic) %>" class="my-2">
         <%= link_to(critic_url(critic)) do %>
-          <article class="sm:grid sm:grid-cols-[6fr_1fr_1fr] sm:gap-4 sm:items-start my-4 sm:my-0 rounded-sm group">
+          <article class="sm:grid sm:grid-cols-[2fr_1fr_1fr] lg:grid-cols-[3fr_1fr_1fr] sm:gap-4 sm:items-start my-4 sm:my-0 rounded-sm group">
             <header class="flex justify-between mb-2 sm:mb-4">
               <div>
                 <h1 class="text-xl sm:text-4xl font-semibold group-hover:italic group-hover:text-indigo-700">
@@ -18,10 +18,10 @@
               </div>
             </header>
 
-            <div class="inline-block sm:block px-2 py-1 bg-violet-500 text-white text-xs leading-tight sm:text-lg md:text-2xl text-center rounded-sm hover:bg-violet-700">
+            <div class="inline-block sm:block px-2 py-1 bg-violet-500 text-white text-xs leading-tight sm:text-base md:text-lg text-center rounded-sm hover:bg-violet-700">
               <%= pluralize(critic.editions.size, "edition") %>
             </div>
-            <div class="inline-block sm:block px-2 py-1 bg-teal-500 text-white text-xs leading-tight sm:text-lg md:text-2xl text-center rounded-sm hover:bg-teal-700">
+            <div class="inline-block sm:block px-2 py-1 bg-teal-500 text-white text-xs leading-tight sm:text-base md:text-lg text-center rounded-sm hover:bg-teal-700">
               <%= pluralize(critic.ratings.size, "rating") %>
             </div>
           </article>
