@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  def title(content)
+    content_for(:title) do
+      if content.blank?
+        "MOIRÉE"
+      else
+        "#{content} | MOIRÉE"
+      end
+    end
+  end
+
   def description(content)
     content_for(:description) { "#{content} on MOIRÉE" }
   end

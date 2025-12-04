@@ -1,5 +1,6 @@
 <%= render partial: "shared/edition_nav", locals: { edition: @edition } %>
 
+<% title("Festival summary for #{@edition.name}") %>
 <% description("Summary of ratings for #{@edition.code}") %>
 <% open_graph(@edition) %>
 

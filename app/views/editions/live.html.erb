@@ -1,5 +1,6 @@
 <%= render partial: "shared/edition_nav", locals: { edition: @edition } %>
 
+<% title("Live ratings for #{@edition.name}") %>
 <% description(@edition.current? ? "Live ratings for #{@edition.code}" : "Rating chronology for #{@edition.code}") %>
 <% open_graph(@edition) %>
 
