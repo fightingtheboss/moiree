@@ -46,4 +46,11 @@ class Admin::FilmsControllerTest < ActionDispatch::IntegrationTest
     get admin_festival_edition_search_for_film_to_add_url(edition.festival, edition), params: { query: "Title" }
     assert_response :success
   end
+
+  test "should render without error when query parameter is not present" do
+    edition = editions(:base)
+    get admin_festival_edition_search_for_film_to_add_url(edition.festival, edition)
+    assert_response :success
+    assert_select "turbo-frame#new-film-search-results"
+  end
 end
