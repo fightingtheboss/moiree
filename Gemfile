@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-ruby "3.4.2"
+#ruby "3.4.2"
 
 # Use specific branch of Rails
 gem "rails", "8.0.2"
@@ -116,7 +116,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "mocha"
-  gem "rails-controller-testing"
 end
 
 gem "dockerfile-rails", ">= 1.6", group: :development

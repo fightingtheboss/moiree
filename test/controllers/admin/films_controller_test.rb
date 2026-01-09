@@ -47,10 +47,10 @@ class Admin::FilmsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should return empty array for tmdb_results when query parameter is not present" do
+  test "should render without error when query parameter is not present" do
     edition = editions(:base)
     get admin_festival_edition_search_for_film_to_add_url(edition.festival, edition)
     assert_response :success
-    assert_equal [], assigns(:tmdb_results)
+    assert_select "turbo-frame#new-film-search-results"
   end
 end
