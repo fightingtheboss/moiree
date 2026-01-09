@@ -21,7 +21,7 @@ class Film < ApplicationRecord
   normalizes :country, with: Normalizers::Country.new
 
   validates :title, :director, :country, :year, presence: true
-  validates :year, numericality: { only_integer: true, greater_than_or_equal_to: 1888, less_than_or_equal_to: Date.current.year }, allow_blank: true
+  validates :year, numericality: { only_integer: true, greater_than_or_equal_to: 1888, less_than_or_equal_to: -> { Date.current.year } }, allow_blank: true
   validate :country_codes_must_be_valid
 
   before_save :normalize_title, if: :title_changed?

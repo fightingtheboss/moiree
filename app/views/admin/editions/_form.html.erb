@@ -8,7 +8,7 @@
     </div>
     <div class="mb-4">
       <%= form.label :year, class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= form.number_field :year, step: 1, min: 2023, value: 2024, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+      <%= form.number_field :year, value: form.object.year || Date.current.year, step: 1, min: 2023, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
     </div>
     <div class="mb-4">
       <%= form.label :start_date, class: "block text-gray-700 text-sm font-bold mb-2" %>
