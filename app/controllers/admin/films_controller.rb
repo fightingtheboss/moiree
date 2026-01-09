@@ -26,7 +26,11 @@ class Admin
       @festival = @edition.festival
       @selection_id = params[:selection_id]
 
-      @tmdb_results = TMDB.search(params[:query], year: params[:year] || @edition.year) if params[:query].present?
+      @tmdb_results = if params[:query].present?
+                         TMDB.search(params[:query], year: params[:year] || @edition.year)
+                       else
+                         []
+                       end
 
       respond_to do |format|
         format.html do
