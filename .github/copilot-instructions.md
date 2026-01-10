@@ -1,62 +1,161 @@
-<!-- .github/copilot-instructions.md
-  Purpose: concise, actionable guidance for AI coding agents working on this repo.
-  Keep this file short (~20-50 lines) and reference concrete files/commands.
--->
+# Moirée - AI Coding Agent Instructions
 
-# Quick orientation for AI code contributors
+## Project Overview
+Rails 8.0.2 film festival rating aggregation app. Public site + admin interface for festivals/editions/critics/ratings. Includes podcast management with Transistor.fm integration.
 
-- Project type: Ruby on Rails (Rails 8.0.2) monolith using importmap + Turbo + Tailwind.
-- Ruby: 3.4.2 (see `Gemfile`). Core app lives under `app/` with conventional Rails layout.
+**Stack:** Ruby 3.4.2 (REQUIRED) | Rails 8.0.2 | SQLite3 | Turbo + Tailwind v4 | Solid Queue (background jobs)
+**System Deps:** libvips, libvips-dev, pkg-config, build-essential (for image_processing gem)
+**Production:** Fly.io with LiteFS (SQLite replication), Solid Queue runs in Puma (`SOLID_QUEUE_IN_PUMA=true`)
 
-## Big picture
-- Single Rails app that serves both public site and an admin UI (namespaced under `admin`).
-- Data store: SQLite (used in production). The Dockerfile and `config/litefs.yml` are used
-  to run SQLite with LiteFS on Fly.io for replication/backups. See `Dockerfile` and
-  `README.md` (DB backup notes).
-- Background jobs and scheduling: uses `solid_queue` / `mission_control-jobs`. Mission Control
-  UI is mounted at `/admin/jobs` (see `config/application.rb` and `config/routes.rb`).
+## Key Structure
+```
+app/controllers/admin/  → Admin namespace (all admin features)
+app/models/            → Film, Edition, Rating, Critic, User, etc.
+app/jobs/              → BackupDbToS3Job, DailySummaryTweetJob
+config/routes.rb       → Admin routes under `namespace :admin`
+config/puma.rb         → Solid Queue plugin config
+config/litefs.yml      → Production SQLite replication
+config/recurring.yml   → Scheduled jobs (midnight backup, 11:50pm tweet)
+db/schema.rb           → Main schema (+ queue/cache/cable schemas)
+test/                  → Minitest (unit/integration/system with Capybara/Selenium)
+```
 
-## Dev / build / test commands (explicit)
-- Start server (development): `bin/rails server` (or `bin/dev` which wraps it).
-- Tailwind dev watch: `bin/rails tailwindcss:watch` (Procfile.dev contains `css: bin/rails tailwindcss:watch`).
-- Assets precompile (used in Dockerfile):
-  `SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile`
-- Run tests: `bin/rails test` (system tests present under `test/` — Capybara + Selenium are listed
-  in the `:test` group in `Gemfile`).
-- Bootsnap precompile (used during image build): `bundle exec bootsnap precompile --gemfile`.
+## Setup & Build (CRITICAL - Follow Order)
 
-## Project-specific conventions & patterns
-- Namespacing: admin controllers live under `app/controllers/admin/...` and admin routes are
-  grouped in `namespace :admin` in `config/routes.rb` — follow this pattern for admin features.
-- Podcasts: admin podcasts and episodes are namespaced and include a webhook endpoint
-  (see `admin/podcasts/episodes_controller` and the `post :webhook` route in `config/routes.rb`).
-  There is a planned rake task to register webhooks — check `lib/tasks` for related tasks.
-- Jobs: Solid Queue is sometimes run inside Puma (see `config/puma.rb` — `plugin :solid_queue`).
-  When adding jobs, ensure they play nicely with `solid_queue`/`mission_control-jobs`.
-- Assets: this app uses Rails asset pipeline + Tailwind via `tailwindcss-rails` (no webpack/Node
-  build step). Use `bin/rails tailwindcss:build` / `tailwindcss:watch` for CSS workflow.
+**Prerequisites:** Ruby 3.4.2, bundler, SQLite3, libvips libs. Use `ruby/setup-ruby@v1` in CI or `.devcontainer/`.
 
-## Integration points & infra to be aware of
-- Fly.io deployment — see `Dockerfile` and `fly.toml` in the repo root.
-- LiteFS is configured in Dockerfile (`litefs` entrypoint) and `config/litefs.yml` —
-  production SQLite uses LiteFS for atomic replication. Be cautious when changing DB access
-  or migrations; follow LiteFS / Fly.io patterns.
-- S3 backups: an existing Solid Queue job (`BackupDbToS3Job`) uploads DB backups to S3.
-- OIDC with Fly for credentials in production (see README DB backup section).
+```bash
+# 1. Install dependencies
+bundle install
+# Error: "Ruby version 3.x.x but Gemfile specified 3.4.2"? Install Ruby 3.4.2 or use devcontainer.
 
-## Helpful files to inspect when changing behavior
-- Routing and controller structure: `config/routes.rb`, `app/controllers/admin/...`.
-- Job config and mission control: `config/application.rb`, `config/puma.rb`, `lib/tasks/`.
-- Docker & deploy: `Dockerfile`, `fly.toml`.
-- Dev commands: `Procfile.dev`, `bin/dev`, and `bin/rails` scripts in `bin/`.
-- Tests: `test/` for unit/system tests; `Gemfile` lists test dependencies.
+# 2. Setup database (creates storage/*.sqlite3 + runs migrations)
+bin/rails db:prepare
 
-## Do / Don't (practical rules)
-- Do: preserve the admin namespace and route structure. New admin endpoints should use
-  `app/controllers/admin/...` and update `config/routes.rb` accordingly.
-- Do: when touching DB behavior, consider LiteFS implications and how Fly.io runs the app.
-- Don't assume a separate background worker stack — `solid_queue` may run inside Puma for
-  single-server deployments. Check `SOLID_QUEUE_IN_PUMA` env usage.
+# 3. Full setup (or use bin/setup to auto-start server)
+bin/setup --skip-server  # Runs bundle, db:prepare, log/tmp cleanup
+```
 
-If anything here is unclear or you want me to expand an area (jobs, Docker, or podcasts/webhooks),
-tell me which part and I'll update this file with concrete examples/snippets.
+## Development
+
+```bash
+# Start server + Tailwind watch
+bin/dev  # Or separately: bin/rails server (port 3000) + bin/rails tailwindcss:watch
+
+# Database
+bin/rails db:migrate       # Run migrations
+bin/rails db:seed          # Load seed data
+bin/rails db:test:prepare  # Prepare test DB (used in CI)
+```
+
+## Testing (ALWAYS Before Committing)
+
+```bash
+# Run all tests (~30-60s, parallel by default)
+bin/rails test
+
+# Specific types
+bin/rails test:models
+bin/rails test:controllers
+bin/rails test:system  # Capybara + Selenium
+
+# CI test preparation (matches .github/workflows/ci.yml)
+bin/rails db:test:prepare && bin/rails test:prepare && bin/rails test
+```
+
+**Test Helpers:** `sign_in_as(user)` in test_helper.rb, fixtures in `test/fixtures/*.yml`, Mocha for mocking
+
+## Linting
+
+```bash
+bin/rubocop           # Run style checks (.rubocop.yml inherits rubocop-shopify)
+bin/rubocop -a        # Auto-fix safe violations
+```
+**Note:** Lint job commented out in CI but run locally before committing.
+
+## Assets & Compilation
+
+**Development:** Tailwind auto-compiles via `bin/rails tailwindcss:watch` (part of `bin/dev`). NO Node.js/webpack.
+
+**Production/Docker:**
+```bash
+SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile  # Precompile without real credentials
+bundle exec bootsnap precompile --gemfile && bundle exec bootsnap precompile app/ lib/  # Docker only
+```
+
+## CI/CD Pipeline
+
+**CI (.github/workflows/ci.yml)** - Runs on all branches except `main`:
+1. Install: libvips, libvips-dev, pkg-config, build-essential
+2. Ruby 3.4.2 + gems via `ruby/setup-ruby@v1` (auto-caches)
+3. `bin/rails db:test:prepare`
+4. `bin/rails test:prepare` (build assets for tests)
+5. `bin/rails test`
+
+**Deploy (.github/workflows/deploy.yml)** - `main` branch:
+1. Run CI workflow
+2. `flyctl deploy --remote-only --depot=false`
+
+## Background Jobs
+
+**Solid Queue:** Runs in Puma via `plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]` (see config/puma.rb)
+**Mission Control UI:** `/admin/jobs` (admin auth required)
+**Recurring Jobs (config/recurring.yml):**
+- `BackupDbToS3Job`: Midnight (exports to S3 via LiteFS + AWS OIDC)
+- `DailySummaryTweetJob`: 11:50pm
+
+```bash
+bin/rails jobs:start  # Start worker manually
+bin/rails runner "BackupDbToS3Job.perform_now"  # Run specific job
+```
+
+## Common Errors & Fixes
+
+**1. Ruby version mismatch:** Install Ruby 3.4.2 or use `.devcontainer/`
+**2. Missing libvips:** `sudo apt-get install -y libvips libvips-dev pkg-config build-essential`
+**3. Asset precompile error:** Use `SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile`
+**4. SQLite locked:** Stop all Rails servers/tests (SQLite doesn't handle concurrent writes well)
+
+## Project Conventions
+
+**Admin Features:**
+- Controllers: `app/controllers/admin/` (inherit from `Admin::AdminController`)
+- Routes: `namespace :admin` in config/routes.rb
+- Example: `app/controllers/admin/podcasts_controller.rb`
+
+**Database:**
+- Main: `storage/development.sqlite3` (db/schema.rb)
+- Queue: `storage/development_queue.sqlite3` (db/queue_schema.rb)
+- Cache/Cable: Similar pattern (see config/database.yml)
+
+**Tailwind:** v4 via standalone CLI (`tailwindcss-rails` gem). NO Node.js/npm/PostCSS.
+
+## Critical Files Before Changes
+- `config/routes.rb` — Routing
+- `config/application.rb` — Mission Control config
+- `config/puma.rb` — Solid Queue plugin
+- `config/litefs.yml` — Production DB replication (be cautious!)
+- `Dockerfile` — Production build
+- `.github/workflows/ci.yml` — CI validation
+- `Gemfile` — Check versions before adding/upgrading
+
+## Root Files Reference
+```
+.devcontainer/         → Docker devcontainer with Ruby 3.4.2
+.github/workflows/     → ci.yml (test), deploy.yml (Fly.io)
+.rubocop.yml          → Style config (inherits rubocop-shopify)
+.ruby-version         → 3.4.2
+Dockerfile            → Production build (LiteFS entrypoint)
+Gemfile               → Ruby 3.4.2, Rails 8.0.2, solid_queue, tailwindcss-rails, pundit, etc.
+Procfile.dev          → web: bin/rails server, css: bin/rails tailwindcss:watch
+README.md             → App context, auth flow, roadmap, DB backup details
+Rakefile              → Standard Rails tasks
+bin/dev               → Start Rails server wrapper
+bin/setup             → Idempotent setup (bundle, db:prepare, cleanup)
+bin/rubocop           → Rubocop with explicit config
+config.ru             → Rack config
+fly.toml              → Fly.io deployment (SOLID_QUEUE_IN_PUMA=true, AWS_ROLE_ARN)
+```
+
+## Trust These Instructions
+All commands validated. Only explore if: (1) instructions unclear, (2) undocumented error, (3) need implementation details beyond setup/build/test. For standard tasks, follow exactly as written.
