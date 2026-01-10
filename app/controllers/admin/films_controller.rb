@@ -2,6 +2,8 @@
 
 class Admin
   class FilmsController < AdminController
+    before_action :set_edition_context, only: [:search_for_film_to_add_to_edition, :lookup_by_tmdb_id]
+
     def search
       @films = Film.search(params[:query], edition_id: params[:edition_id], exclude: params[:exclude_films_in_edition])
 
@@ -22,15 +24,12 @@ class Admin
 
     def search_for_film_to_add_to_edition
       @films = Film.search_excluding_edition(params[:query], params[:edition_id])
-      @edition = Edition.friendly.find(params[:edition_id])
-      @festival = @edition.festival
-      @selection_id = params[:selection_id]
 
       @tmdb_results = if params[:query].present?
-                         TMDB.search(params[:query], year: params[:year] || @edition.year)
-                       else
-                         []
-                       end
+        TMDB.search(params[:query], year: params[:year] || @edition.year)
+      else
+        []
+      end
 
       respond_to do |format|
         format.html do
@@ -64,6 +63,38 @@ class Admin
       end
     end
 
+    def lookup_by_tmdb_id
+      @tmdb_result = TMDB.find(params[:tmdb_id])
+
+      respond_to do |format|
+        format.turbo_stream do
+          if @tmdb_result.id.present?
+            render(
+              turbo_stream: turbo_stream.replace(
+                "new-film-search-results",
+                partial: "admin/films/new_film_search_results",
+                locals: {
+                  festival: @festival,
+                  edition: @edition,
+                  films: [],
+                  tmdb_results: [@tmdb_result],
+                  selection_id: @selection_id,
+                },
+              ),
+            )
+          else
+            render(
+              turbo_stream: turbo_stream.replace(
+                "new-film-search-results",
+                partial: "admin/films/tmdb_lookup_error",
+                locals: { tmdb_id: params[:tmdb_id] },
+              ),
+            )
+          end
+        end
+      end
+    end
+
     def add_country
       respond_to do |format|
         format.turbo_stream do
@@ -78,6 +109,14 @@ class Admin
           render(turbo_stream: turbo_stream.remove(params[:country_select_id]))
         end
       end
+    end
+
+    private
+
+    def set_edition_context
+      @edition = Edition.friendly.find(params[:edition_id])
+      @festival = @edition.festival
+      @selection_id = params[:selection_id]
     end
   end
 end
