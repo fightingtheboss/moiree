@@ -74,7 +74,7 @@
               </div>
               <ul class="grid grid-flow-col gap-1 h-24 items-end my-8">
                 <% @bombe_moiree_histogram.each do |score, count| %>
-                  <li style="--histogramHeight:<%= histogram_height(count, @bombe_moiree_histogram.values.max) %>" class="relative bg-linear-to-b from-indigo-500 to-indigo-700 h-[var(--histogramHeight)]" title="<%= histogram_title(score, count) %>">
+                  <li style="--histogramHeight:<%= histogram_height(count, @bombe_moiree_histogram.values.max) %>" class="relative bg-linear-to-b from-indigo-500 to-indigo-700 h-(--histogramHeight)" title="<%= histogram_title(score, count) %>">
                     <span class="absolute top-2 left-0 right-0 text-xs text-white text-center font-semibold"><%= count %></span>
                     <span class="absolute -bottom-6 left-0 right-0 text-xs text-center"><%= display_rating(score) %></span>
                   </li>
@@ -101,7 +101,7 @@
               </div>
               <ul class="grid grid-flow-col gap-1 h-24 items-end my-8">
                 <% @most_divisive_histogram.each do |score, count| %>
-                  <li style="--histogramHeight:<%= histogram_height(count, @most_divisive_histogram.values.max) %>" class="relative bg-linear-to-b from-indigo-500 to-indigo-700 h-[var(--histogramHeight)]" title="<%= histogram_title(score, count) %>">
+                  <li style="--histogramHeight:<%= histogram_height(count, @most_divisive_histogram.values.max) %>" class="relative bg-linear-to-b from-indigo-500 to-indigo-700 h-(--histogramHeight)" title="<%= histogram_title(score, count) %>">
                     <span class="absolute top-2 left-0 right-0 text-xs text-white text-center font-semibold"><%= count %></span>
                     <span class="absolute -bottom-6 left-0 right-0 text-xs text-center"><%= display_rating(score) %></span>
                   </li>

@@ -103,7 +103,7 @@
               <img class="block w-full h-auto rounded-sm shadow-xs" src="<%= TMDB.poster_url(@film.poster_path) %>" alt="Poster image for <%= @film.title %>">
               <%= form.hidden_field :poster_path, value: @film.poster_path %>
             </div>
-            <div class="flex-grow">
+            <div class="grow">
               <%= form.label :backdrop_path, "Backdrop", class: "block text-gray-700 text-sm font-bold mb-2" %>
               <img class="block w-full h-auto rounded-sm shadow-xs" src="<%= TMDB.backdrop_url(@film.backdrop_path) %>" alt="Backdrop image for <%= @film.title %>">
               <%= form.hidden_field :backdrop_path, value: @film.backdrop_path %>

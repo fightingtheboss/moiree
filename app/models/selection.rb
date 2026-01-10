@@ -23,9 +23,9 @@ class Selection < ApplicationRecord
 
     return 0 if number_of_ratings < 4
 
-    variance = ratings.map { |r|
+    variance = ratings.map do |r|
       (r.score - average_rating)**2
-    }.sum / (number_of_ratings - 1)
+    end.sum / (number_of_ratings - 1)
 
     Math.sqrt(variance)
   end
