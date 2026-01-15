@@ -28,6 +28,8 @@ class Edition < ApplicationRecord
                       .where("start_date <= ? AND end_date >= ?", Date.current, Date.current)
                       .order(:start_date)
                   }
+  scope :ending_in, ->(year) { where(end_date: Date.new(year)..Date.new(year).end_of_year) }
+  scope :within, ->(year) { where(start_date: Date.new(year)..Date.new(year).end_of_year) }
 
   friendly_id :code, use: [:slugged, :scoped], scope: :festival
 
