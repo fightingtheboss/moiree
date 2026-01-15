@@ -26,8 +26,8 @@ class HomeController < ApplicationController
 
     # Past festivals from the year (for archive preview)
     @past = Edition.past
-                   .where("CAST(strftime('%Y', start_date) AS INTEGER) = ?", @year)
-                   .limit(6)
+      .where("CAST(strftime('%Y', start_date) AS INTEGER) = ?", @year)
+      .limit(6)
   end
 
   def top_films_of_year(year)
@@ -37,12 +37,12 @@ class HomeController < ApplicationController
     return [] if edition_ids.empty?
 
     Selection.joins(:ratings, :film)
-             .where(edition_id: edition_ids)
-             .where.not(ratings: { impression: [nil, ""] })
-             .group("selections.id")
-             .having("COUNT(ratings.id) >= 2")
-             .order("AVG(ratings.score) DESC")
-             .limit(5)
-             .includes(:film, ratings: :critic)
+      .where(edition_id: edition_ids)
+      .where.not(ratings: { impression: [nil, ""] })
+      .group("selections.id")
+      .having("COUNT(ratings.id) >= 2")
+      .order("AVG(ratings.score) DESC")
+      .limit(5)
+      .includes(:film, ratings: :critic)
   end
 end
