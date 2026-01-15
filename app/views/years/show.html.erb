@@ -1,4 +1,4 @@
-<% description("MOIRÉE is a platform that showcases real-time ratings from a curated community of film critics at festivals worldwide.") %>
+<% description("MOIRÉE #{@year} Year in Review - The best films and festivals of #{@year}") %>
 
 <div class="min-h-screen flex flex-col">
   <%# Hero Header with Moiré Pattern %>
@@ -10,83 +10,31 @@
     </div>
     <div class="absolute bottom-8 left-0 right-0 text-center">
       <p class="font-medium italic tracking-tight text-indigo-700 bg-white/80 backdrop-blur-sm md:text-xl p-2 md:p-4 inline-block rounded-full px-6">
-        Critic ratings from film festivals around the world
+        <%= @year %> Year in Review
       </p>
     </div>
   </header>
 
-  <main class="flex-grow">
-    <%# Current/Ongoing Festivals - Most Prominent %>
-    <% if @current.any? %>
-      <section class="bg-gradient-to-b from-indigo-900 to-indigo-800 py-8 px-4">
-        <div class="max-w-6xl mx-auto">
-          <header class="mb-6">
-            <div class="flex items-center gap-4">
-              <span class="relative flex h-3 w-3">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-              </span>
-              <h2 class="text-white font-black uppercase tracking-widest text-sm">
-                Live Now
-              </h2>
-            </div>
-          </header>
-
-          <div class="grid gap-6 md:grid-cols-<%= [@current.size, 2].min %>">
-            <% @current.each do |edition| %>
-              <article class="relative bg-white rounded-lg shadow-xl overflow-hidden group">
-                <%= link_to edition_path(edition), class: "block" do %>
-                  <div class="bg-radial-gradient p-6 md:p-8">
-                    <header class="mb-4">
-                      <p class="text-xs uppercase tracking-wider text-indigo-500 mb-1"><%= edition.name %></p>
-                      <h3 class="font-bold text-2xl md:text-3xl text-indigo-900 group-hover:text-indigo-700 transition-colors"><%= edition.code %></h3>
-                      <p class="text-sm text-gray-600">
-                        Day <%= edition.current_day %> •
-                        <time datetime="<%= edition.start_date.to_date %>"><%= edition.start_date.strftime("%b %d") %></time> –
-                        <time datetime="<%= edition.end_date.to_date %>"><%= edition.end_date.strftime("%b %d, %Y") %></time>
-                      </p>
-                    </header>
-
-                    <ul class="flex flex-wrap gap-2 text-xs mb-4">
-                      <li class="px-3 py-1 bg-violet-500 text-white rounded-full font-medium"><%= edition.categories.size %> Categories</li>
-                      <li class="px-3 py-1 bg-fuchsia-500 text-white rounded-full font-medium"><%= edition.films.size %> Films</li>
-                      <li class="px-3 py-1 bg-teal-500 text-white rounded-full font-medium"><%= edition.ratings.size %> Ratings</li>
-                    </ul>
-                  </div>
-
-                  <% if edition.ratings.any? %>
-                    <div class="bg-indigo-50/50 p-6 border-t border-indigo-100">
-                      <div class="flex justify-between items-center mb-4">
-                        <h4 class="font-semibold text-indigo-900">Latest Ratings</h4>
-                        <%= link_to "Live Feed →", live_edition_path(edition), class: "text-xs font-medium text-indigo-600 hover:text-indigo-800" %>
-                      </div>
-                      <ul class="space-y-2">
-                        <% edition.ratings.includes(:critic, selection: :film).order("ratings.created_at DESC").limit(3).each do |rating| %>
-                          <li class="flex items-center justify-between text-sm bg-white rounded-md p-3 shadow-sm">
-                            <div class="flex-grow min-w-0 mr-4">
-                              <p class="font-medium text-indigo-900 truncate"><%= rating.film.title %></p>
-                              <p class="text-xs text-gray-500"><%= rating.critic.name %></p>
-                            </div>
-                            <span class="font-bold text-xl text-indigo-700"><%= display_rating(rating.score) %></span>
-                          </li>
-                        <% end %>
-                      </ul>
-                    </div>
-                  <% end %>
-                <% end %>
-
-                <% if current_user&.admin? || (current_user&.critic? && edition.critics.include?(current_user.critic)) %>
-                  <%= link_to admin_festival_edition_path(edition.festival, edition), class: "absolute top-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-3 rounded-md text-xs shadow-md transition-colors" do %>
-                    <%= inline_svg_tag("icons/plus-circle.svg", class: "inline-block w-4 fill-white") %>
-                    <span class="ml-1">Rate</span>
-                  <% end %>
-                <% end %>
-              </article>
-            <% end %>
-          </div>
+  <main class="grow">
+    <%# Year Archive Navigation %>
+    <div class="bg-indigo-50 border-b border-indigo-100 py-3 px-4">
+      <div class="max-w-6xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-2 text-sm">
+          <%= link_to "← Back to Today", root_path, class: "text-indigo-600 hover:text-indigo-800" %>
         </div>
-      </section>
-    <% end %>
+        <h2 class="font-bold text-indigo-900">
+          <span class="text-indigo-500">Wrapped:</span> <%= @year %>
+        </h2>
+        <div class="flex items-center gap-2 text-sm">
+          <% if @year > 2024 %>
+            <%= link_to "← #{@year - 1}", year_path(@year - 1), class: "text-indigo-600 hover:text-indigo-800" %>
+          <% end %>
+          <% if @year < Date.current.year %>
+            <%= link_to "#{@year + 1} →", year_path(@year + 1), class: "text-indigo-600 hover:text-indigo-800" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
     <%# Top Films of the Year - Magazine Style %>
     <% if @top_films.any? %>
@@ -107,7 +55,7 @@
               <article class="<%= index == 0 ? 'md:col-span-2 lg:col-span-1 lg:row-span-2' : '' %> bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-shadow">
                 <%= link_to film_path(film), class: "block h-full" do %>
                   <%# Film Poster %>
-                  <div class="relative aspect-[2/3] overflow-hidden bg-indigo-100 <%= index == 0 ? 'lg:aspect-[3/4]' : 'hidden md:block' %>">
+                  <div class="relative aspect-2/3 overflow-hidden bg-indigo-100 <%= index == 0 ? 'lg:aspect-3/4' : 'hidden md:block' %>">
                     <% if film.poster_path.present? %>
                       <img
                         src="<%= TMDB.poster_url(film.poster_path, size: 'w500') %>"
@@ -215,7 +163,7 @@
                         loading="lazy"
                       >
                     <% end %>
-                    <div class="flex-grow min-w-0">
+                    <div class="grow min-w-0">
                       <h4 class="font-medium text-indigo-900 group-hover:text-indigo-700 truncate"><%= selection.film.title %></h4>
                       <p class="text-xs text-gray-500 truncate"><%= selection.film.director %></p>
                     </div>
@@ -229,101 +177,14 @@
       </section>
     <% end %>
 
-    <%# Latest Podcast Episode %>
-    <% if @latest_episode %>
-      <section class="py-12 px-4 bg-indigo-900 text-white">
-        <div class="max-w-6xl mx-auto">
-          <div class="md:flex md:items-center md:gap-12">
-            <div class="md:w-1/3 mb-6 md:mb-0">
-              <p class="text-xs uppercase tracking-wider text-indigo-300 mb-2">Latest Episode</p>
-              <h2 class="font-black text-3xl md:text-4xl uppercase mb-2">Podcast</h2>
-              <p class="text-indigo-200 font-sentient italic">Listen to our latest discussions on film and festivals</p>
-            </div>
-
-            <div class="md:w-2/3">
-              <article class="bg-white/10 backdrop-blur rounded-lg p-6 border border-white/20">
-                <%= link_to podcast_episode_path(@latest_episode.podcast, @latest_episode), class: "block group" do %>
-                  <h3 class="font-bold text-xl md:text-2xl group-hover:text-indigo-200 transition-colors mb-2">
-                    <%= @latest_episode.title %>
-                  </h3>
-                  <% if @latest_episode.published_at %>
-                    <time datetime="<%= @latest_episode.published_at.iso8601 %>" class="text-sm text-indigo-200 mb-3 block">
-                      <%= @latest_episode.published_at.strftime("%B %d, %Y") %>
-                    </time>
-                  <% end %>
-                  <% if @latest_episode.summary.present? %>
-                    <p class="font-sentient text-white/80 leading-relaxed line-clamp-3">
-                      <%= truncate(@latest_episode.summary, length: 200) %>
-                    </p>
-                  <% end %>
-                  <% if @latest_episode.edition %>
-                    <p class="mt-3 text-sm text-indigo-300">
-                      Part of <%= @latest_episode.edition.code %>
-                    </p>
-                  <% end %>
-                <% end %>
-
-                <div class="mt-4 pt-4 border-t border-white/20 flex items-center gap-4">
-                  <a href="<%= @latest_episode.url %>" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white font-semibold py-2 px-4 rounded-full text-sm transition-colors">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    Listen Now
-                  </a>
-                  <%= link_to "All Episodes →", podcast_path(@latest_episode.podcast), class: "text-sm text-indigo-200 hover:text-white transition-colors" %>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-    <% end %>
-
-    <%# Upcoming Festivals %>
-    <% if @upcoming.any? %>
-      <section class="py-12 px-4 bg-slate-50">
-        <div class="max-w-6xl mx-auto">
-          <header class="mb-8">
-            <h2 class="font-black text-3xl md:text-4xl uppercase text-indigo-900 mb-2">Coming Soon</h2>
-            <p class="text-gray-600">Upcoming festivals we'll be covering</p>
-          </header>
-
-          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <% @upcoming.each do |edition| %>
-              <%= link_to edition_path(edition), class: "group block" do %>
-                <article class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow border border-indigo-100 bg-radial-gradient h-full">
-                  <header class="mb-4">
-                    <p class="text-xs uppercase tracking-wider text-indigo-500 mb-1"><%= edition.name %></p>
-                    <h3 class="font-bold text-xl text-indigo-900 group-hover:text-indigo-700 transition-colors"><%= edition.code %></h3>
-                    <time class="text-sm text-gray-600 block mt-1">
-                      <%= edition.start_date.strftime("%B %d") %> – <%= edition.end_date.strftime("%B %d, %Y") %>
-                    </time>
-                  </header>
-
-                  <% days_until = (edition.start_date - Date.current).to_i %>
-                  <p class="text-sm font-medium text-indigo-600">
-                    <% if days_until == 0 %>
-                      Starts today!
-                    <% elsif days_until == 1 %>
-                      Starts tomorrow
-                    <% else %>
-                      <%= days_until %> days away
-                    <% end %>
-                  </p>
-                </article>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
-      </section>
-    <% end %>
-
-    <%# Past Festivals Preview with Link to Archive %>
+    <%# Past Festivals from this Year %>
     <% if @past.any? %>
       <section class="py-12 px-4 bg-white">
         <div class="max-w-6xl mx-auto">
           <header class="mb-8 flex items-end justify-between">
             <div>
-              <h2 class="font-black text-3xl md:text-4xl uppercase text-indigo-900 mb-2">Recent Coverage</h2>
-              <p class="text-gray-600">Browse our festival archive</p>
+              <h2 class="font-black text-3xl md:text-4xl uppercase text-indigo-900 mb-2"><%= @year %> Coverage</h2>
+              <p class="text-gray-600">All festivals from this year</p>
             </div>
             <%= link_to editions_path, class: "text-indigo-600 hover:text-indigo-800 font-semibold text-sm" do %>
               View Full Archive →

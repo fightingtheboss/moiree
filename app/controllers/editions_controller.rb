@@ -3,6 +3,13 @@
 class EditionsController < ApplicationController
   layout "application"
 
+  def index
+    @editions_by_year = Edition.past
+                               .includes(:festival, :ratings, :films, :critics)
+                               .order(start_date: :desc)
+                               .group_by { |e| e.start_date.year }
+  end
+
   def show
     hidden_critics = params[:critics]
 

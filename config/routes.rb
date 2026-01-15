@@ -3,6 +3,9 @@
 Rails.application.routes.draw do
   root "home#index"
 
+  # Year in review pages (/:year maps to years#show)
+  resources :years, only: [:show], constraints: { id: /20\d{2}/ }, path: ""
+
   get  "sign-in", to: "sessions#new"
   post "sign-in", to: "sessions#create"
   delete  "sign-out", to: "sessions#destroy"
@@ -12,7 +15,7 @@ Rails.application.routes.draw do
   get  "verify", to: "sessions/passwordlesses#edit"
 
   resources :critics, only: [:index, :show]
-  resources :editions, only: [:show] do
+  resources :editions, only: [:index, :show] do
     get :live, on: :member
     resource :summary, only: [:show]
     resource :share, only: [] do
