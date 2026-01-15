@@ -5,9 +5,9 @@ class EditionsController < ApplicationController
 
   def index
     @editions_by_year = Edition.past
-                               .includes(:festival, :ratings, :films, :critics)
-                               .order(start_date: :desc)
-                               .group_by { |e| e.start_date.year }
+      .includes(:festival, :ratings, :films, :critics)
+      .order(start_date: :desc)
+      .group_by { |e| e.start_date.year }
   end
 
   def show

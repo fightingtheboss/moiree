@@ -25,12 +25,12 @@ class YearsController < ApplicationController
     return [] if edition_ids.empty?
 
     Selection.joins(:ratings, :film)
-             .where(edition_id: edition_ids)
-             .where.not(ratings: { impression: [nil, ""] })
-             .group("selections.id")
-             .having("COUNT(ratings.id) >= 2")
-             .order("AVG(ratings.score) DESC")
-             .limit(5)
-             .includes(:film, ratings: :critic)
+      .where(edition_id: edition_ids)
+      .where.not(ratings: { impression: [nil, ""] })
+      .group("selections.id")
+      .having("COUNT(ratings.id) >= 2")
+      .order("AVG(ratings.score) DESC")
+      .limit(5)
+      .includes(:film, ratings: :critic)
   end
 end
