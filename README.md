@@ -45,6 +45,7 @@ When an Admin is invited, their account is created and they're sent a link to re
   - Provide links to all previous episodes
   - Add social media links
 - Page caching for the summary!
+- create a Summary model that acts as a rollup of stats for a year, that can be cached until the record changes, which should be very rare after created. This will be used for the year in review view, since the data shouldn't change once the year is over.
 - When a critic is added to an edition, link their previous ratings for the same film to this edition
   - This might be a copy of the existing Rating records or it might be an association
     - Likely both: A new Rating for that Edition, but associated to the original rating
