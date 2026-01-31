@@ -1,9 +1,21 @@
-<tr class=" hover:bg-indigo-600/10">
-  <th scope="row" class="border p-2 sticky left-0 z-10 bg-white text-left">
-    <h4 class="text-sm leading-tight text-ellipsis overflow-hidden">
-      <%= link_to selection.film.title, film_url(selection.film), target: "_top", class: "hover:italic hover:text-indigo-700" %>
-    </h4>
-    <h5 class="mt-1 font-light text-sm leading-tight"><%= film_directors[selection.film] %></h5>
+<tr class="<%= selection.film.rateable? ? '' : 'bg-gray-100/50' %> hover:bg-indigo-600/10">
+  <th scope="row" class="border p-2 sticky left-0 <%= selection.film.rateable? ? 'bg-white' : 'bg-gray-100/50' %> text-left [&:has(.group:hover)]:z-50 z-10">
+    <div class="flex items-start gap-1.5">
+      <div class="flex-1">
+        <h4 class="text-sm leading-tight text-ellipsis overflow-hidden <%= selection.film.rateable? ? '' : 'text-gray-500' %>">
+          <%= link_to selection.film.title, film_url(selection.film), target: "_top", class: "hover:italic hover:text-indigo-700" %>
+        </h4>
+        <h5 class="mt-1 font-light text-sm leading-tight <%= selection.film.rateable? ? '' : 'text-gray-400' %>"><%= film_directors[selection.film] %></h5>
+      </div>
+      <% unless selection.film.rateable? %>
+        <span class="group relative cursor-help">
+          <%= inline_svg_tag("icons/eye-slash.svg", class: "w-3.5 h-3.5 fill-gray-400 shrink-0 mt-0.5") %>
+          <span class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 px-2 py-1 text-xs text-white bg-gray-800 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+            This film is not being rated on Moirée
+          </span>
+        </span>
+      <% end %>
+    </div>
   </th>
   <td class="border p-2 text-center font-semibold"><%= number_with_precision(selection.average_rating, precision: 1) %></td>
   <% critics.each do |critic| %>
@@ -18,7 +30,7 @@
                 action: "modal#show",
                 "modal-dialog-param": "global-modal"
               },
-              class: "absolute bottom-0 left-0 z-[5] py-2 w-full group flex justify-center items-center gap-1 mt-4" do %>
+              class: "absolute bottom-0 left-0 z-5 py-2 w-full group flex justify-center items-center gap-1 mt-4" do %>
             <% if rating.impression.present? %>
               <div class="flex items-center gap-2">
                 <%= inline_svg_tag("icons/waveform-path.svg", class: "w-3 fill-indigo-500 group-hover:fill-indigo-900") %>
