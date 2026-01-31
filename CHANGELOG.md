@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-01-31
+- Concept of unrateable film
+  - Should be called out to both critics and to end users
+
 ## 2025-12-03
 - Add a public index of all critics who've rated for MOIRÉE
   - Link to index in top menu bar

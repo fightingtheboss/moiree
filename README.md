@@ -28,8 +28,6 @@ When an Admin is invited, their account is created and they're sent a link to re
 - Credentials are coordinated between Fly and AWS via OIDC IdP: [Configure fly.io as a OIDC IdP](https://fly.io/blog/oidc-cloud-roles/)
 
 ## Roadmap
-- Concept of unrateable film
-  - Should be called out to both critics and to end users
 - Instagram integration
   - Keep using the SVG approach for the time being
     - Maybe just use it for the layout and then overlay/composite the text to be able to ensure custom fonts?
