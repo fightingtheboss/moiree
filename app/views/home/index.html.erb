@@ -15,10 +15,10 @@
     </div>
   </header>
 
-  <main class="flex-grow">
+  <main class="grow">
     <%# Current/Ongoing Festivals - Most Prominent %>
     <% if @current.any? %>
-      <section class="bg-gradient-to-b from-indigo-900 to-indigo-800 py-8 px-4">
+      <section class="bg-linear-to-b from-indigo-900 to-indigo-800 py-8 px-4">
         <div class="max-w-6xl mx-auto">
           <header class="mb-6">
             <div class="flex items-center gap-4">
@@ -63,7 +63,7 @@
                       <ul class="space-y-2">
                         <% edition.ratings.includes(:critic, selection: :film).order("ratings.created_at DESC").limit(3).each do |rating| %>
                           <li class="flex items-center justify-between text-sm bg-white rounded-md p-3 shadow-sm">
-                            <div class="flex-grow min-w-0 mr-4">
+                            <div class="grow min-w-0 mr-4">
                               <p class="font-medium text-indigo-900 truncate"><%= rating.film.title %></p>
                               <p class="text-xs text-gray-500"><%= rating.critic.name %></p>
                             </div>
@@ -107,7 +107,7 @@
               <article class="<%= index == 0 ? 'md:col-span-2 lg:col-span-1 lg:row-span-2' : '' %> bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-shadow">
                 <%= link_to film_path(film), class: "block h-full" do %>
                   <%# Film Poster %>
-                  <div class="relative aspect-[2/3] overflow-hidden bg-indigo-100 <%= index == 0 ? 'lg:aspect-[3/4]' : 'hidden md:block' %>">
+                  <div class="relative aspect-2/3 overflow-hidden bg-indigo-100 <%= index == 0 ? 'lg:aspect-[3/4]' : 'hidden md:block' %>">
                     <% if film.poster_path.present? %>
                       <img
                         src="<%= TMDB.poster_url(film.poster_path, size: 'w500') %>"
@@ -215,7 +215,7 @@
                         loading="lazy"
                       >
                     <% end %>
-                    <div class="flex-grow min-w-0">
+                    <div class="grow min-w-0">
                       <h4 class="font-medium text-indigo-900 group-hover:text-indigo-700 truncate"><%= selection.film.title %></h4>
                       <p class="text-xs text-gray-500 truncate"><%= selection.film.director %></p>
                     </div>
