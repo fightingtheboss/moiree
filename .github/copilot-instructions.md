@@ -118,6 +118,11 @@ bin/rails runner "BackupDbToS3Job.perform_now"  # Run specific job
 
 ## Project Conventions
 
+**Coding Guidelines:**
+- Conform to idiomatic Ruby and Rails as much as possible
+- Use concerns to keep models small and focused where needed (if not reusable, namespace to model)
+- Follow the wisdom of Sandi Metz
+
 **Admin Features:**
 - Controllers: `app/controllers/admin/` (inherit from `Admin::AdminController`)
 - Routes: `namespace :admin` in config/routes.rb
