@@ -52,5 +52,6 @@ class Admin::FilmsControllerTest < ActionDispatch::IntegrationTest
     get admin_festival_edition_search_for_film_to_add_url(edition.festival, edition)
     assert_response :success
     assert_select "turbo-frame#new-film-search-results"
+    assert_select "h3", text: "TMDB results", count: 0
   end
 end
