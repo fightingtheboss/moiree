@@ -17,7 +17,10 @@
   UI is mounted at `/admin/jobs` (see `config/application.rb` and `config/routes.rb`).
 
 ## Dev / build / test commands (explicit)
-- Start server (development): `bin/rails server` (or `bin/dev` which wraps it).
+- Start server (development): `bin/dev` (uses `Procfile.dev` to start both Puma and Tailwind watch).
+- Rails console: `bin/rails console`.
+- Migrations: `bin/rails db:migrate`.
+- Rollback last migration: `bin/rails db:rollback`.
 - Tailwind dev watch: `bin/rails tailwindcss:watch` (Procfile.dev contains `css: bin/rails tailwindcss:watch`).
 - Assets precompile (used in Dockerfile):
   `SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile`
@@ -45,7 +48,7 @@
 - OIDC with Fly for credentials in production (see README DB backup section).
 
 ## Helpful files to inspect when changing behavior
-- Routing and controller structure: `config/routes.rb`, `app/controllers/admin/...`.
+- Routing and controller structure: `config/routes.rb`, `app/controllers/...`.
 - Job config and mission control: `config/application.rb`, `config/puma.rb`, `lib/tasks/`.
 - Docker & deploy: `Dockerfile`, `fly.toml`.
 - Dev commands: `Procfile.dev`, `bin/dev`, and `bin/rails` scripts in `bin/`.
@@ -57,6 +60,5 @@
 - Do: when touching DB behavior, consider LiteFS implications and how Fly.io runs the app.
 - Don't assume a separate background worker stack — `solid_queue` may run inside Puma for
   single-server deployments. Check `SOLID_QUEUE_IN_PUMA` env usage.
-
-If anything here is unclear or you want me to expand an area (jobs, Docker, or podcasts/webhooks),
-tell me which part and I'll update this file with concrete examples/snippets.
+- Don't add gems unless necessary; prefer built-in Rails features or lightweight solutions
+  to keep the app simple and maintainable.

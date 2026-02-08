@@ -11,14 +11,26 @@
           <%= render partial: "admin/films/film_detail", locals: { film: film } %>
         </div>
       <% else %>
-        <div class="grid grid-cols-5 gap-2" data-controller="search" data-search-url-value="<%= admin_festival_edition_search_for_film_to_add_path(edition.festival, edition, selection_id: selection.id) %>">
-          <div class="col-span-4">
-            <%= form.label :title, class: "block text-gray-700 text-sm font-bold mb-2" %>
-            <%= form.text_field :title, placeholder: "e.g. Anatomy of a Fall", data: { action: "input->search#existing", "search-target": "query" }, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+        <div data-controller="search" data-search-url-value="<%= admin_festival_edition_search_for_film_to_add_path(edition.festival, edition, selection_id: selection.id) %>" data-search-tmdb-lookup-url-value="<%= admin_festival_edition_lookup_by_tmdb_id_path(edition.festival, edition, selection_id: selection.id) %>">
+          <div class="grid grid-cols-5 gap-2 mb-4">
+            <div class="col-span-2 md:col-span-1">
+              <%= form.label :tmdb_id, "TMDB ID", class: "block text-gray-700 text-sm font-bold mb-2" %>
+              <%= form.number_field :tmdb_id, placeholder: "e.g. 915935", min: 1, step: 1, data: { action: "input->search#lookupByTmdbId", "search-target": "tmdbId" }, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+            </div>
+            <div class="col-span-3 md:col-span-4 flex flex-col justify-end">
+              <p class="text-sm text-gray-500 md:my-2">Look up film directly by <a href="https://www.themoviedb.org/" target="_blank" class="text-indigo-500 hover:text-indigo-700 underline">TMDB</a> ID or search by title below</p>
+            </div>
           </div>
-          <div class="col-span-1">
-            <%= form.label :year, class: "block text-gray-700 text-sm font-bold mb-2" %>
-            <%= form.number_field :year, min: 1900, max: Time.now.year, step: 1, value: form.object.year || @edition.year, data: { action: "input->search#existing", "search-target": "year" }, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+
+          <div class="grid grid-cols-5 gap-2">
+            <div class="col-span-4">
+              <%= form.label :title, class: "block text-gray-700 text-sm font-bold mb-2" %>
+              <%= form.text_field :title, placeholder: "e.g. Anatomy of a Fall", data: { action: "input->search#existing", "search-target": "query" }, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+            </div>
+            <div class="col-span-1">
+              <%= form.label :year, class: "block text-gray-700 text-sm font-bold mb-2" %>
+              <%= form.number_field :year, min: 1900, max: Time.now.year, step: 1, value: form.object.year || @edition.year, data: { action: "input->search#existing", "search-target": "year" }, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+            </div>
           </div>
         </div>
 
@@ -103,7 +115,7 @@
               <img class="block w-full h-auto rounded-sm shadow-xs" src="<%= TMDB.poster_url(@film.poster_path) %>" alt="Poster image for <%= @film.title %>">
               <%= form.hidden_field :poster_path, value: @film.poster_path %>
             </div>
-            <div class="flex-grow">
+            <div class="grow">
               <%= form.label :backdrop_path, "Backdrop", class: "block text-gray-700 text-sm font-bold mb-2" %>
               <img class="block w-full h-auto rounded-sm shadow-xs" src="<%= TMDB.backdrop_url(@film.backdrop_path) %>" alt="Backdrop image for <%= @film.title %>">
               <%= form.hidden_field :backdrop_path, value: @film.backdrop_path %>
