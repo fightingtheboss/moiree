@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     resources :festivals do
       resources :editions do
         get :search_for_film_to_add, to: "films#search_for_film_to_add_to_edition"
+        get :lookup_by_tmdb_id, to: "films#lookup_by_tmdb_id"
 
         resources :attendances, only: [:index, :create, :edit, :update, :destroy]
 

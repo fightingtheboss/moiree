@@ -1,0 +1,8 @@
+<%= turbo_frame_tag "new-film-search-results" do %>
+  <li class="bg-red-50 p-4 flex flex-col justify-between rounded-sm my-1 border border-red-200">
+    <p class="text-sm text-red-700">
+      <strong>Film not found.</strong> No film exists in TMDB with ID <code class="bg-red-100 px-1 rounded"><%= tmdb_id %></code>.
+      Please check the ID and try again.
+    </p>
+  </li>
+<% end %>

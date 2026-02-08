@@ -18,13 +18,13 @@
       <% tmdb_results.each do |film| %>
         <li class="bg-white p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow hover:cursor-pointer my-1 border border-gray-200/50 bg-radial-gradient">
           <%= link_to tmdb_modify_path(festival, edition, selection_id, film.id), data: { "turbo-frame": "add-film-to-edition" }, class: "block" do %>
-            <article class="grid grid-cols-1 md:grid-cols-[96px_1fr] md:gap-4">
-              <div class="mb-4 md:mb-0">
+            <article class="grid grid-cols-[96px_1fr] gap-4">
+              <div class="w-24 shrink-0">
                 <% if film.poster_path.present? %>
                   <%= image_tag film.poster_url(size: "w185"), alt: "#{film.title} poster", class: "w-full h-auto rounded-sm shadow-xs" %>
                 <% else %>
-                  <div class="w-full h-0 pb-[150%] bg-gray-200 flex items-center justify-center rounded-sm shadow-xs">
-                    <span class="text-gray-500 text-sm">No poster available</span>
+                  <div class="relative w-full pb-[150%] bg-gray-200 rounded-sm shadow-xs">
+                    <span class="absolute inset-0 flex items-center justify-center text-gray-500 text-sm text-center px-1">No poster available</span>
                   </div>
                 <% end %>
               </div>

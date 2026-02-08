@@ -1,11 +1,21 @@
-<li id="<%= dom_id(selection) %>" class="bg-white p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow my-1 md:my-0 group">
+<li id="<%= dom_id(selection) %>" class="<%= selection.film.rateable? ? 'bg-white' : 'bg-gray-100/50' %> p-6 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow my-1 md:my-0 group">
   <div class="flex justify-between">
     <article class="basis-full">
-      <h2 class="text-xs uppercase tracking-wide font-light"><%= selection.category.name %></h2>
-      <h1 class="font-semibold my-2 leading-tight"><%= link_to selection.film.title, film_url(selection.film), target: "_top", class: "hover:italic hover:text-indigo-700" %></h1>
-      <p class="text-sm my-0.5"><%= selection.film.director %></p>
-      <p class="text-sm my-0.5"><%= selection.film.countries.join(", ") %></p>
-      <p class="text-sm my-0.5"><%= selection.film.year %></p>
+      <h2 class="text-xs uppercase tracking-wide font-light <%= selection.film.rateable? ? '' : 'text-gray-400' %>"><%= selection.category.name %></h2>
+      <h1 class="font-semibold my-2 leading-tight flex items-start gap-1.5">
+        <span class="<%= selection.film.rateable? ? '' : 'text-gray-500' %>"><%= link_to selection.film.title, film_url(selection.film), target: "_top", class: "hover:italic hover:text-indigo-700" %></span>
+        <% unless selection.film.rateable? %>
+          <span class="relative cursor-help inline-flex" title="This film is not being rated on Moirée">
+            <%= inline_svg_tag("icons/eye-slash.svg", class: "w-3.5 h-3.5 fill-gray-400 shrink-0 mt-0.5") %>
+            <span class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 px-2 py-1 text-xs font-normal text-white bg-gray-800 rounded whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity pointer-events-none z-20">
+              Not rated on Moirée
+            </span>
+          </span>
+        <% end %>
+      </h1>
+      <p class="text-sm my-0.5 <%= selection.film.rateable? ? '' : 'text-gray-400' %>"><%= selection.film.director %></p>
+      <p class="text-sm my-0.5 <%= selection.film.rateable? ? '' : 'text-gray-400' %>"><%= selection.film.countries.join(", ") %></p>
+      <p class="text-sm my-0.5 <%= selection.film.rateable? ? '' : 'text-gray-400' %>"><%= selection.film.year %></p>
     </article>
     <% if policy(selection).edit? %>
       <div class="opacity-0 group-hover:opacity-100">

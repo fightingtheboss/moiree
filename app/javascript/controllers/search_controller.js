@@ -3,10 +3,11 @@ import { get } from "@rails/request.js";
 
 // Connects to data-controller="search"
 export default class extends Controller {
-  static targets = ["query", "year"];
+  static targets = ["query", "year", "tmdbId"];
 
   static values = {
     url: String,
+    tmdbLookupUrl: String,
   };
 
   search() {
@@ -37,6 +38,25 @@ export default class extends Controller {
     this.timeout = setTimeout(() => {
       get(this.urlValue, {
         query: { query: query, year: year },
+        responseKind: "turbo-stream"
+      });
+    }, 500);
+  }
+
+  // Look up film directly by TMDB ID
+  lookupByTmdbId() {
+    const tmdbId = this.tmdbIdTarget.value.trim();
+
+    if (!tmdbId || tmdbId === this.previousTmdbId) {
+      return;
+    }
+
+    this.previousTmdbId = tmdbId;
+
+    clearTimeout(this.tmdbTimeout);
+    this.tmdbTimeout = setTimeout(() => {
+      get(this.tmdbLookupUrlValue, {
+        query: { tmdb_id: tmdbId },
         responseKind: "turbo-stream"
       });
     }, 500);
