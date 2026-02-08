@@ -1,0 +1,70 @@
+<%# Featured First Film - Large Hero Card %>
+<% film = selection.film %>
+<article class="md:col-span-2 lg:col-span-1 lg:row-span-2 bg-indigo-900 rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-shadow relative">
+  <%= link_to film_path(film), class: "block h-full" do %>
+    <%# Background Title Typography %>
+    <div class="sm:hidden lg:block absolute inset-0 overflow-hidden">
+      <div class="absolute -left-4 bottom-1/6 text-[8rem] text-center scale-150 font-black italic text-indigo-800/50 leading-none tracking-tighter -rotate-6 select-none">
+        <%= film.title %>
+      </div>
+    </div>
+
+    <div class="relative h-full flex flex-col">
+      <%# Poster or Visual Area %>
+      <div class="relative aspect-2/3 overflow-hidden">
+        <% if film.poster_path.present? %>
+          <img
+            src="<%= TMDB.poster_url(film.poster_path, size: 'w500') %>"
+            alt="<%= film.title %> poster"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
+            loading="lazy"
+          >
+          <div class="absolute inset-0 bg-linear-to-t from-indigo-900 via-indigo-900/50 to-transparent"></div>
+        <% else %>
+          <%# Decorative typography when no poster %>
+          <div class="w-full h-full bg-linear-to-br from-indigo-800 to-indigo-900 flex items-center justify-center relative">
+            <span class="text-[8rem] lg:text-[10rem] font-black italic text-indigo-700/60 rotate-[-8deg] select-none">
+              <%= film.title.first %>
+            </span>
+          </div>
+        <% end %>
+
+        <%# Rating Badge - Large %>
+        <div class="absolute top-4 right-4 bg-white text-indigo-900 rounded-full w-16 h-16 flex items-center justify-center shadow-lg">
+          <span class="font-black text-2xl"><%= number_with_precision(selection.average_rating, precision: 1) %></span>
+        </div>
+
+        <%# Rank Badge %>
+        <div class="absolute top-4 left-4 bg-amber-400 text-indigo-900 rounded-full w-10 h-10 flex items-center justify-center shadow-lg">
+          <span class="font-black text-lg">#1</span>
+        </div>
+      </div>
+
+      <%# Film Info - Overlaid on dark background %>
+      <div class="p-6 flex-1 flex flex-col justify-center relative z-10">
+        <header class="mb-3">
+          <h3 class="font-black text-2xl lg:text-5xl text-white group-hover:text-indigo-200 transition-colors leading-tight mb-2 uppercase italic">
+            <%= film.title %>
+          </h3>
+          <p class="text-indigo-200 font-medium"><%= film.director %></p>
+          <p class="text-indigo-300 text-sm mt-1">
+            <%= film.countries.join(", ") %> • <%= film.year %>
+          </p>
+        </header>
+
+        <p class="text-indigo-300 italic mt-3"><%= film.summary %></p>
+
+        <% if selection.featured_rating&.impression.present? %>
+          <blockquote class="border-l-4 border-indigo-500 pl-4 mt-4">
+            <p class="font-sentient italic text-indigo-100 leading-relaxed line-clamp-3">
+              "<%= truncate(selection.featured_rating.impression, length: 150) %>"
+            </p>
+            <footer class="mt-2 text-sm text-indigo-300">
+              — <%= selection.featured_rating.critic.name %>
+            </footer>
+          </blockquote>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</article>

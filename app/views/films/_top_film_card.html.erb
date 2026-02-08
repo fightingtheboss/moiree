@@ -1,0 +1,50 @@
+<%# Regular Film Card %>
+<% film = selection.film %>
+<article class="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-shadow">
+  <%= link_to film_path(film), class: "block h-full" do %>
+    <%# Film Poster %>
+    <div class="relative aspect-2/3 overflow-hidden bg-indigo-100 hidden md:block">
+      <% if film.poster_path.present? %>
+        <img
+          src="<%= TMDB.poster_url(film.poster_path, size: 'w500') %>"
+          alt="<%= film.title %> poster"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+        >
+      <% else %>
+        <div class="w-full h-full bg-radial-gradient flex items-center justify-center">
+          <span class="text-indigo-300 font-black text-6xl italic"><%= film.title.first %></span>
+        </div>
+      <% end %>
+
+      <%# Rating Badge %>
+      <div class="absolute top-3 right-3 bg-indigo-900/90 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg">
+        <span class="font-black text-xl"><%= number_with_precision(selection.average_rating, precision: 1) %></span>
+      </div>
+    </div>
+
+    <%# Film Info %>
+    <div class="p-5">
+      <header class="mb-3">
+        <h3 class="font-bold text-lg md:text-xl text-indigo-900 group-hover:text-indigo-700 transition-colors leading-tight mb-1">
+          <%= film.title %>
+        </h3>
+        <p class="text-sm text-gray-600"><%= film.director %></p>
+        <p class="text-xs text-gray-500 mt-1">
+          <%= film.countries.join(", ") %> • <%= film.year %>
+        </p>
+      </header>
+
+      <% if selection.featured_rating&.impression.present? %>
+        <blockquote class="border-l-4 border-indigo-200 pl-4 mt-4">
+          <p class="font-sentient italic text-gray-700 text-sm leading-relaxed line-clamp-3">
+            "<%= truncate(selection.featured_rating.impression, length: 150) %>"
+          </p>
+          <footer class="mt-2 text-xs text-gray-500">
+            — <%= selection.featured_rating.critic.name %>
+          </footer>
+        </blockquote>
+      <% end %>
+    </div>
+  <% end %>
+</article>

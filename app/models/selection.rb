@@ -12,7 +12,10 @@ class Selection < ApplicationRecord
 
   accepts_nested_attributes_for :film
 
-  after_touch :touch_edition
+  # Returns the highest-scored rating that has an impression
+  def featured_rating
+    ratings.where.not(impression: [nil, ""]).order(score: :desc).first
+  end
 
   def cache_average_rating
     update(average_rating: ratings.where(critic: edition.critics).average(:score).to_f)
@@ -28,9 +31,5 @@ class Selection < ApplicationRecord
     end.sum / (number_of_ratings - 1)
 
     Math.sqrt(variance)
-  end
-
-  def touch_edition
-    edition.touch
   end
 end

@@ -5,12 +5,12 @@
   <header class="relative bg-white overflow-hidden">
     <div class="grid place-content-center bg-logo-radial-gradient contrast-2000 after:bg-logo-radial-gradient-overlay after:absolute after:top-0 after:left-0 after:right-0 after:bottom-0 after:mix-blend-lighten">
       <h1 class="font-black uppercase text-[26vw] xl:text-[22.5rem] italic leading-tight px-4">
-        <span class="inline-block">Moirée</span>
+        <span class="inline-block"><%= @year %></span>
       </h1>
     </div>
     <div class="absolute bottom-8 left-0 right-0 text-center">
       <p class="font-medium italic tracking-tight text-indigo-700 bg-white/80 backdrop-blur-sm md:text-xl p-2 md:p-4 inline-block rounded-full px-6">
-        <%= @year %> Year in Review
+        Year in Review
       </p>
     </div>
   </header>
@@ -22,9 +22,6 @@
         <div class="flex items-center gap-2 text-sm">
           <%= link_to "← Back to Today", root_path, class: "text-indigo-600 hover:text-indigo-800" %>
         </div>
-        <h2 class="font-bold text-indigo-900">
-          <span class="text-indigo-500">Wrapped:</span> <%= @year %>
-        </h2>
         <div class="flex items-center gap-2 text-sm">
           <% if @year > 2024 %>
             <%= link_to "← #{@year - 1}", year_path(@year - 1), class: "text-indigo-600 hover:text-indigo-800" %>
@@ -48,62 +45,9 @@
           </header>
 
           <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <% @top_films.each_with_index do |selection, index| %>
-              <% film = selection.film %>
-              <% featured_rating = selection.ratings.where.not(impression: [nil, ""]).order(score: :desc).first %>
-
-              <article class="<%= index == 0 ? 'md:col-span-2 lg:col-span-1 lg:row-span-2' : '' %> bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-shadow">
-                <%= link_to film_path(film), class: "block h-full" do %>
-                  <%# Film Poster %>
-                  <div class="relative aspect-2/3 overflow-hidden bg-indigo-100 <%= index == 0 ? 'lg:aspect-3/4' : 'hidden md:block' %>">
-                    <% if film.poster_path.present? %>
-                      <img
-                        src="<%= TMDB.poster_url(film.poster_path, size: 'w500') %>"
-                        alt="<%= film.title %> poster"
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      >
-                    <% else %>
-                      <div class="w-full h-full bg-radial-gradient flex items-center justify-center">
-                        <span class="text-indigo-300 font-black text-6xl italic"><%= film.title.first %></span>
-                      </div>
-                    <% end %>
-
-                    <%# Rating Badge %>
-                    <div class="absolute top-3 right-3 bg-indigo-900/90 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg">
-                      <span class="font-black text-xl"><%= number_with_precision(selection.average_rating, precision: 1) %></span>
-                    </div>
-                  </div>
-
-                  <%# Film Info %>
-                  <div class="p-5 <%= index == 0 ? 'lg:p-6' : '' %>">
-                    <header class="mb-3">
-                      <h3 class="font-bold text-lg md:text-xl text-indigo-900 group-hover:text-indigo-700 transition-colors leading-tight mb-1">
-                        <%= film.title %>
-                      </h3>
-                      <p class="text-sm text-gray-600"><%= film.director %></p>
-                      <p class="text-xs text-gray-500 mt-1">
-                        <%= film.countries.join(", ") %> • <%= film.year %>
-                      </p>
-                    </header>
-
-                    <%# Featured Impression Quote %>
-                    <% if featured_rating&.impression.present? %>
-                      <blockquote class="border-l-4 border-indigo-200 pl-4 mt-4">
-                        <p class="font-sentient italic text-gray-700 text-sm leading-relaxed line-clamp-3">
-                          "<%= truncate(featured_rating.impression, length: 150) %>"
-                        </p>
-                        <footer class="mt-2 text-xs text-gray-500">
-                          — <%= featured_rating.critic.name %>
-                          <% if featured_rating.review_url.present? %>
-                            <a href="<%= featured_rating.review_url %>" target="_blank" rel="noopener" class="ml-1 text-indigo-600 hover:underline" onclick="event.stopPropagation();">Read review →</a>
-                          <% end %>
-                        </footer>
-                      </blockquote>
-                    <% end %>
-                  </div>
-                <% end %>
-              </article>
+            <%= render "films/top_film_featured", selection: @top_films.first %>
+            <% @top_films.drop(1).each do |selection| %>
+              <%= render "films/top_film_card", selection: selection %>
             <% end %>
           </div>
         </div>

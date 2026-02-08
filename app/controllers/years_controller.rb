@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class YearsController < ApplicationController
+  include TopFilms
+
   def show
     @year = params[:id].to_i
     setup_year_data
@@ -17,20 +19,5 @@ class YearsController < ApplicationController
 
     # Past festivals from the year
     @past = Edition.past.within(@year).limit(6)
-  end
-
-  def top_films_of_year(year)
-    edition_ids = Edition.within(year).pluck(:id)
-
-    return [] if edition_ids.empty?
-
-    Selection.joins(:ratings, :film)
-      .where(edition_id: edition_ids)
-      .where.not(ratings: { impression: [nil, ""] })
-      .group("selections.id")
-      .having("COUNT(ratings.id) >= 2")
-      .order("AVG(ratings.score) DESC")
-      .limit(5)
-      .includes(:film, ratings: :critic)
   end
 end
