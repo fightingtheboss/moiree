@@ -28,6 +28,14 @@ When an Admin is invited, their account is created and they're sent a link to re
 - Credentials are coordinated between Fly and AWS via OIDC IdP: [Configure fly.io as a OIDC IdP](https://fly.io/blog/oidc-cloud-roles/)
 
 ## Roadmap
+- Add a YearInReview model that represents a year-in-review
+  - This should be a highly cacheable object and view
+  - Should contain all of the queries related to presenting a year-in-review, persisted to a record
+    - Top films of the year
+    - Top level stats for the year: number of festivals, number of critics, number of films rated, number of ratings
+    - Plus the stats from the Edition summary, but spread across all editions for that year
+    - No need for the "recent edition" section
+    - Keep the list of all the festivals from the year
 - Instagram integration
   - Keep using the SVG approach for the time being
     - Maybe just use it for the layout and then overlay/composite the text to be able to ensure custom fonts?
