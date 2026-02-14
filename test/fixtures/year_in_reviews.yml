@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+base:
+  year: 2024
+  editions_count: 1
+  critics_count: 2
+  films_count: 2
+  ratings_count: 3
+  five_star_ratings_count: 0
+  zero_star_ratings_count: 0
+  generated_at: <%= 1.hour.ago.to_fs(:db) %>
