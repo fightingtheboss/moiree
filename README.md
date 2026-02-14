@@ -28,21 +28,6 @@ When an Admin is invited, their account is created and they're sent a link to re
 - Credentials are coordinated between Fly and AWS via OIDC IdP: [Configure fly.io as a OIDC IdP](https://fly.io/blog/oidc-cloud-roles/)
 
 ## Roadmap
-- Add a YearInReview model that represents a year-in-review
-  - This should be a highly cacheable object and view
-  - Should contain all of the queries related to presenting a year-in-review, persisted to a record
-    - Top films of the year
-    - Top level stats for the year: number of festivals, number of critics, number of films rated, number of ratings
-    - Plus the stats from the Edition summary, but spread across all editions for that year
-    - No need for the "recent edition" section
-    - Keep the list of all the festivals from the year
-- Instagram integration
-  - Keep using the SVG approach for the time being
-    - Maybe just use it for the layout and then overlay/composite the text to be able to ensure custom fonts?
-  - Should be generated in a job that runs nighly during an active festival
-  - Need to use ActiveStorage to store the JPG files on S3 so they can be accessed by Instagram
-- Move generation of OG images to a scheduled job rather than it being part of the request
-  - No need for it to be exactly up to date, could even run it hourly during the festival
 - Homepage
   - Continue to start with any ongoing festivals
   - Highlight the most highly reviewed films for the year
@@ -53,7 +38,34 @@ When an Admin is invited, their account is created and they're sent a link to re
   - Provide links to all previous episodes
   - Add social media links
 - Page caching for the summary!
-- create a Summary model that acts as a rollup of stats for a year, that can be cached until the record changes, which should be very rare after created. This will be used for the year in review view, since the data shouldn't change once the year is over.
+- Add a YearInReview model that represents a year-in-review
+  - This should be a highly cacheable object and view
+  - Should contain all of the queries related to presenting a year-in-review, persisted to a record
+    - Top films of the year
+    - Top level stats for the year: number of festivals, number of critics, number of films rated, number of ratings
+    - Plus the stats from the Edition summary, but spread across all editions for that year
+    - No need for the "recent edition" section
+    - Keep the list of all the festivals from the year
+- Refactor to reuse queries across Editions and YearInReview where it makes sense
+  - Perhaps have a concern we can mix in with the queries for both (Summarizable)
+- Refactor to extract more template sections to partials
+- Design notes to follow up on
+  - Play with making things more monochrome
+  - Unify the approach to the bar charts
+    - Maybe show the details of the chart on hover in the year in the review format
+  - Unify the approach to rollup badges
+    - The new version that's fully rounded is nicer and more subtle as well
+  - Find a good middle ground for showing the rankings
+    - The ranking badge on the summary page is pretty nice and unique (but might not work everywhere)
+  - Try moving the top ranked film in the top films grid to be across the top rather than down the side
+  - Use the moire background strategically, investigate animating it on hover in some places
+- Instagram integration
+  - Keep using the SVG approach for the time being
+    - Maybe just use it for the layout and then overlay/composite the text to be able to ensure custom fonts?
+  - Should be generated in a job that runs nighly during an active festival
+  - Need to use ActiveStorage to store the JPG files on S3 so they can be accessed by Instagram
+- Move generation of OG images to a scheduled job rather than it being part of the request
+  - No need for it to be exactly up to date, could even run it hourly during the festival
 - When a critic is added to an edition, link their previous ratings for the same film to this edition
   - This might be a copy of the existing Rating records or it might be an association
     - Likely both: A new Rating for that Edition, but associated to the original rating
