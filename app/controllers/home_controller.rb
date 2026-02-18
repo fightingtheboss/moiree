@@ -21,7 +21,7 @@ class HomeController < ApplicationController
     @recent_festival = Edition.past.where("CAST(strftime('%Y', end_date) AS INTEGER) = ?", @year).first
 
     # Latest podcast episode
-    @latest_episode = Episode.order(published_at: :desc).first
+    @latest_episode = Podcast.platform.first.episodes.order(published_at: :desc).first
 
     # Upcoming festivals
     @upcoming = Edition.upcoming
