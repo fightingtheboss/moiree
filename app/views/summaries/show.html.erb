@@ -114,11 +114,21 @@
             <h1 class="text-xl font-semibold">Bombe Moirée for <%= @edition.code %> 💣</h1>
             <h2 class="text-sm mb-2">Worst rated film of the festival</h2>
             <% if @bombe_moiree %>
-              <div class="shadow-md rounded-lg mb-2 p-4 bg-radial-gradient hover:shadow-xl transition-shadow">
-                <h4 class="text-xs uppercase tracking-wide font-light mb-1"><%= @bombe_moiree.category.name %></h4>
-                <h2 class="font-medium leading-tight"><%= link_to @bombe_moiree.film.title, film_path(@bombe_moiree.film, anchor: dom_id(@edition)), class: "hover:text-indigo-700 hover:italic" %></h2>
-                <h3 class="text-xs my-0.5"><%= @bombe_moiree.film.director %></h3>
-                <p class="text-xs text-slate-500">Avg <strong><%= number_with_precision(@bombe_moiree.average_rating, precision: 1) %></strong> from <%= pluralize(@bombe_moiree.ratings.size, "rating") %></p>
+              <div class="shadow-md rounded-lg mb-2 p-4 bg-radial-gradient hover:shadow-xl transition-shadow flex items-center gap-4">
+                <% if @bombe_moiree.film.poster_path.present? %>
+                  <img
+                    src="<%= TMDB.poster_url(@bombe_moiree.film.poster_path, size: 'w92') %>"
+                    alt="<%= @bombe_moiree.film.title %> poster"
+                    class="w-12 h-18 object-cover rounded shadow-sm shrink-0"
+                    loading="lazy"
+                  >
+                <% end %>
+                <div>
+                  <h4 class="text-xs uppercase tracking-wide font-light mb-1"><%= @bombe_moiree.category.name %></h4>
+                  <h2 class="font-medium leading-tight"><%= link_to @bombe_moiree.film.title, film_path(@bombe_moiree.film, anchor: dom_id(@edition)), class: "hover:text-indigo-700 hover:italic" %></h2>
+                  <h3 class="text-xs my-0.5"><%= @bombe_moiree.film.director %></h3>
+                  <p class="text-xs text-slate-500">Avg <strong><%= number_with_precision(@bombe_moiree.average_rating, precision: 1) %></strong> from <%= pluralize(@bombe_moiree.ratings.size, "rating") %></p>
+                </div>
               </div>
               <ul class="grid grid-flow-col gap-1 h-24 items-end my-8">
                 <% @bombe_moiree_histogram.each do |score, count| %>
@@ -141,11 +151,21 @@
             <h1 class="text-xl font-semibold">Most divisive film for <%= @edition.code %></h1>
             <h2 class="text-sm mb-2">The widest variance of ratings</h2>
             <% if @most_divisive %>
-              <div class="shadow-md rounded-lg mb-2 p-4 bg-radial-gradient hover:shadow-xl transition-shadow">
-                <h4 class="text-xs uppercase tracking-wide font-light mb-1"><%= @most_divisive.category.name %></h4>
-                <h2 class="font-medium leading-tight"><%= link_to @most_divisive.film.title, film_path(@most_divisive.film, anchor: dom_id(@edition)), class: "hover:text-indigo-700 hover:italic" %></h2>
-                <h3 class="text-xs my-0.5"><%= @most_divisive.film.director %></h3>
-                <p class="text-xs text-slate-500">Avg <strong><%= number_with_precision(@most_divisive.average_rating, precision: 1) %></strong> from <%= pluralize(@most_divisive.ratings.all.size, "rating") %></p>
+              <div class="shadow-md rounded-lg mb-2 p-4 bg-radial-gradient hover:shadow-xl transition-shadow flex items-center gap-4">
+                <% if @most_divisive.film.poster_path.present? %>
+                  <img
+                    src="<%= TMDB.poster_url(@most_divisive.film.poster_path, size: 'w92') %>"
+                    alt="<%= @most_divisive.film.title %> poster"
+                    class="w-12 h-18 object-cover rounded shadow-sm shrink-0"
+                    loading="lazy"
+                  >
+                <% end %>
+                <div>
+                  <h4 class="text-xs uppercase tracking-wide font-light mb-1"><%= @most_divisive.category.name %></h4>
+                  <h2 class="font-medium leading-tight"><%= link_to @most_divisive.film.title, film_path(@most_divisive.film, anchor: dom_id(@edition)), class: "hover:text-indigo-700 hover:italic" %></h2>
+                  <h3 class="text-xs my-0.5"><%= @most_divisive.film.director %></h3>
+                  <p class="text-xs text-slate-500">Avg <strong><%= number_with_precision(@most_divisive.average_rating, precision: 1) %></strong> from <%= pluralize(@most_divisive.ratings.all.size, "rating") %></p>
+                </div>
               </div>
               <ul class="grid grid-flow-col gap-1 h-24 items-end my-8">
                 <% @most_divisive_histogram.each do |score, count| %>
