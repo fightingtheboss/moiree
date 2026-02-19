@@ -192,9 +192,9 @@
           </header>
 
           <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <%= render "films/top_film_featured", selection: @top_films.first %>
-            <% @top_films.drop(1).each do |selection| %>
-              <%= render "films/top_film_card", selection: selection %>
+            <%= render "films/top_film_featured", selection: @top_films.first, rank: 1 %>
+            <% @top_films.drop(1).each_with_index do |selection, index| %>
+              <%= render "films/top_film_card", selection: selection, rank: index + 2 %>
             <% end %>
           </div>
         </div>
