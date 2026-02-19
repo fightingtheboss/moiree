@@ -41,8 +41,8 @@ class SummariesController < ApplicationController
         @bombe_moiree_histogram = @bombe_moiree_histogram.sort.to_h
       end
 
-      @five_star_ratings = @edition.ratings.where({ score: 5.0 }).order("films.title")
-      @zero_star_ratings = @edition.ratings.where({ score: 0.0 }).order("films.title")
+      @five_star_ratings = @edition.ratings.includes(:critic, :film).where({ score: 5.0 }).order("films.title")
+      @zero_star_ratings = @edition.ratings.includes(:critic, :film).where({ score: 0.0 }).order("films.title")
 
       @most_divisive = @edition.selections
         .includes(:ratings)
