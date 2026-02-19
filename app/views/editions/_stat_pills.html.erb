@@ -1,0 +1,22 @@
+<%# Stat pills for edition cards
+     Usage: render "editions/stat_pills", edition: edition
+     Optional: variant: :prominent (for Live Now cards on dark backgrounds) %>
+<% variant = local_assigns.fetch(:variant, :default) %>
+
+<ul class="flex flex-wrap gap-2 text-xs">
+  <% if variant == :prominent %>
+    <li class="px-3 py-1 bg-violet-500 text-white rounded-full font-medium"><%= edition.categories.size %> Categories</li>
+    <li class="px-3 py-1 bg-fuchsia-500 text-white rounded-full font-medium"><%= edition.films.size %> Films</li>
+    <li class="px-3 py-1 bg-teal-500 text-white rounded-full font-medium"><%= edition.ratings.size %> Ratings</li>
+  <% else %>
+    <li class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full">
+      <strong><%= edition.critics.count %></strong> Critics
+    </li>
+    <li class="px-2 py-1 bg-violet-100 text-violet-700 rounded-full">
+      <strong><%= edition.films.count %></strong> Films
+    </li>
+    <li class="px-2 py-1 bg-teal-100 text-teal-700 rounded-full">
+      <strong><%= edition.ratings.count %></strong> Ratings
+    </li>
+  <% end %>
+</ul>

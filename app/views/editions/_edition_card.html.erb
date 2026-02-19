@@ -7,15 +7,5 @@
     </time>
   </header>
 
-  <ul class="flex flex-wrap gap-2 text-xs">
-    <li class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full">
-      <strong><%= edition.critics.count %></strong> Critics
-    </li>
-    <li class="px-2 py-1 bg-violet-100 text-violet-700 rounded-full">
-      <strong><%= edition.films.count %></strong> Films
-    </li>
-    <li class="px-2 py-1 bg-teal-100 text-teal-700 rounded-full">
-      <strong><%= edition.ratings.count %></strong> Ratings
-    </li>
-  </ul>
+  <%= render "editions/stat_pills", edition: edition %>
 </article>

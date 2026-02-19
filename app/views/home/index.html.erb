@@ -47,11 +47,9 @@
                       </p>
                     </header>
 
-                    <ul class="flex flex-wrap gap-2 text-xs mb-4">
-                      <li class="px-3 py-1 bg-violet-500 text-white rounded-full font-medium"><%= edition.categories.size %> Categories</li>
-                      <li class="px-3 py-1 bg-fuchsia-500 text-white rounded-full font-medium"><%= edition.films.size %> Films</li>
-                      <li class="px-3 py-1 bg-teal-500 text-white rounded-full font-medium"><%= edition.ratings.size %> Ratings</li>
-                    </ul>
+                    <div class="mb-4">
+                      <%= render "editions/stat_pills", edition: edition, variant: :prominent %>
+                    </div>
                   </div>
 
                   <% if edition.ratings.any? %>
