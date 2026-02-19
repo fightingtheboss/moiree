@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_11_200247) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_09_023843) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -215,6 +215,36 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_200247) do
     t.index ["userable_type", "userable_id"], name: "index_users_on_userable"
   end
 
+  create_table "year_in_review_top_selections", force: :cascade do |t|
+    t.integer "year_in_review_id", null: false
+    t.integer "selection_id", null: false
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["selection_id"], name: "index_year_in_review_top_selections_on_selection_id"
+    t.index ["year_in_review_id", "position"], name: "idx_yir_top_selections_on_yir_and_position", unique: true
+    t.index ["year_in_review_id", "selection_id"], name: "idx_yir_top_selections_on_yir_and_selection", unique: true
+    t.index ["year_in_review_id"], name: "index_year_in_review_top_selections_on_year_in_review_id"
+  end
+
+  create_table "year_in_reviews", force: :cascade do |t|
+    t.integer "year", null: false
+    t.integer "editions_count", default: 0, null: false
+    t.integer "critics_count", default: 0, null: false
+    t.integer "films_count", default: 0, null: false
+    t.integer "ratings_count", default: 0, null: false
+    t.integer "five_star_ratings_count", default: 0, null: false
+    t.integer "zero_star_ratings_count", default: 0, null: false
+    t.integer "bombe_moiree_selection_id"
+    t.integer "most_divisive_selection_id"
+    t.datetime "generated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bombe_moiree_selection_id"], name: "index_year_in_reviews_on_bombe_moiree_selection_id"
+    t.index ["most_divisive_selection_id"], name: "index_year_in_reviews_on_most_divisive_selection_id"
+    t.index ["year"], name: "index_year_in_reviews_on_year", unique: true
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "attendances", "critics"
@@ -231,4 +261,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_200247) do
   add_foreign_key "selections", "films"
   add_foreign_key "sessions", "users"
   add_foreign_key "sign_in_tokens", "users"
+  add_foreign_key "year_in_review_top_selections", "selections"
+  add_foreign_key "year_in_review_top_selections", "year_in_reviews"
+  add_foreign_key "year_in_reviews", "selections", column: "bombe_moiree_selection_id"
+  add_foreign_key "year_in_reviews", "selections", column: "most_divisive_selection_id"
 end

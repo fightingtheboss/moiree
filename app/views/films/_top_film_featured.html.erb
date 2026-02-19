@@ -29,14 +29,9 @@
           </div>
         <% end %>
 
-        <%# Rating Badge - Large %>
-        <div class="absolute top-4 right-4 bg-white text-indigo-900 rounded-full w-16 h-16 flex items-center justify-center shadow-lg">
-          <span class="font-black text-2xl"><%= number_with_precision(selection.average_rating, precision: 1) %></span>
-        </div>
-
         <%# Rank Badge %>
-        <div class="absolute top-4 left-4 bg-amber-400 text-indigo-900 rounded-full w-10 h-10 flex items-center justify-center shadow-lg">
-          <span class="font-black text-lg">#1</span>
+        <div class="absolute top-4 right-4 w-8 h-8 rounded-md bg-indigo-700 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] grid place-content-center">
+          <span class="font-bold text-lg text-white"><%= rank %></span>
         </div>
       </div>
 
@@ -50,6 +45,7 @@
           <p class="text-indigo-300 text-sm mt-1">
             <%= film.countries.join(", ") %> • <%= film.year %>
           </p>
+          <p class="text-sm text-indigo-300 mt-2 bg-white/15 rounded-full px-3 py-0.5 inline-block">Avg <strong class="text-white"><%= number_with_precision(selection.average_rating, precision: 1) %></strong> from <%= pluralize(selection.ratings.size, "rating") %></p>
         </header>
 
         <p class="text-indigo-300 italic mt-3"><%= film.summary %></p>

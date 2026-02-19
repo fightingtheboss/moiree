@@ -17,9 +17,9 @@
         </div>
       <% end %>
 
-      <%# Rating Badge %>
-      <div class="absolute top-3 right-3 bg-indigo-900/90 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg">
-        <span class="font-black text-xl"><%= number_with_precision(selection.average_rating, precision: 1) %></span>
+      <%# Rank Badge %>
+      <div class="absolute top-3 right-3 w-8 h-8 rounded-md bg-indigo-700 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] grid place-content-center">
+        <span class="font-bold text-lg text-white"><%= rank %></span>
       </div>
     </div>
 
@@ -33,6 +33,7 @@
         <p class="text-xs text-gray-500 mt-1">
           <%= film.countries.join(", ") %> • <%= film.year %>
         </p>
+        <p class="text-xs text-slate-500 mt-2 bg-indigo-50/85 rounded-full px-2 py-0.5 inline-block">Avg <strong><%= number_with_precision(selection.average_rating, precision: 1) %></strong> from <%= pluralize(selection.ratings.size, "rating") %></p>
       </header>
 
       <% if selection.featured_rating&.impression.present? %>

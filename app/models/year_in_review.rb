@@ -7,7 +7,9 @@ class YearInReview < ApplicationRecord
   belongs_to :bombe_moiree_selection, class_name: "Selection", optional: true
   belongs_to :most_divisive_selection, class_name: "Selection", optional: true
 
-  validates :year, presence: true, uniqueness: true,
+  validates :year,
+    presence: true,
+    uniqueness: true,
     numericality: { only_integer: true, greater_than: 2023 }
 
   scope :chronological, -> { order(year: :desc) }
@@ -94,6 +96,22 @@ class YearInReview < ApplicationRecord
     return {} unless most_divisive_selection
 
     build_histogram(most_divisive_selection)
+  end
+
+  def five_star_ratings
+    edition_ids = Edition.within(year).pluck(:id)
+    Rating.joins(:selection, :critic, :film)
+      .where(selections: { edition_id: edition_ids }, score: 5.0)
+      .includes(:critic, :film)
+      .order("films.title")
+  end
+
+  def zero_star_ratings
+    edition_ids = Edition.within(year).pluck(:id)
+    Rating.joins(:selection, :critic, :film)
+      .where(selections: { edition_id: edition_ids }, score: 0.0)
+      .includes(:critic, :film)
+      .order("films.title")
   end
 
   private
