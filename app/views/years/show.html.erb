@@ -138,19 +138,7 @@
           <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <% @past.each do |edition| %>
               <%= link_to edition_summary_path(edition), class: "group block" do %>
-                <article class="bg-slate-50 rounded-lg p-6 hover:bg-indigo-50 transition-colors border border-slate-200 h-full">
-                  <header>
-                    <p class="text-xs uppercase tracking-wider text-gray-500 mb-1"><%= edition.name %></p>
-                    <h3 class="font-bold text-lg text-indigo-900 group-hover:text-indigo-700 transition-colors"><%= edition.code %></h3>
-                    <time class="text-sm text-gray-500">
-                      <%= edition.start_date.strftime("%b %Y") %>
-                    </time>
-                  </header>
-                  <ul class="flex flex-wrap gap-2 mt-4 text-xs">
-                    <li class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full"><%= edition.films.count %> Films</li>
-                    <li class="px-2 py-1 bg-teal-100 text-teal-700 rounded-full"><%= edition.ratings.count %> Ratings</li>
-                  </ul>
-                </article>
+                <%= render "editions/edition_card", edition: edition %>
               <% end %>
             <% end %>
           </div>

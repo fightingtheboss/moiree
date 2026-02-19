@@ -1,0 +1,21 @@
+<article class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 border border-indigo-100 bg-radial-gradient h-full">
+  <header class="mb-4">
+    <p class="text-xs uppercase tracking-wider text-indigo-500 mb-1"><%= edition.name %></p>
+    <h3 class="font-bold text-xl text-indigo-900 group-hover:text-indigo-700 transition-colors"><%= edition.code %></h3>
+    <time class="text-sm text-gray-500">
+      <%= edition.start_date.strftime("%b %d") %> – <%= edition.end_date.strftime("%b %d, %Y") %>
+    </time>
+  </header>
+
+  <ul class="flex flex-wrap gap-2 text-xs">
+    <li class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full">
+      <strong><%= edition.critics.count %></strong> Critics
+    </li>
+    <li class="px-2 py-1 bg-violet-100 text-violet-700 rounded-full">
+      <strong><%= edition.films.count %></strong> Films
+    </li>
+    <li class="px-2 py-1 bg-teal-100 text-teal-700 rounded-full">
+      <strong><%= edition.ratings.count %></strong> Ratings
+    </li>
+  </ul>
+</article>
