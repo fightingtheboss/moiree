@@ -98,4 +98,36 @@ class YearInReviewTest < ActiveSupport::TestCase
 
     assert_equal({}, year_in_review.most_divisive_histogram)
   end
+
+  test ".for returns a generated YearInReview for the given year" do
+    year_in_review = YearInReview.for(year_in_reviews(:base).year)
+
+    assert_kind_of(YearInReview, year_in_review)
+    assert_not_nil(year_in_review.generated_at)
+    assert(year_in_review.persisted?)
+  end
+
+  test ".for creates a new record if one does not exist" do
+    assert_difference("YearInReview.count", 1) do
+      YearInReview.for(2029)
+    end
+  end
+
+  test ".for returns existing record without regenerating if fresh" do
+    year_in_review = year_in_reviews(:base)
+    year_in_review.generate!
+    original_generated_at = year_in_review.generated_at
+
+    result = YearInReview.for(year_in_review.year)
+
+    assert_equal(original_generated_at, result.generated_at)
+  end
+
+  test ".current returns a YearInReview for the current year" do
+    year_in_review = YearInReview.current
+
+    assert_kind_of(YearInReview, year_in_review)
+    assert_equal(Date.current.year, year_in_review.year)
+    assert_not_nil(year_in_review.generated_at)
+  end
 end

@@ -14,6 +14,16 @@ class YearInReview < ApplicationRecord
 
   scope :chronological, -> { order(year: :desc) }
 
+  def self.for(year)
+    record = find_or_create_by!(year: year)
+    record.generate! if record.stale?
+    record
+  end
+
+  def self.current
+    self.for(Date.current.year)
+  end
+
   def editions
     Edition.within(year).includes(:festival).order(start_date: :desc)
   end
