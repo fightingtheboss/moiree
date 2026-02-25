@@ -129,11 +129,13 @@ class YearInReview < ApplicationRecord
   private
 
   def assign_top_selections!(edition_ids)
-    # Best selection per film (highest average_rating), requiring ≥2 ratings
-    best_selection_ids = Selection.joins(:ratings)
+    # Best selection per film (highest average_rating), requiring ≥4 ratings
+    # Filters by film release year rather than edition year
+    best_selection_ids = Selection.joins(:ratings, :film)
       .where(edition_id: edition_ids)
+      .where(films: { year: year })
       .group("selections.id")
-      .having("COUNT(ratings.id) >= 2")
+      .having("COUNT(ratings.id) >= 4")
       .select("selections.id, selections.film_id, selections.average_rating")
       .then do |selections|
         selections.group_by(&:film_id).map { |_, sels| sels.max_by(&:average_rating).id }
