@@ -59,153 +59,155 @@
       </section>
     <% end %>
 
-    <%# Top Films of the Year - Magazine Style %>
-    <% if @top_films.any? %>
-      <section class="py-12 px-4 bg-radial-gradient-center">
-        <div class="max-w-6xl mx-auto">
-          <header class="mb-8 text-center">
-            <h2 class="font-black text-4xl md:text-5xl uppercase italic text-indigo-900 mb-2">
-              Best of <%= @year %>
-            </h2>
-            <p class="text-indigo-600 font-sentient italic text-lg">The highest rated films from our critics</p>
-          </header>
+    <% if @year_in_review.ratings_count > 0 %>
+      <%# Top Films of the Year - Magazine Style %>
+      <% if @top_films.any? %>
+        <section class="py-12 px-4 bg-radial-gradient-center">
+          <div class="max-w-6xl mx-auto">
+            <header class="mb-8 text-center">
+              <h2 class="font-black text-4xl md:text-5xl uppercase italic text-indigo-900 mb-2">
+                Best of <%= @year %>
+              </h2>
+              <p class="text-indigo-600 font-sentient italic text-lg">The highest rated films from our critics</p>
+            </header>
 
-          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <%= render "films/top_film_featured", selection: @top_films.first, rank: 1 %>
-            <% @top_films.drop(1).each_with_index do |selection, index| %>
-              <%= render "films/top_film_card", selection: selection, rank: index + 2 %>
-            <% end %>
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <%= render "films/top_film_featured", selection: @top_films.first, rank: 1 %>
+              <% @top_films.drop(1).each_with_index do |selection, index| %>
+                <%= render "films/top_film_card", selection: selection, rank: index + 2 %>
+              <% end %>
+            </div>
           </div>
-        </div>
-      </section>
-    <% end %>
+        </section>
+      <% end %>
 
-    <%# Bombe Moirée & Most Divisive %>
-    <% if @year_in_review.bombe_moiree_selection || @year_in_review.most_divisive_selection %>
-      <section class="py-12 px-4 bg-slate-50">
-        <div class="max-w-6xl mx-auto grid gap-8 md:grid-cols-2">
-          <%# Bombe Moirée %>
-          <% if @year_in_review.bombe_moiree_selection %>
-            <% bombe = @year_in_review.bombe_moiree_selection %>
-            <div class="bg-white rounded-lg p-4 h-full flex flex-col">
-              <h1 class="text-xl font-semibold">Bombe Moirée for <%= @year %> 💣</h1>
-              <h2 class="text-sm mb-2">Worst rated film of the year</h2>
-              <div class="shadow-md rounded-lg mb-2 p-4 bg-radial-gradient hover:shadow-xl transition-shadow flex items-center gap-4">
-                <% if bombe.film.poster_path.present? %>
-                  <img
-                    src="<%= TMDB.poster_url(bombe.film.poster_path, size: 'w92') %>"
-                    alt="<%= bombe.film.title %> poster"
-                    class="w-12 h-18 object-cover rounded shadow-sm shrink-0"
-                    loading="lazy"
-                  >
-                <% end %>
-                <div>
-                  <h4 class="text-xs uppercase tracking-wide font-light mb-1"><%= bombe.category.name %></h4>
-                  <h2 class="font-medium leading-tight"><%= link_to bombe.film.title, film_path(bombe.film), class: "hover:text-indigo-700 hover:italic" %></h2>
-                  <h3 class="text-xs my-0.5"><%= bombe.film.director %></h3>
-                  <p class="text-xs text-slate-500 bg-indigo-50/85 rounded-full px-2 py-0.5 inline-block">Avg <strong><%= number_with_precision(bombe.average_rating, precision: 1) %></strong> from <%= pluralize(bombe.ratings.size, "rating") %></p>
+      <%# Bombe Moirée & Most Divisive %>
+      <% if @year_in_review.bombe_moiree_selection || @year_in_review.most_divisive_selection %>
+        <section class="py-12 px-4 bg-slate-50">
+          <div class="max-w-6xl mx-auto grid gap-8 md:grid-cols-2">
+            <%# Bombe Moirée %>
+            <% if @year_in_review.bombe_moiree_selection %>
+              <% bombe = @year_in_review.bombe_moiree_selection %>
+              <div class="bg-white rounded-lg p-4 h-full flex flex-col">
+                <h1 class="text-xl font-semibold">Bombe Moirée for <%= @year %> 💣</h1>
+                <h2 class="text-sm mb-2">Worst rated film of the year</h2>
+                <div class="shadow-md rounded-lg mb-2 p-4 bg-radial-gradient hover:shadow-xl transition-shadow flex items-center gap-4">
+                  <% if bombe.film.poster_path.present? %>
+                    <img
+                      src="<%= TMDB.poster_url(bombe.film.poster_path, size: 'w92') %>"
+                      alt="<%= bombe.film.title %> poster"
+                      class="w-12 h-18 object-cover rounded shadow-sm shrink-0"
+                      loading="lazy"
+                    >
+                  <% end %>
+                  <div>
+                    <h4 class="text-xs uppercase tracking-wide font-light mb-1"><%= bombe.category.name %></h4>
+                    <h2 class="font-medium leading-tight"><%= link_to bombe.film.title, film_path(bombe.film), class: "hover:text-indigo-700 hover:italic" %></h2>
+                    <h3 class="text-xs my-0.5"><%= bombe.film.director %></h3>
+                    <p class="text-xs text-slate-500 bg-indigo-50/85 rounded-full px-2 py-0.5 inline-block">Avg <strong><%= number_with_precision(bombe.average_rating, precision: 1) %></strong> from <%= pluralize(bombe.ratings.size, "rating") %></p>
+                  </div>
                 </div>
-              </div>
-              <ul class="grid grid-flow-col gap-1 h-24 items-end my-8">
-                <% @year_in_review.bombe_moiree_histogram.each do |score, count| %>
-                  <li style="--histogramHeight:<%= histogram_height(count, @year_in_review.bombe_moiree_histogram.values.max) %>" class="group/bar relative bg-linear-to-b from-indigo-500 to-indigo-700 rounded h-(--histogramHeight)" title="<%= histogram_title(score, count) %>">
-                    <span class="absolute top-2 left-0 right-0 text-xs text-white text-center font-semibold opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= count %></span>
-                    <span class="absolute -bottom-6 left-0 right-0 text-xs text-center opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= display_rating(score) %></span>
-                  </li>
-                <% end %>
-              </ul>
-            </div>
-          <% end %>
-
-          <%# Most Divisive %>
-          <% if @year_in_review.most_divisive_selection %>
-            <% divisive = @year_in_review.most_divisive_selection %>
-            <div class="bg-white rounded-lg p-4 h-full flex flex-col">
-              <h1 class="text-xl font-semibold">Most divisive film for <%= @year %></h1>
-              <h2 class="text-sm mb-2">The widest variance of ratings</h2>
-              <div class="shadow-md rounded-lg mb-2 p-4 bg-radial-gradient hover:shadow-xl transition-shadow flex items-center gap-4">
-                <% if divisive.film.poster_path.present? %>
-                  <img
-                    src="<%= TMDB.poster_url(divisive.film.poster_path, size: 'w92') %>"
-                    alt="<%= divisive.film.title %> poster"
-                    class="w-12 h-18 object-cover rounded shadow-sm shrink-0"
-                    loading="lazy"
-                  >
-                <% end %>
-                <div>
-                  <h4 class="text-xs uppercase tracking-wide font-light mb-1"><%= divisive.category.name %></h4>
-                  <h2 class="font-medium leading-tight"><%= link_to divisive.film.title, film_path(divisive.film), class: "hover:text-indigo-700 hover:italic" %></h2>
-                  <h3 class="text-xs my-0.5"><%= divisive.film.director %></h3>
-                  <p class="text-xs text-slate-500 bg-indigo-50/85 rounded-full px-2 py-0.5 inline-block">Avg <strong><%= number_with_precision(divisive.average_rating, precision: 1) %></strong> from <%= pluralize(divisive.ratings.all.size, "rating") %></p>
-                </div>
-              </div>
-              <ul class="grid grid-flow-col gap-1 h-24 items-end my-8">
-                <% @year_in_review.most_divisive_histogram.each do |score, count| %>
-                  <li style="--histogramHeight:<%= histogram_height(count, @year_in_review.most_divisive_histogram.values.max) %>" class="group/bar relative bg-linear-to-b from-indigo-500 to-indigo-700 rounded h-(--histogramHeight)" title="<%= histogram_title(score, count) %>">
-                    <span class="absolute top-2 left-0 right-0 text-xs text-white text-center font-semibold opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= count %></span>
-                    <span class="absolute -bottom-6 left-0 right-0 text-xs text-center opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= display_rating(score) %></span>
-                  </li>
-                <% end %>
-              </ul>
-            </div>
-          <% end %>
-        </div>
-      </section>
-    <% end %>
-
-    <%# Fire & Bomb Ratings %>
-    <% if @five_star_ratings.any? || @zero_star_ratings.any? %>
-      <section class="py-12 px-4 bg-white">
-        <div class="max-w-6xl mx-auto grid gap-8 md:grid-cols-2">
-          <div class="bg-white rounded-lg shadow-md p-4 h-full flex flex-col">
-            <h1 class="text-xl font-semibold mb-2 text-center">Number of 🔥 ratings</h1>
-            <p class="text-center bg-radial-gradient rounded-lg px-2 py-4 text-8xl tracking-tighter font-semibold"><%= @year_in_review.five_star_ratings_count %></p>
-            <% if @five_star_ratings.any? %>
-              <details class="mt-4">
-                <summary class="cursor-pointer text-sm font-medium text-indigo-600 hover:text-indigo-800 text-center">Show all 🔥 ratings</summary>
-                <ul class="mt-2 bg-indigo-50 rounded-lg p-4 divide-y divide-indigo-100">
-                  <% @five_star_ratings.each do |rating| %>
-                    <li class="py-2">
-                      <p class="leading-tight"><strong><%= rating.critic.name %></strong> appreciated <%= link_to rating.film.title, film_path(rating.film), class: "font-medium hover:text-indigo-700 hover:italic" %></p>
-                      <% if rating.impression.present? %>
-                        <p class="mt-1 text-sm text-gray-600 italic line-clamp-2">"<%= rating.impression %>"</p>
-                      <% end %>
+                <ul class="grid grid-flow-col gap-1 h-24 items-end my-8">
+                  <% @year_in_review.bombe_moiree_histogram.each do |score, count| %>
+                    <li style="--histogramHeight:<%= histogram_height(count, @year_in_review.bombe_moiree_histogram.values.max) %>" class="group/bar relative bg-linear-to-b from-indigo-500 to-indigo-700 rounded h-(--histogramHeight)" title="<%= histogram_title(score, count) %>">
+                      <span class="absolute top-2 left-0 right-0 text-xs text-white text-center font-semibold opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= count %></span>
+                      <span class="absolute -bottom-6 left-0 right-0 text-xs text-center opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= display_rating(score) %></span>
                     </li>
                   <% end %>
                 </ul>
-              </details>
-            <% else %>
-              <div class="grow flex items-center justify-center mt-4 rounded-lg bg-[repeating-linear-gradient(-45deg,#e0e7ff80_0px,#e0e7ff80_4px,#eef2ff80_4px,#eef2ff80_8px)]">
-                <p class="p-4 font-semibold text-center text-sm leading-tight">No perfect scores</p>
               </div>
             <% end %>
-          </div>
 
-          <div class="bg-white rounded-lg shadow-md p-4 h-full flex flex-col">
-            <h1 class="text-xl font-semibold mb-2 text-center">Number of 💣 ratings</h1>
-            <p class="text-center bg-radial-gradient rounded-lg px-2 py-4 text-8xl tracking-tighter font-semibold"><%= @year_in_review.zero_star_ratings_count %></p>
-            <% if @zero_star_ratings.any? %>
-              <details class="mt-4">
-                <summary class="cursor-pointer text-sm font-medium text-indigo-600 hover:text-indigo-800 text-center">Show all 💣 ratings</summary>
-                <ul class="mt-2 bg-indigo-50 rounded-lg p-4 divide-y divide-indigo-100">
-                  <% @zero_star_ratings.each do |rating| %>
-                    <li class="py-2">
-                      <p class="leading-tight"><strong><%= rating.critic.name %></strong> bombed <%= link_to rating.film.title, film_path(rating.film), class: "font-medium hover:text-indigo-700 hover:italic" %></p>
-                      <% if rating.impression.present? %>
-                        <p class="mt-1 text-sm text-gray-600 italic line-clamp-2">"<%= rating.impression %>"</p>
-                      <% end %>
+            <%# Most Divisive %>
+            <% if @year_in_review.most_divisive_selection %>
+              <% divisive = @year_in_review.most_divisive_selection %>
+              <div class="bg-white rounded-lg p-4 h-full flex flex-col">
+                <h1 class="text-xl font-semibold">Most divisive film for <%= @year %></h1>
+                <h2 class="text-sm mb-2">The widest variance of ratings</h2>
+                <div class="shadow-md rounded-lg mb-2 p-4 bg-radial-gradient hover:shadow-xl transition-shadow flex items-center gap-4">
+                  <% if divisive.film.poster_path.present? %>
+                    <img
+                      src="<%= TMDB.poster_url(divisive.film.poster_path, size: 'w92') %>"
+                      alt="<%= divisive.film.title %> poster"
+                      class="w-12 h-18 object-cover rounded shadow-sm shrink-0"
+                      loading="lazy"
+                    >
+                  <% end %>
+                  <div>
+                    <h4 class="text-xs uppercase tracking-wide font-light mb-1"><%= divisive.category.name %></h4>
+                    <h2 class="font-medium leading-tight"><%= link_to divisive.film.title, film_path(divisive.film), class: "hover:text-indigo-700 hover:italic" %></h2>
+                    <h3 class="text-xs my-0.5"><%= divisive.film.director %></h3>
+                    <p class="text-xs text-slate-500 bg-indigo-50/85 rounded-full px-2 py-0.5 inline-block">Avg <strong><%= number_with_precision(divisive.average_rating, precision: 1) %></strong> from <%= pluralize(divisive.ratings.all.size, "rating") %></p>
+                  </div>
+                </div>
+                <ul class="grid grid-flow-col gap-1 h-24 items-end my-8">
+                  <% @year_in_review.most_divisive_histogram.each do |score, count| %>
+                    <li style="--histogramHeight:<%= histogram_height(count, @year_in_review.most_divisive_histogram.values.max) %>" class="group/bar relative bg-linear-to-b from-indigo-500 to-indigo-700 rounded h-(--histogramHeight)" title="<%= histogram_title(score, count) %>">
+                      <span class="absolute top-2 left-0 right-0 text-xs text-white text-center font-semibold opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= count %></span>
+                      <span class="absolute -bottom-6 left-0 right-0 text-xs text-center opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= display_rating(score) %></span>
                     </li>
                   <% end %>
                 </ul>
-              </details>
-            <% else %>
-              <div class="grow flex items-center justify-center mt-4 rounded-lg bg-[repeating-linear-gradient(-45deg,#e0e7ff80_0px,#e0e7ff80_4px,#eef2ff80_4px,#eef2ff80_8px)]">
-                <p class="p-4 font-semibold text-center text-sm leading-tight">No bombs dropped</p>
               </div>
             <% end %>
           </div>
-        </div>
-      </section>
+        </section>
+      <% end %>
+
+      <%# Fire & Bomb Ratings %>
+      <% if @five_star_ratings.any? || @zero_star_ratings.any? %>
+        <section class="py-12 px-4 bg-white">
+          <div class="max-w-6xl mx-auto grid gap-8 md:grid-cols-2">
+            <div class="bg-white rounded-lg shadow-md p-4 h-full flex flex-col">
+              <h1 class="text-xl font-semibold mb-2 text-center">Number of 🔥 ratings</h1>
+              <p class="text-center bg-radial-gradient rounded-lg px-2 py-4 text-8xl tracking-tighter font-semibold"><%= @year_in_review.five_star_ratings_count %></p>
+              <% if @five_star_ratings.any? %>
+                <details class="mt-4">
+                  <summary class="cursor-pointer text-sm font-medium text-indigo-600 hover:text-indigo-800 text-center">Show all 🔥 ratings</summary>
+                  <ul class="mt-2 bg-indigo-50 rounded-lg p-4 divide-y divide-indigo-100">
+                    <% @five_star_ratings.each do |rating| %>
+                      <li class="py-2">
+                        <p class="leading-tight"><strong><%= rating.critic.name %></strong> appreciated <%= link_to rating.film.title, film_path(rating.film), class: "font-medium hover:text-indigo-700 hover:italic" %></p>
+                        <% if rating.impression.present? %>
+                          <p class="mt-1 text-sm text-gray-600 italic line-clamp-2">"<%= rating.impression %>"</p>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </details>
+              <% else %>
+                <div class="grow flex items-center justify-center mt-4 rounded-lg bg-[repeating-linear-gradient(-45deg,#e0e7ff80_0px,#e0e7ff80_4px,#eef2ff80_4px,#eef2ff80_8px)]">
+                  <p class="p-4 font-semibold text-center text-sm leading-tight">No perfect scores</p>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4 h-full flex flex-col">
+              <h1 class="text-xl font-semibold mb-2 text-center">Number of 💣 ratings</h1>
+              <p class="text-center bg-radial-gradient rounded-lg px-2 py-4 text-8xl tracking-tighter font-semibold"><%= @year_in_review.zero_star_ratings_count %></p>
+              <% if @zero_star_ratings.any? %>
+                <details class="mt-4">
+                  <summary class="cursor-pointer text-sm font-medium text-indigo-600 hover:text-indigo-800 text-center">Show all 💣 ratings</summary>
+                  <ul class="mt-2 bg-indigo-50 rounded-lg p-4 divide-y divide-indigo-100">
+                    <% @zero_star_ratings.each do |rating| %>
+                      <li class="py-2">
+                        <p class="leading-tight"><strong><%= rating.critic.name %></strong> bombed <%= link_to rating.film.title, film_path(rating.film), class: "font-medium hover:text-indigo-700 hover:italic" %></p>
+                        <% if rating.impression.present? %>
+                          <p class="mt-1 text-sm text-gray-600 italic line-clamp-2">"<%= rating.impression %>"</p>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </details>
+              <% else %>
+                <div class="grow flex items-center justify-center mt-4 rounded-lg bg-[repeating-linear-gradient(-45deg,#e0e7ff80_0px,#e0e7ff80_4px,#eef2ff80_4px,#eef2ff80_8px)]">
+                  <p class="p-4 font-semibold text-center text-sm leading-tight">No bombs dropped</p>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </section>
+      <% end %>
     <% end %>
 
     <%# All Festivals from this Year %>
