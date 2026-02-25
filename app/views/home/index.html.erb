@@ -8,7 +8,7 @@
         <span class="inline-block">Moirée</span>
       </h1>
     </div>
-    <div class="absolute bottom-8 left-0 right-0 text-center">
+    <div class="static text-xs text-center md:absolute md:bottom-8 md:left-0 md:right-0 md:text-base">
       <p class="font-medium italic tracking-tight text-indigo-700 bg-white/80 backdrop-blur-sm md:text-xl p-2 md:p-4 inline-block rounded-full px-6">
         Critic ratings from film festivals around the world
       </p>
@@ -91,45 +91,73 @@
           </div>
         </div>
       </section>
-    <% end %>
+    <% else %>
+      <%# Recent Festival Spotlight %>
+      <% if @recent_festival %>
+        <section class="py-12 px-4 bg-slate-50">
+          <div class="max-w-6xl mx-auto">
+            <header class="mb-8">
+              <p class="text-xs uppercase tracking-wider text-indigo-500 mb-2">Most Recent</p>
+              <h2 class="font-black text-3xl md:text-4xl uppercase text-indigo-900">
+                <%= @recent_festival.code %>
+              </h2>
+              <p class="text-gray-600 mt-1">
+                <time datetime="<%= @recent_festival.end_date %>">
+                  <%= @recent_festival.start_date.strftime("%B %d") %> – <%= @recent_festival.end_date.strftime("%B %d, %Y") %>
+                </time>
+              </p>
+            </header>
 
-    <%# Upcoming Festivals %>
-    <% if @upcoming.any? %>
-      <section class="py-12 px-4 bg-slate-50">
-        <div class="max-w-6xl mx-auto">
-          <header class="mb-8">
-            <h2 class="font-black text-3xl md:text-4xl uppercase text-indigo-900 mb-2">Coming Soon</h2>
-            <p class="text-gray-600">Upcoming festivals we'll be covering</p>
-          </header>
+            <div class="grid gap-8 md:grid-cols-3">
+              <%# Stats %>
+              <div class="bg-white rounded-lg p-6 shadow-sm border border-indigo-100 bg-radial-gradient">
+                <h3 class="font-semibold text-indigo-900 mb-4">Festival Stats</h3>
+                <dl class="space-y-3">
+                  <div class="flex justify-between items-center">
+                    <dt class="text-gray-600">Critics</dt>
+                    <dd class="font-bold text-indigo-700 text-xl"><%= @recent_festival.critics.count %></dd>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <dt class="text-gray-600">Films</dt>
+                    <dd class="font-bold text-indigo-700 text-xl"><%= @recent_festival.films.count %></dd>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <dt class="text-gray-600">Ratings</dt>
+                    <dd class="font-bold text-indigo-700 text-xl"><%= @recent_festival.ratings.count %></dd>
+                  </div>
+                </dl>
+                <%= link_to edition_summary_path(@recent_festival), class: "mt-6 block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition-colors" do %>
+                  View Full Summary →
+                <% end %>
+              </div>
 
-          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <% @upcoming.each do |edition| %>
-              <%= link_to edition_path(edition), class: "group block" do %>
-                <article class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow border border-indigo-100 bg-radial-gradient h-full">
-                  <header class="mb-4">
-                    <p class="text-xs uppercase tracking-wider text-indigo-500 mb-1"><%= edition.name %></p>
-                    <h3 class="font-bold text-xl text-indigo-900 group-hover:text-indigo-700 transition-colors"><%= edition.code %></h3>
-                    <time class="text-sm text-gray-600 block mt-1">
-                      <%= edition.start_date.strftime("%b %d") %> – <%= edition.end_date.strftime("%b %d, %Y") %>
-                    </time>
-                  </header>
-
-                  <% days_until = (edition.start_date - Date.current).to_i %>
-                  <p class="text-sm font-medium text-indigo-600">
-                    <% if days_until == 0 %>
-                      Starts today!
-                    <% elsif days_until == 1 %>
-                      Starts tomorrow
-                    <% else %>
-                      <%= days_until %> days away
+              <%# Top rated films from this festival %>
+              <div class="md:col-span-2">
+                <h3 class="font-semibold text-indigo-900 mb-4">Top Rated at <%= @recent_festival.short_name %></h3>
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <% @recent_festival.selections.includes(:film).order(average_rating: :desc).limit(4).each do |selection| %>
+                    <%= link_to film_path(selection.film), class: "flex items-center gap-4 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow group" do %>
+                      <% if selection.film.poster_path.present? %>
+                        <img
+                          src="<%= TMDB.poster_url(selection.film.poster_path, size: 'w92') %>"
+                          alt=""
+                          class="w-12 h-18 object-cover rounded shadow-sm hidden sm:block"
+                          loading="lazy"
+                        >
+                      <% end %>
+                      <div class="grow min-w-0">
+                        <h4 class="font-medium text-indigo-900 group-hover:text-indigo-700 truncate"><%= selection.film.title %></h4>
+                        <p class="text-xs text-gray-500 truncate"><%= selection.film.director %></p>
+                      </div>
+                      <span class="font-bold text-lg text-indigo-700"><%= number_with_precision(selection.average_rating, precision: 1) %></span>
                     <% end %>
-                  </p>
-                </article>
-              <% end %>
-            <% end %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      <% end %>
     <% end %>
 
     <%# Latest Podcast Episode %>
@@ -180,6 +208,45 @@
       </section>
     <% end %>
 
+    <%# Upcoming Festivals %>
+    <% if @upcoming.any? %>
+      <section class="py-12 px-4 bg-slate-50">
+        <div class="max-w-6xl mx-auto">
+          <header class="mb-8">
+            <h2 class="font-black text-3xl md:text-4xl uppercase text-indigo-900 mb-2">Coming Soon</h2>
+            <p class="text-gray-600">Upcoming festivals we'll be covering</p>
+          </header>
+
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <% @upcoming.each do |edition| %>
+              <%= link_to edition_path(edition), class: "group block" do %>
+                <article class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow border border-indigo-100 bg-radial-gradient h-full">
+                  <header class="mb-4">
+                    <p class="text-xs uppercase tracking-wider text-indigo-500 mb-1"><%= edition.name %></p>
+                    <h3 class="font-bold text-xl text-indigo-900 group-hover:text-indigo-700 transition-colors"><%= edition.code %></h3>
+                    <time class="text-sm text-gray-600 block mt-1">
+                      <%= edition.start_date.strftime("%b %d") %> – <%= edition.end_date.strftime("%b %d, %Y") %>
+                    </time>
+                  </header>
+
+                  <% days_until = (edition.start_date - Date.current).to_i %>
+                  <p class="text-sm font-medium text-indigo-600">
+                    <% if days_until == 0 %>
+                      Starts today!
+                    <% elsif days_until == 1 %>
+                      Starts tomorrow
+                    <% else %>
+                      <%= days_until %> days away
+                    <% end %>
+                  </p>
+                </article>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </section>
+    <% end %>
+
     <%# Top Films of the Year - Magazine Style %>
     <% if @top_films.any? %>
       <section class="py-12 px-4 bg-radial-gradient-center">
@@ -196,73 +263,6 @@
             <% @top_films.drop(1).each_with_index do |selection, index| %>
               <%= render "films/top_film_card", selection: selection, rank: index + 2 %>
             <% end %>
-          </div>
-        </div>
-      </section>
-    <% end %>
-
-    <%# Recent Festival Spotlight %>
-    <% if @recent_festival %>
-      <section class="py-12 px-4 bg-slate-50">
-        <div class="max-w-6xl mx-auto">
-          <header class="mb-8">
-            <p class="text-xs uppercase tracking-wider text-indigo-500 mb-2">Most Recent</p>
-            <h2 class="font-black text-3xl md:text-4xl uppercase text-indigo-900">
-              <%= @recent_festival.code %>
-            </h2>
-            <p class="text-gray-600 mt-1">
-              <time datetime="<%= @recent_festival.end_date %>">
-                <%= @recent_festival.start_date.strftime("%B %d") %> – <%= @recent_festival.end_date.strftime("%B %d, %Y") %>
-              </time>
-            </p>
-          </header>
-
-          <div class="grid gap-8 md:grid-cols-3">
-            <%# Stats %>
-            <div class="bg-white rounded-lg p-6 shadow-sm border border-indigo-100 bg-radial-gradient">
-              <h3 class="font-semibold text-indigo-900 mb-4">Festival Stats</h3>
-              <dl class="space-y-3">
-                <div class="flex justify-between items-center">
-                  <dt class="text-gray-600">Critics</dt>
-                  <dd class="font-bold text-indigo-700 text-xl"><%= @recent_festival.critics.count %></dd>
-                </div>
-                <div class="flex justify-between items-center">
-                  <dt class="text-gray-600">Films</dt>
-                  <dd class="font-bold text-indigo-700 text-xl"><%= @recent_festival.films.count %></dd>
-                </div>
-                <div class="flex justify-between items-center">
-                  <dt class="text-gray-600">Ratings</dt>
-                  <dd class="font-bold text-indigo-700 text-xl"><%= @recent_festival.ratings.count %></dd>
-                </div>
-              </dl>
-              <%= link_to edition_summary_path(@recent_festival), class: "mt-6 block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition-colors" do %>
-                View Full Summary →
-              <% end %>
-            </div>
-
-            <%# Top rated films from this festival %>
-            <div class="md:col-span-2">
-              <h3 class="font-semibold text-indigo-900 mb-4">Top Rated at <%= @recent_festival.short_name %></h3>
-              <div class="grid gap-3 sm:grid-cols-2">
-                <% @recent_festival.selections.includes(:film).order(average_rating: :desc).limit(4).each do |selection| %>
-                  <%= link_to film_path(selection.film), class: "flex items-center gap-4 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow group" do %>
-                    <% if selection.film.poster_path.present? %>
-                      <img
-                        src="<%= TMDB.poster_url(selection.film.poster_path, size: 'w92') %>"
-                        alt=""
-                        class="w-12 h-18 object-cover rounded shadow-sm hidden sm:block"
-                        loading="lazy"
-                      >
-                    <% end %>
-                    <div class="grow min-w-0">
-                      <h4 class="font-medium text-indigo-900 group-hover:text-indigo-700 truncate"><%= selection.film.title %></h4>
-                      <p class="text-xs text-gray-500 truncate"><%= selection.film.director %></p>
-                    </div>
-                    <span class="font-bold text-lg text-indigo-700"><%= number_with_precision(selection.average_rating, precision: 1) %></span>
-                  <% end %>
-                <% end %>
-              </div>
-            </div>
           </div>
         </div>
       </section>
