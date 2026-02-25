@@ -3,6 +3,9 @@
 class YearsController < ApplicationController
   def show
     @year = params[:id].to_i
+
+    return head(:not_found) unless Edition.within(@year).exists?
+
     @year_in_review = YearInReview.for(@year)
 
     if stale?(@year_in_review)
