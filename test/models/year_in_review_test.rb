@@ -109,10 +109,18 @@ class YearInReviewTest < ActiveSupport::TestCase
 
     # Existing ratings on base selection: base critic (3.5), without_publication (2.5) = 2 ratings
     # Add two more ratings on the SECOND selection to hit the >=4 threshold across editions
-    Rating.create!(critic: critics(:without_publication), selection: second_selection, score: 4.0,
-      skip_cache_average_ratings_callback: true)
-    Rating.create!(critic: critics(:without_ratings), selection: second_selection, score: 5.0,
-      skip_cache_average_ratings_callback: true)
+    Rating.create!(
+      critic: critics(:without_publication),
+      selection: second_selection,
+      score: 4.0,
+      skip_cache_average_ratings_callback: true,
+    )
+    Rating.create!(
+      critic: critics(:without_ratings),
+      selection: second_selection,
+      score: 5.0,
+      skip_cache_average_ratings_callback: true,
+    )
 
     year_in_review = year_in_reviews(:base)
     year_in_review.generate!
