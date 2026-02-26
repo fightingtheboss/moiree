@@ -1,5 +1,7 @@
 <%# Featured First Film - Large Hero Card %>
 <% film = selection.film %>
+<% display_average = local_assigns.fetch(:combined_average_rating, selection.average_rating) %>
+<% display_count = local_assigns.fetch(:combined_ratings_count, selection.ratings.size) %>
 <article class="md:col-span-2 lg:col-span-1 lg:row-span-2 bg-indigo-900 rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-shadow relative">
   <%= link_to film_path(film), class: "block h-full" do %>
     <%# Background Title Typography %>
@@ -45,7 +47,7 @@
           <p class="text-indigo-300 text-sm mt-1">
             <%= film.countries.join(", ") %> • <%= film.year %>
           </p>
-          <p class="text-sm text-indigo-300 mt-2 bg-white/15 rounded-full px-3 py-0.5 inline-block">Avg <strong class="text-white"><%= number_with_precision(selection.average_rating, precision: 1) %></strong> from <%= pluralize(selection.ratings.size, "rating") %></p>
+          <p class="text-sm text-indigo-300 mt-2 bg-white/15 rounded-full px-3 py-0.5 inline-block">Avg <strong class="text-white"><%= number_with_precision(display_average, precision: 1) %></strong> from <%= pluralize(display_count, "rating") %></p>
         </header>
 
         <p class="text-indigo-300 italic mt-3"><%= film.summary %></p>

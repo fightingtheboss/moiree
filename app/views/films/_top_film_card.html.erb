@@ -1,5 +1,7 @@
 <%# Regular Film Card %>
 <% film = selection.film %>
+<% display_average = local_assigns.fetch(:combined_average_rating, selection.average_rating) %>
+<% display_count = local_assigns.fetch(:combined_ratings_count, selection.ratings.size) %>
 <article class="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-shadow">
   <%= link_to film_path(film), class: "block h-full" do %>
     <%# Film Poster %>
@@ -33,7 +35,7 @@
         <p class="text-xs text-gray-500 mt-1">
           <%= film.countries.join(", ") %> • <%= film.year %>
         </p>
-        <p class="text-xs text-slate-500 mt-2 bg-indigo-50/85 rounded-full px-2 py-0.5 inline-block">Avg <strong><%= number_with_precision(selection.average_rating, precision: 1) %></strong> from <%= pluralize(selection.ratings.size, "rating") %></p>
+        <p class="text-xs text-slate-500 mt-2 bg-indigo-50/85 rounded-full px-2 py-0.5 inline-block">Avg <strong><%= number_with_precision(display_average, precision: 1) %></strong> from <%= pluralize(display_count, "rating") %></p>
       </header>
 
       <% if selection.featured_rating&.impression.present? %>

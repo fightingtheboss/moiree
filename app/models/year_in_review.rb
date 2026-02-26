@@ -91,9 +91,13 @@ class YearInReview < ApplicationRecord
     self
   end
 
-  # Eager-load top selections with their associations for display
+  # Returns YearInReviewTopSelection join records with eager-loaded associations.
+  # Each record carries combined_average_rating and combined_ratings_count
+  # aggregated across all editions in the year.
   def top_selections_with_includes
-    top_selections.includes(:film, ratings: :critic)
+    year_in_review_top_selections
+      .includes(selection: [:film, { ratings: :critic }])
+      .order(:position)
   end
 
   # Histogram data for the bombe moirée selection
@@ -129,25 +133,36 @@ class YearInReview < ApplicationRecord
   private
 
   def assign_top_selections!(edition_ids)
-    # Best selection per film (highest average_rating), requiring ≥4 ratings
-    # Filters by film release year rather than edition year
-    best_selection_ids = Selection.joins(:ratings, :film)
-      .where(edition_id: edition_ids)
+    # Aggregate ratings across ALL editions in the year, per film.
+    # Requires ≥4 total ratings across editions. Ranks by combined average.
+    film_aggregates = Rating
+      .joins(selection: :film)
+      .where(selections: { edition_id: edition_ids })
       .where(films: { year: year })
-      .group("selections.id")
+      .group("films.id")
       .having("COUNT(ratings.id) >= 4")
-      .select("selections.id, selections.film_id, selections.average_rating")
-      .then do |selections|
-        selections.group_by(&:film_id).map { |_, sels| sels.max_by(&:average_rating).id }
-      end
-
-    top = Selection.where(id: best_selection_ids)
-      .order(average_rating: :desc)
+      .order("AVG(ratings.score) DESC")
       .limit(5)
+      .pluck(Arel.sql("films.id, AVG(ratings.score), COUNT(ratings.id)"))
 
+    # For each top film, pick a representative selection (the one with the most ratings)
+    # to use for featured_rating, poster, etc.
     year_in_review_top_selections.destroy_all
-    top.each_with_index do |selection, index|
-      year_in_review_top_selections.create!(selection: selection, position: index + 1)
+
+    film_aggregates.each_with_index do |(film_id, avg_rating, ratings_count), index|
+      representative = Selection
+        .joins(:ratings)
+        .where(edition_id: edition_ids, film_id: film_id)
+        .group("selections.id")
+        .order("COUNT(ratings.id) DESC")
+        .first
+
+      year_in_review_top_selections.create!(
+        selection: representative,
+        position: index + 1,
+        combined_average_rating: avg_rating,
+        combined_ratings_count: ratings_count,
+      )
     end
   end
 
