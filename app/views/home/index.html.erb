@@ -135,7 +135,7 @@
               <div class="md:col-span-2">
                 <h3 class="font-semibold text-indigo-900 mb-4">Top Rated at <%= @recent_festival.short_name %></h3>
                 <div class="grid gap-3 sm:grid-cols-2">
-                  <% @recent_festival.selections.includes(:film).order(average_rating: :desc).limit(4).each do |selection| %>
+                  <% @recent_top_selections.each do |selection| %>
                     <%= link_to film_path(selection.film), class: "flex items-center gap-4 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow group" do %>
                       <% if selection.film.poster_path.present? %>
                         <img
@@ -149,7 +149,10 @@
                         <h4 class="font-medium text-indigo-900 group-hover:text-indigo-700 truncate"><%= selection.film.title %></h4>
                         <p class="text-xs text-gray-500 truncate"><%= selection.film.director %></p>
                       </div>
-                      <span class="font-bold text-lg text-indigo-700"><%= number_with_precision(selection.average_rating, precision: 1) %></span>
+                      <div class="shrink-0 text-center">
+                        <span class="font-bold text-lg text-indigo-700 block"><%= number_with_precision(selection.average_rating, precision: 1) %></span>
+                        <p class="text-xs text-slate-500 mt-1.5 bg-indigo-50/85 rounded-full px-2 py-0.5"><%= pluralize(selection.ratings_total, "rating") %></p>
+                      </div>
                     <% end %>
                   <% end %>
                 </div>
