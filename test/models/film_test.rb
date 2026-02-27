@@ -61,7 +61,7 @@ class FilmTest < ActiveSupport::TestCase
 
     film.cache_overall_average_rating
 
-    assert_equal 3.0, film.overall_average_rating
+    assert_equal 2.125, film.overall_average_rating
   end
 
   test "#search with no query returns all films" do

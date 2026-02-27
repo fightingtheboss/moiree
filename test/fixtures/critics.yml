@@ -16,3 +16,15 @@ without_ratings:
   last_name: Vishnevetsky
   publication: The A.V. Club
   country: US
+
+frequent_rater:
+  first_name: Ava
+  last_name: DuVernay
+  publication: Sight and Sound
+  country: US
+
+contrarian:
+  first_name: Pauline
+  last_name: Kael
+  publication: The New Yorker
+  country: US

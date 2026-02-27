@@ -4,8 +4,10 @@ base:
   edition: base
   film: base
   category: base
+  average_rating: 3.5
 
 with_original_title:
   edition: base
   film: with_original_title
   category: midnight
+  average_rating: 4.5

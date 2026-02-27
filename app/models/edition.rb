@@ -2,6 +2,7 @@
 
 class Edition < ApplicationRecord
   include FriendlyId
+  include Summarizable
 
   belongs_to :festival
 

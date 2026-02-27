@@ -40,6 +40,6 @@ class CategoryTest < ActiveSupport::TestCase
   test "#overall_average_rating should return the average Rating of all Films in the Category" do
     category = categories(:base)
 
-    assert_equal 3.0, category.overall_average_rating
+    assert_equal 2.125, category.overall_average_rating
   end
 end

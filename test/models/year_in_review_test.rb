@@ -107,8 +107,9 @@ class YearInReviewTest < ActiveSupport::TestCase
     Attendance.create!(critic: critics(:without_publication), edition: second_edition)
     Attendance.create!(critic: critics(:without_ratings), edition: second_edition)
 
-    # Existing ratings on base selection: base critic (3.5), without_publication (2.5) = 2 ratings
-    # Add two more ratings on the SECOND selection to hit the >=4 threshold across editions
+    # Existing ratings on base selection: base (3.5), without_publication (2.5),
+    #   frequent_rater (1.0), contrarian (1.5) = 4 ratings
+    # Add two more ratings on the SECOND selection for cross-edition aggregation
     Rating.create!(
       critic: critics(:without_publication),
       selection: second_selection,
@@ -129,9 +130,9 @@ class YearInReviewTest < ActiveSupport::TestCase
     top_for_film = top.find { |ts| ts.selection.film_id == film.id }
 
     assert_not_nil(top_for_film, "Film should appear in top selections via cross-edition aggregation")
-    # Total: 4 ratings (3.5 + 2.5 + 4.0 + 5.0) = 15.0 / 4 = 3.75
-    assert_equal(4, top_for_film.combined_ratings_count)
-    assert_in_delta(3.75, top_for_film.combined_average_rating.to_f, 0.01)
+    # Total: 6 ratings (3.5 + 2.5 + 1.0 + 1.5 + 4.0 + 5.0) = 17.5 / 6 ≈ 2.917
+    assert_equal(6, top_for_film.combined_ratings_count)
+    assert_in_delta(2.917, top_for_film.combined_average_rating.to_f, 0.01)
   end
 
   test "has many top_selections through year_in_review_top_selections" do
@@ -183,5 +184,63 @@ class YearInReviewTest < ActiveSupport::TestCase
     assert_kind_of(YearInReview, year_in_review)
     assert_equal(Date.current.year, year_in_review.year)
     assert_not_nil(year_in_review.generated_at)
+  end
+
+  test "includes Summarizable concern" do
+    assert_includes(YearInReview.ancestors, Summarizable)
+  end
+
+  test "#summary_selections returns selections across all editions in the year" do
+    year_in_review = year_in_reviews(:base)
+
+    edition_ids = Edition.within(year_in_review.year).pluck(:id)
+    expected = Selection.where(edition_id: edition_ids).order(:id).to_a
+
+    assert_equal(expected, year_in_review.summary_selections.order(:id).to_a)
+  end
+
+  test "#generate! uses Summarizable methods for bombe_moiree and most_divisive" do
+    year_in_review = year_in_reviews(:base)
+    year_in_review.generate!
+
+    # Fixtures have 4 ratings per selection, meeting the threshold
+    assert_equal(
+      selections(:base),
+      year_in_review.bombe_moiree_selection,
+      "Base selection (avg 3.5) should be bombe moirée",
+    )
+    assert_equal(
+      selections(:with_original_title),
+      year_in_review.most_divisive_selection,
+      "With original title (scores 4.5, 0.0, 5.0, 1.0) should be most divisive",
+    )
+  end
+
+  test "#five_star_ratings delegates to Summarizable" do
+    year_in_review = year_in_reviews(:base)
+
+    assert_equal(1, year_in_review.five_star_ratings.size)
+    assert(year_in_review.five_star_ratings.all? { |r| r.score == 5.0 })
+  end
+
+  test "#zero_star_ratings delegates to Summarizable" do
+    year_in_review = year_in_reviews(:base)
+
+    assert_equal(1, year_in_review.zero_star_ratings.size)
+    assert(year_in_review.zero_star_ratings.all? { |r| r.score == 0.0 })
+  end
+
+  test "#bombe_moiree_histogram uses cached bombe_moiree_selection" do
+    year_in_review = year_in_reviews(:base)
+    year_in_review.update!(bombe_moiree_selection: nil)
+
+    assert_equal({}, year_in_review.bombe_moiree_histogram)
+  end
+
+  test "#most_divisive_histogram uses cached most_divisive_selection" do
+    year_in_review = year_in_reviews(:base)
+    year_in_review.update!(most_divisive_selection: nil)
+
+    assert_equal({}, year_in_review.most_divisive_histogram)
   end
 end

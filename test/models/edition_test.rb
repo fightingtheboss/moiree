@@ -104,4 +104,14 @@ class EditionTest < ActiveSupport::TestCase
 
     assert edition.ratings.include?(rating)
   end
+
+  test "includes Summarizable concern" do
+    assert_includes(Edition.ancestors, Summarizable)
+  end
+
+  test "#summary_selections returns the edition's selections" do
+    edition = editions(:base)
+
+    assert_equal(edition.selections.order(:id).to_a, edition.summary_selections.order(:id).to_a)
+  end
 end
