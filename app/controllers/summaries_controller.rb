@@ -15,14 +15,14 @@ class SummariesController < ApplicationController
       @selections_for_standalone = @edition.selections.includes(:category, :film, ratings: :critic)
         .where(category: { standalone: true })
         .group("selections.id")
-        .having("COUNT(ratings.id) >= ?", Summarizable::MIN_RATINGS_FOR_SUMMARY)
+        .having("COUNT(ratings.id) >= ?", @edition.min_ratings_for_summary)
         .order(average_rating: :desc)
         .group_by(&:category)
 
       @selections_for_others = @edition.selections.includes(:category, :film, ratings: :critic)
         .where(category: { standalone: false })
         .group("selections.id")
-        .having("COUNT(ratings.id) >= ?", Summarizable::MIN_RATINGS_FOR_SUMMARY)
+        .having("COUNT(ratings.id) >= ?", @edition.min_ratings_for_summary)
         .order(average_rating: :desc)
 
       @bombe_moiree = @edition.bombe_moiree

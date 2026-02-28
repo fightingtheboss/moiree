@@ -3,7 +3,19 @@
 module Summarizable
   extend ActiveSupport::Concern
 
-  MIN_RATINGS_FOR_SUMMARY = 4
+  MIN_RATINGS_FLOOR = 4
+
+  # Includers must implement this to define the critic pool size.
+  # For Edition, this is the number of attending critics.
+  # For YearInReview, this is the distinct critics across all editions in the year.
+  def summary_critics_count
+    raise NotImplementedError, "#{self.class} must implement #summary_critics_count"
+  end
+
+  # Dynamic threshold: 1/3 of the critic pool, with a floor of MIN_RATINGS_FLOOR.
+  def min_ratings_for_summary
+    [(summary_critics_count / 3.0).ceil, MIN_RATINGS_FLOOR].max
+  end
 
   # Override in models without a direct `selections` association.
   # Must return an ActiveRecord::Relation of Selection.
@@ -16,7 +28,7 @@ module Summarizable
     summary_selections
       .joins(:ratings)
       .group("selections.id")
-      .having("COUNT(ratings.id) >= ?", MIN_RATINGS_FOR_SUMMARY)
+      .having("COUNT(ratings.id) >= ?", min_ratings_for_summary)
       .order(average_rating: :asc)
       .first
   end
@@ -27,7 +39,7 @@ module Summarizable
       .includes(:ratings)
       .where.not(ratings: { id: nil })
       .to_a
-      .select { |s| s.ratings.size >= MIN_RATINGS_FOR_SUMMARY }
+      .select { |s| s.ratings.size >= min_ratings_for_summary }
       .max_by(&:ratings_standard_deviation)
   end
 

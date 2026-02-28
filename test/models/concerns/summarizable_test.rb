@@ -124,10 +124,45 @@ class SummarizableTest < ActiveSupport::TestCase
     assert_empty(editions(:with_no_films).zero_star_ratings)
   end
 
-  # --- MIN_RATINGS_FOR_SUMMARY constant ---
+  # --- summary_critics_count ---
 
-  test "MIN_RATINGS_FOR_SUMMARY is accessible as a constant" do
-    assert_equal(4, Summarizable::MIN_RATINGS_FOR_SUMMARY)
+  test "#summary_critics_count returns the number of attending critics for an Edition" do
+    assert_equal(@edition.critics.count, @edition.summary_critics_count)
+  end
+
+  # --- min_ratings_for_summary ---
+
+  test "#min_ratings_for_summary returns the floor when critic pool is small" do
+    # 1 attending critic → ceil(1/3) = 1 → max(1, 4) = 4
+    assert_equal(4, @edition.min_ratings_for_summary)
+  end
+
+  test "#min_ratings_for_summary returns 1/3 of critic pool when above floor" do
+    edition = editions(:base)
+
+    # Add 14 more critics (15 total attending) → ceil(15/3) = 5 > 4
+    14.times do |i|
+      critic = Critic.create!(first_name: "Critic#{i}", last_name: "Test", country: "US")
+      Attendance.create!(critic: critic, edition: edition)
+    end
+
+    assert_equal(5, edition.min_ratings_for_summary)
+  end
+
+  test "#min_ratings_for_summary returns ceil of 1/3 (rounds up)" do
+    edition = editions(:base)
+
+    # Add 16 more critics (17 total) → ceil(17/3) = ceil(5.67) = 6
+    16.times do |i|
+      critic = Critic.create!(first_name: "Ceil#{i}", last_name: "Test", country: "US")
+      Attendance.create!(critic: critic, edition: edition)
+    end
+
+    assert_equal(6, edition.min_ratings_for_summary)
+  end
+
+  test "MIN_RATINGS_FLOOR is 4" do
+    assert_equal(4, Summarizable::MIN_RATINGS_FLOOR)
   end
 
   # --- summary_selections default ---

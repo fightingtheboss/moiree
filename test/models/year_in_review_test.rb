@@ -203,7 +203,8 @@ class YearInReviewTest < ActiveSupport::TestCase
     year_in_review = year_in_reviews(:base)
     year_in_review.generate!
 
-    # Fixtures have 4 ratings per selection, meeting the threshold
+    # Fixtures have 4 ratings per selection, meeting the dynamic threshold
+    # (1 attending critic → ceil(1/3) = 1 → floor of 4 applies)
     assert_equal(
       selections(:base),
       year_in_review.bombe_moiree_selection,
@@ -242,5 +243,35 @@ class YearInReviewTest < ActiveSupport::TestCase
     year_in_review.update!(most_divisive_selection: nil)
 
     assert_equal({}, year_in_review.most_divisive_histogram)
+  end
+
+  test "#summary_critics_count returns distinct attending critics across all editions in the year" do
+    year_in_review = year_in_reviews(:base)
+
+    expected = Attendance.where(
+      edition_id: Edition.within(year_in_review.year).select(:id),
+    ).distinct.count(:critic_id)
+
+    assert_equal(expected, year_in_review.summary_critics_count)
+  end
+
+  test "#min_ratings_for_summary uses floor of 4 for small critic pools" do
+    year_in_review = year_in_reviews(:base)
+
+    # 1 attending critic → ceil(1/3) = 1 → max(1, 4) = 4
+    assert_equal(4, year_in_review.min_ratings_for_summary)
+  end
+
+  test "#min_ratings_for_summary scales to 1/3 of critic pool when above floor" do
+    year_in_review = year_in_reviews(:base)
+    edition = editions(:base)
+
+    # Add 17 more critics (18 total attending) → ceil(18/3) = 6 > 4
+    17.times do |i|
+      critic = Critic.create!(first_name: "YIR#{i}", last_name: "Test", country: "US")
+      Attendance.create!(critic: critic, edition: edition)
+    end
+
+    assert_equal(6, year_in_review.min_ratings_for_summary)
   end
 end

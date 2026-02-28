@@ -94,6 +94,10 @@ class YearInReview < ApplicationRecord
     build_histogram(most_divisive_selection)
   end
 
+  def summary_critics_count
+    Attendance.where(edition_id: Edition.within(year).select(:id)).distinct.count(:critic_id)
+  end
+
   # Scope summary queries to all editions in this year
   def summary_selections
     Selection.where(edition_id: Edition.within(year).select(:id))
@@ -103,13 +107,13 @@ class YearInReview < ApplicationRecord
 
   def assign_top_selections!(edition_ids)
     # Aggregate ratings across ALL editions in the year, per film.
-    # Requires ≥4 total ratings across editions. Ranks by combined average.
+    # Requires ≥1/3 of the critic pool (min 4). Ranks by combined average.
     film_aggregates = Rating
       .joins(selection: :film)
       .where(selections: { edition_id: edition_ids })
       .where(films: { year: year })
       .group("films.id")
-      .having("COUNT(ratings.id) >= ?", MIN_RATINGS_FOR_SUMMARY)
+      .having("COUNT(ratings.id) >= ?", min_ratings_for_summary)
       .order("AVG(ratings.score) DESC")
       .limit(5)
       .pluck(Arel.sql("films.id, AVG(ratings.score), COUNT(ratings.id)"))

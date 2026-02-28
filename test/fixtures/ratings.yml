@@ -15,7 +15,7 @@ without_publication:
   selection: base
   score: 2.5
 
-# Additional ratings to meet MIN_RATINGS_FOR_SUMMARY (4) threshold.
+# Additional ratings to meet min_ratings_for_summary threshold (floor of 4).
 # All use created_at in the past so DailySummaryTweet tests (last 24h filter) are unaffected.
 # Critics below do NOT have attendances, so cache_average_rating (which scopes to attending critics) is unaffected.
 
