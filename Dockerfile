@@ -2,9 +2,7 @@
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=3.4.2
-FROM ruby:$RUBY_VERSION-slim as base
-
-LABEL fly_launch_runtime="rails"
+FROM ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
 WORKDIR /rails
@@ -21,7 +19,7 @@ RUN gem update --system --no-document && \
 
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
@@ -47,37 +45,28 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 # Final stage for app image
 FROM base
 
-# Install, configure litefs
-COPY --from=flyio/litefs:0.5 /usr/local/bin/litefs /usr/local/bin/litefs
-COPY --link config/litefs.yml /etc/litefs.yml
-
 # Install packages needed for deployment
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y ca-certificates curl fuse3 libsqlite3-0 sudo libjemalloc2 libvips && \
+    apt-get install --no-install-recommends -y ca-certificates curl libsqlite3-0 libjemalloc2 libvips && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
+# Install the litestream binary via the gem
+RUN bundle exec rails litestream:install
+
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    mkdir /data /litefs && \
-    chown -R 1000:1000 db log storage tmp /data /litefs
+    chown -R 1000:1000 db log storage tmp
 
-# Authorize rails user to launch litefs
-COPY <<-"EOF" /etc/sudoers.d/rails
-rails ALL=(root) /usr/local/bin/litefs
-EOF
-
-# Deployment options
-ENV DATABASE_URL="sqlite3:///litefs/production.sqlite3" \
-    PORT="3001"
+USER 1000:1000
 
 # Entrypoint prepares the database.
-ENTRYPOINT ["litefs", "mount"]
+ENTRYPOINT ["./bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-VOLUME /data
+CMD ["bundle", "exec", "thrust", "./bin/rails", "server"]

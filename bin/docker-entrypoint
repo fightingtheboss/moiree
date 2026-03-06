@@ -1,10 +1,19 @@
 #!/bin/bash -e
 
-# mount litefs
-sudo -E litefs mount &
+# Restore databases from S3 if they don't exist yet (first deploy / fresh server)
+if [ ! -f storage/production.sqlite3 ]; then
+  echo "Restoring databases from Litestream replicas..."
+  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production.sqlite3 storage/production.sqlite3
+  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production_cache.sqlite3 storage/production_cache.sqlite3
+  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production_queue.sqlite3 storage/production_queue.sqlite3
+  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production_cable.sqlite3 storage/production_cable.sqlite3
+fi
+
+# Start Litestream replication in the background
+bundle exec rails litestream:replicate &
 
 # If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ] && [ "$FLY_REGION" == "$PRIMARY_REGION" ]; then
+if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   ./bin/rails db:prepare
 fi
 
