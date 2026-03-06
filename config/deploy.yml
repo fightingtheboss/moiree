@@ -22,7 +22,7 @@ env:
   clear:
     RAILS_ENV: production
     SOLID_QUEUE_IN_PUMA: true
-    WEB_CONCURRENCY: 2          # CX23 has 2 vCPUs
+    WEB_CONCURRENCY: 3          # CX33 has 4 vCPUs
     RAILS_LOG_TO_STDOUT: true
   secret:
     - RAILS_MASTER_KEY

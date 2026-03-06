@@ -5,17 +5,18 @@ Rails 8.0.2 film festival rating aggregation app. Public site + admin interface 
 
 **Stack:** Ruby 3.4.2 (REQUIRED) | Rails 8.0.2 | SQLite3 | Turbo + Tailwind v4 | Solid Queue (background jobs)
 **System Deps:** libvips, libvips-dev, pkg-config, build-essential (for image_processing gem)
-**Production:** Fly.io with LiteFS (SQLite replication), Solid Queue runs in Puma (`SOLID_QUEUE_IN_PUMA=true`)
+**Production:** Hetzner CX33 via Kamal, Litestream (SQLite replication to S3), Solid Queue runs in Puma (`SOLID_QUEUE_IN_PUMA=true`)
 
 ## Key Structure
 ```
 app/controllers/admin/  → Admin namespace (all admin features)
 app/models/            → Film, Edition, Rating, Critic, User, etc.
-app/jobs/              → BackupDbToS3Job, DailySummaryTweetJob
+app/jobs/              → DailySummaryTweetJob
 config/routes.rb       → Admin routes under `namespace :admin`
 config/puma.rb         → Solid Queue plugin config
-config/litefs.yml      → Production SQLite replication
-config/recurring.yml   → Scheduled jobs (midnight backup, 11:50pm tweet)
+config/litestream.yml  → Litestream replication to S3
+config/deploy.yml      → Kamal deployment config
+config/recurring.yml   → Scheduled jobs (11:50pm tweet)
 db/schema.rb           → Main schema (+ queue/cache/cable schemas)
 test/                  → Minitest (unit/integration/system with Capybara/Selenium)
 ```
@@ -92,21 +93,21 @@ bundle exec bootsnap precompile --gemfile && bundle exec bootsnap precompile app
 4. `bin/rails test:prepare` (build assets for tests)
 5. `bin/rails test`
 
-**Deploy (.github/workflows/deploy.yml)** - `main` branch:
+**Deploy** - `main` branch:
 1. Run CI workflow
-2. `flyctl deploy --remote-only --depot=false`
+2. `kamal deploy`
 
 ## Background Jobs
 
 **Solid Queue:** Runs in Puma via `plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]` (see config/puma.rb)
 **Mission Control UI:** `/admin/jobs` (admin auth required)
 **Recurring Jobs (config/recurring.yml):**
-- `BackupDbToS3Job`: Midnight (exports to S3 via LiteFS + AWS OIDC)
 - `DailySummaryTweetJob`: 11:50pm
+
+**DB Replication:** Litestream continuously streams all SQLite DBs to S3. Configured via `config/litestream.yml` + `config/initializers/litestream.rb` (reads credentials from Rails encrypted credentials).
 
 ```bash
 bin/rails jobs:start  # Start worker manually
-bin/rails runner "BackupDbToS3Job.perform_now"  # Run specific job
 ```
 
 ## Common Errors & Fixes
@@ -147,7 +148,8 @@ bin/rails runner "BackupDbToS3Job.perform_now"  # Run specific job
 - `config/routes.rb` — Routing
 - `config/application.rb` — Mission Control config
 - `config/puma.rb` — Solid Queue plugin
-- `config/litefs.yml` — Production DB replication (be cautious!)
+- `config/litestream.yml` — Litestream DB replication to S3
+- `config/deploy.yml` — Kamal deployment config
 - `Dockerfile` — Production build
 - `.github/workflows/ci.yml` — CI validation
 - `Gemfile` — Check versions before adding/upgrading
@@ -162,11 +164,11 @@ fly ssh console --pty -C "/rails/bin/rails console"
 ## Root Files Reference
 ```
 .devcontainer/         → Docker devcontainer with Ruby 3.4.2
-.github/workflows/     → ci.yml (test), deploy.yml (Fly.io)
+.github/workflows/     → ci.yml (test)
 .rubocop.yml          → Style config (inherits rubocop-shopify)
 .ruby-version         → 3.4.2
-Dockerfile            → Production build (LiteFS entrypoint)
-Gemfile               → Ruby 3.4.2, Rails 8.0.2, solid_queue, tailwindcss-rails, pundit, etc.
+Dockerfile            → Production build (Litestream + Thruster)
+Gemfile               → Ruby 3.4.2, Rails 8.0.2, solid_queue, tailwindcss-rails, kamal, litestream, etc.
 Procfile.dev          → web: bin/rails server, css: bin/rails tailwindcss:watch
 README.md             → App context, auth flow, roadmap, DB backup details
 Rakefile              → Standard Rails tasks
@@ -174,7 +176,7 @@ bin/dev               → Start Rails server wrapper
 bin/setup             → Idempotent setup (bundle, db:prepare, cleanup)
 bin/rubocop           → Rubocop with explicit config
 config.ru             → Rack config
-fly.toml              → Fly.io deployment (SOLID_QUEUE_IN_PUMA=true, AWS_ROLE_ARN)
+config/deploy.yml     → Kamal deployment config (Hetzner CX33)
 ```
 
 ## Trust These Instructions

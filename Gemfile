@@ -75,7 +75,7 @@ gem "x"
 
 gem "inline_svg"
 
-# Using this for scheduled SQLite DB backups to S3 from Fly.io (with the help of Solid Queue)
+# Used by Active Storage for S3 file uploads
 gem "aws-sdk-s3", "~> 1"
 
 # Used for replicating SQLite DB to S3 for backups
