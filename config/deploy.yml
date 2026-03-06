@@ -1,0 +1,35 @@
+service: moiree
+
+image: moiree
+
+servers:
+  web:
+    hosts:
+      - 157.90.29.34
+
+proxy:
+  ssl: true
+  host: staging.moir.ee
+  app_port: 3000
+
+registry:
+  server: localhost:5555
+
+builder:
+  arch: amd64
+
+env:
+  clear:
+    RAILS_ENV: production
+    SOLID_QUEUE_IN_PUMA: true
+    WEB_CONCURRENCY: 2          # CX23 has 2 vCPUs
+    RAILS_LOG_TO_STDOUT: true
+  secret:
+    - RAILS_MASTER_KEY
+
+accessories: {}                 # No separate DB or Redis needed
+
+asset_path: /rails/public/assets
+
+volumes:
+  - /opt/moiree/storage:/rails/storage
