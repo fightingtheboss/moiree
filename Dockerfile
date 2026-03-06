@@ -55,7 +55,7 @@ COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
 # Install the litestream binary via the gem
-RUN bundle exec rails litestream:install
+RUN bundle exec rails g litestream:install
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
