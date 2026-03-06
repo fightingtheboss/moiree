@@ -51,10 +51,10 @@ gem "solid_cable"
 gem "bootsnap", require: false
 
 # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
-# gem "kamal", require: false
+gem "kamal", require: false
 
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
-# gem "thruster", require: false
+gem "thruster", require: false
 
 gem "mission_control-jobs"
 
@@ -79,7 +79,7 @@ gem "inline_svg"
 gem "aws-sdk-s3", "~> 1"
 
 # Used for replicating SQLite DB to S3 for backups
-# gem "litestream"
+gem "litestream"
 
 # Used for tracking performance and errors
 gem "newrelic_rpm"
