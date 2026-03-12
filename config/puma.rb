@@ -36,6 +36,9 @@ plugin :tmp_restart
 # Run the Solid Queue supervisor inside of Puma for single-server deployments
 plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 
+# Run Litestream replication inside of Puma in production
+plugin :litestream if ENV.fetch("RAILS_ENV", "development") == "production"
+
 # Rebuild Tailwind assets in development
 plugin :tailwindcss if ENV.fetch("RAILS_ENV", "development") == "development"
 

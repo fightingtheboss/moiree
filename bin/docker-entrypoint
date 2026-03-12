@@ -3,14 +3,11 @@
 # Restore databases from S3 if they don't exist yet (first deploy / fresh server)
 if [ ! -f storage/production.sqlite3 ]; then
   echo "Restoring databases from Litestream replicas..."
-  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production.sqlite3 storage/production.sqlite3
-  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production_cache.sqlite3 storage/production_cache.sqlite3
-  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production_queue.sqlite3 storage/production_queue.sqlite3
-  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production_cable.sqlite3 storage/production_cable.sqlite3
+  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production.sqlite3 -database storage/production.sqlite3
+  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production_cache.sqlite3 -database storage/production_cache.sqlite3
+  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production_queue.sqlite3 -database storage/production_queue.sqlite3
+  bundle exec rails litestream:restore -- -if-replica-exists -config config/litestream.yml -o storage/production_cable.sqlite3 -database storage/production_cable.sqlite3
 fi
-
-# Start Litestream replication in the background
-bundle exec rails litestream:replicate &
 
 # Prepare the database
 ./bin/rails db:prepare
