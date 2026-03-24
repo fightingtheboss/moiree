@@ -4,8 +4,10 @@ base:
   edition: base
   name: Base Category
   position: 1
+  standalone: true
 
 midnight:
   edition: base
   name: Midnight Madness
   position: 2
+  standalone: true
