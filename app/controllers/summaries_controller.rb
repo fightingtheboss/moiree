@@ -18,6 +18,7 @@ class SummariesController < ApplicationController
         .having("COUNT(ratings.id) >= ?", @edition.min_ratings_for_summary)
         .order(average_rating: :desc)
         .group_by(&:category)
+        .sort_by { |category, _| category.position }
 
       @selections_for_others = @edition.selections.includes(:category, :film, ratings: :critic)
         .where(category: { standalone: false })
