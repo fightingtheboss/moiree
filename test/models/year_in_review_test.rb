@@ -133,6 +133,100 @@ class YearInReviewTest < ActiveSupport::TestCase
     # Total: 6 ratings (3.5 + 2.5 + 1.0 + 1.5 + 4.0 + 5.0) = 17.5 / 6 ≈ 2.917
     assert_equal(6, top_for_film.combined_ratings_count)
     assert_in_delta(2.917, top_for_film.combined_average_rating.to_f, 0.01)
+    assert_not_nil(top_for_film.weighted_score, "weighted_score should be set")
+  end
+
+  test "#assign_top_selections! qualifies films using per-edition threshold" do
+    # Create a small edition (6 critics) in the same year alongside the base edition
+    small_edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2024,
+      code: "SMALL24",
+      start_date: "2024-06-01",
+      end_date: "2024-06-07",
+      slug: "small24",
+    )
+    category = Category.create!(edition: small_edition, name: "Main", position: 1)
+
+    # Create 6 attending critics for the small edition
+    small_critics = 6.times.map do |i|
+      critic = Critic.create!(first_name: "Small#{i}", last_name: "Test", country: "US")
+      Attendance.create!(critic: critic, edition: small_edition)
+      critic
+    end
+
+    # Create a new film and selection at the small edition
+    small_film = Film.create!(title: "Small Edition Film", year: 2024)
+    small_selection = Selection.create!(edition: small_edition, film: small_film, category: category)
+
+    # Rate the film by 4 of the 6 critics (meets per-edition threshold: max(ceil(6/3),4) = 4)
+    small_critics.first(4).each do |critic|
+      Rating.create!(
+        critic: critic,
+        selection: small_selection,
+        score: 5.0,
+        skip_cache_average_ratings_callback: true,
+      )
+    end
+
+    year_in_review = year_in_reviews(:base)
+    year_in_review.generate!
+
+    top = year_in_review.top_selections_with_includes.to_a
+    small_film_entry = top.find { |ts| ts.selection.film_id == small_film.id }
+
+    assert_not_nil(small_film_entry, "Film from small edition should qualify via per-edition threshold")
+    assert_equal(4, small_film_entry.combined_ratings_count)
+    assert_in_delta(5.0, small_film_entry.combined_average_rating.to_f, 0.01)
+  end
+
+  test "#assign_top_selections! uses Bayesian ranking to correctly order films" do
+    # Set up two films: one with a perfect average from few ratings (minimum qualifying count),
+    # one with a slightly lower average but many more ratings.
+    # With a low enough global mean, the Bayesian score ranks the well-supported film higher.
+
+    film_a = Film.create!(title: "High Avg Low Count", year: 2024)
+    film_b = Film.create!(title: "Slightly Lower Avg High Count", year: 2024)
+
+    edition = editions(:base)
+    category = categories(:base)
+
+    selection_a = Selection.create!(edition: edition, film: film_a, category: category)
+    selection_b = Selection.create!(edition: edition, film: film_b, category: category)
+
+    # film_a: 4 ratings at 5.0 (minimum qualifying count, perfect score)
+    4.times do |i|
+      critic = Critic.create!(first_name: "CriticA#{i}", last_name: "Test", country: "US")
+      Rating.create!(critic: critic, selection: selection_a, score: 5.0, skip_cache_average_ratings_callback: true)
+    end
+
+    # film_b: 30 ratings at 4.8 (large sample, slightly lower avg)
+    # The fixture films (avg ~2.4) pull the global mean low enough that
+    # film_b's higher confidence overcomes the 0.2 raw average gap.
+    30.times do |i|
+      critic = Critic.create!(first_name: "CriticB#{i}", last_name: "Test", country: "US")
+      Rating.create!(critic: critic, selection: selection_b, score: 4.8, skip_cache_average_ratings_callback: true)
+    end
+
+    year_in_review = year_in_reviews(:base)
+    year_in_review.generate!
+
+    top = year_in_review.top_selections_with_includes.to_a
+    entry_a = top.find { |ts| ts.selection.film_id == film_a.id }
+    entry_b = top.find { |ts| ts.selection.film_id == film_b.id }
+
+    assert_not_nil(entry_a, "High-average small-sample film should qualify")
+    assert_not_nil(entry_b, "Lower-average large-sample film should qualify")
+
+    # Bayesian weighting should rank the well-supported film_b above film_a
+    assert(
+      entry_b.weighted_score > entry_a.weighted_score,
+      "film_b (4.8 avg, 30 ratings) should have a higher weighted score than film_a (5.0 avg, 4 ratings)",
+    )
+    assert(
+      top.index(entry_b) < top.index(entry_a),
+      "film_b should be ranked higher (lower position index) than film_a",
+    )
   end
 
   test "has many top_selections through year_in_review_top_selections" do

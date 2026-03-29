@@ -106,23 +106,55 @@ class YearInReview < ApplicationRecord
   private
 
   def assign_top_selections!(edition_ids)
-    # Aggregate ratings across ALL editions in the year, per film.
-    # Requires ≥1/3 of the critic pool (min 4). Ranks by combined average.
+    # Step 1: Per-edition qualification.
+    # A film qualifies if it meets the threshold for the edition where it was screened,
+    # preventing large festivals from unfairly raising the bar for smaller editions.
+    qualifying_film_ids = []
+    Edition.where(id: edition_ids).each do |edition|
+      threshold = edition.min_ratings_for_summary
+      film_ids = Rating
+        .joins(:selection)
+        .where(selections: { edition_id: edition.id })
+        .group("selections.film_id")
+        .having("COUNT(ratings.id) >= ?", threshold)
+        .pluck("selections.film_id")
+      qualifying_film_ids |= film_ids
+    end
+
+    year_in_review_top_selections.destroy_all
+    return if qualifying_film_ids.empty?
+
+    # Step 2: Compute combined stats across all editions for qualifying films.
     film_aggregates = Rating
       .joins(selection: :film)
-      .where(selections: { edition_id: edition_ids })
+      .where(selections: { edition_id: edition_ids, film_id: qualifying_film_ids })
       .where(films: { year: year })
       .group("films.id")
-      .having("COUNT(ratings.id) >= ?", min_ratings_for_summary)
-      .order("AVG(ratings.score) DESC")
-      .limit(5)
       .pluck(Arel.sql("films.id, AVG(ratings.score), COUNT(ratings.id)"))
+
+    return if film_aggregates.empty?
+
+    # Step 3: Compute global mean C across all qualifying ratings in the year.
+    total_ratings = film_aggregates.sum { |_, _, count| count }
+    global_mean = film_aggregates.sum { |_, avg, count| avg * count } / total_ratings.to_f
+
+    # Step 4: Bayesian weighted ranking.
+    # weighted_score = (v / (v + m)) * R + (m / (v + m)) * C
+    # R = raw average, v = rating count, m = year-wide min_ratings_for_summary (tuning constant), C = global mean.
+    # Films with fewer ratings are pulled closer to the mean, reducing noise from small samples.
+    m = min_ratings_for_summary.to_f
+    scored_films = film_aggregates.map do |film_id, avg_rating, ratings_count|
+      v = ratings_count.to_f
+      weighted = (v / (v + m)) * avg_rating + (m / (v + m)) * global_mean
+      [film_id, avg_rating, ratings_count, weighted]
+    end
+
+    # Step 5: Rank by weighted score descending, take top 5.
+    top_films = scored_films.sort_by { |_, _, _, weighted| -weighted }.first(5)
 
     # For each top film, pick a representative selection (the one with the most ratings)
     # to use for featured_rating, poster, etc.
-    year_in_review_top_selections.destroy_all
-
-    film_aggregates.each_with_index do |(film_id, avg_rating, ratings_count), index|
+    top_films.each_with_index do |(film_id, avg_rating, ratings_count, weighted_score), index|
       representative = Selection
         .joins(:ratings)
         .where(edition_id: edition_ids, film_id: film_id)
@@ -135,6 +167,7 @@ class YearInReview < ApplicationRecord
         position: index + 1,
         combined_average_rating: avg_rating,
         combined_ratings_count: ratings_count,
+        weighted_score: weighted_score,
       )
     end
   end
