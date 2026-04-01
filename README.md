@@ -104,4 +104,27 @@ When an Admin is invited, their account is created and they're sent a link to re
 - Install kamal
 - Setup a small server on Hetzner and do a deploy
   - Deploy from a kamal branch rather than main since this will require changes to Dockerfile
+- Use a remote registry rather than local for CI
+- Update script to deploy from GitHub Action
+  - Should have credentials for accessing the registry
 - If all works as expected, perhaps move everything over to the new server?
+
+
+- Ratings from critics outside of festivals
+  - Can prompt existing critic pool to rate films after the festival is over
+- Newsletter subscriptions to be able to gather some audience data
+- Patreon
+  - Gating of access to podcasts (first 24h)
+  - Maybe specific newsletter content
+- Moving beyond just ratings for festival films (general release)
+  - "Off The Grid"
+  - Critics could add a film that's not in any edition and add their rating
+- Pre-recorded bumpers for the podcast
+- Letterboxd account that could be updated via API
+  - Not sure what content we'd push there, but I think it makes sense to have a presence there
+- Social Media
+  - Instagram
+    - What type of content should we be posting there, other than manual posts about new podcast episodes
+  - X
+    - Is what we're doing here valuable? Should we change the approach?
+  - Any other places we should be targeting?
