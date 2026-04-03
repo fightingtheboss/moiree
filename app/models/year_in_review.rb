@@ -106,20 +106,33 @@ class YearInReview < ApplicationRecord
   private
 
   def assign_top_selections!(edition_ids)
-    # Step 1: Per-edition qualification.
-    # A film qualifies if it meets the threshold for the edition where it was screened,
-    # preventing large festivals from unfairly raising the bar for smaller editions.
-    qualifying_film_ids = []
-    Edition.where(id: edition_ids).each do |edition|
-      threshold = edition.min_ratings_for_summary
-      film_ids = Rating
-        .joins(:selection)
-        .where(selections: { edition_id: edition.id })
-        .group("selections.film_id")
-        .having("COUNT(ratings.id) >= ?", threshold)
-        .pluck("selections.film_id")
-      qualifying_film_ids |= film_ids
+    # Step 1: Per-edition qualification using pre-computed thresholds.
+    # Batch-load attending critic counts per edition in a single query to avoid N+1.
+    edition_critic_counts = Attendance
+      .where(edition_id: edition_ids)
+      .group(:edition_id)
+      .pluck(:edition_id, Arel.sql("COUNT(DISTINCT critic_id)"))
+      .to_h
+
+    edition_thresholds = edition_ids.each_with_object({}) do |id, hash|
+      critic_count = edition_critic_counts[id] || 0
+      hash[id] = [(critic_count / 3.0).ceil, Summarizable::MIN_RATINGS_FLOOR].max
     end
+
+    # Build a CASE expression so all editions can be qualified in a single SQL query.
+    # Values are safe to interpolate: edition IDs are integers from pluck(:id) and
+    # thresholds are integers computed via ceil on attendance counts.
+    threshold_case = "CASE selections.edition_id " \
+      + edition_thresholds.map { |id, t| "WHEN #{id.to_i} THEN #{t.to_i}" }.join(" ") \
+      + " ELSE #{Summarizable::MIN_RATINGS_FLOOR} END"
+
+    qualifying_film_ids = Rating
+      .joins(:selection)
+      .where(selections: { edition_id: edition_ids })
+      .group("selections.edition_id, selections.film_id")
+      .having(Arel.sql("COUNT(ratings.id) >= #{threshold_case}"))
+      .pluck("selections.film_id")
+      .uniq
 
     year_in_review_top_selections.destroy_all
     return if qualifying_film_ids.empty?
@@ -134,15 +147,20 @@ class YearInReview < ApplicationRecord
 
     return if film_aggregates.empty?
 
-    # Step 3: Compute global mean C across all qualifying ratings in the year.
-    total_ratings = film_aggregates.sum { |_, _, count| count }
-    global_mean = film_aggregates.sum { |_, avg, count| avg * count } / total_ratings.to_f
+    # Step 3: Compute global mean C directly in SQL across all qualifying ratings.
+    qualifying_film_ids_for_year = film_aggregates.map(&:first)
+    global_mean = Rating
+      .joins(:selection)
+      .where(selections: { edition_id: edition_ids, film_id: qualifying_film_ids_for_year })
+      .average(:score)
+      &.to_f || 0.0
 
     # Step 4: Bayesian weighted ranking.
     # weighted_score = (v / (v + m)) * R + (m / (v + m)) * C
     # R = raw average, v = rating count, m = year-wide min_ratings_for_summary (tuning constant), C = global mean.
     # Films with fewer ratings are pulled closer to the mean, reducing noise from small samples.
-    m = min_ratings_for_summary.to_f
+    # Derive m from critics_count (already set in generate!) to avoid an extra query.
+    m = [(critics_count / 3.0).ceil, Summarizable::MIN_RATINGS_FLOOR].max.to_f
     scored_films = film_aggregates.map do |film_id, avg_rating, ratings_count|
       v = ratings_count.to_f
       weighted = (v / (v + m)) * avg_rating + (m / (v + m)) * global_mean

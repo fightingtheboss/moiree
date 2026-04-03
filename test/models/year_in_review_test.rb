@@ -155,8 +155,8 @@ class YearInReviewTest < ActiveSupport::TestCase
       critic
     end
 
-    # Create a new film and selection at the small edition
-    small_film = Film.create!(title: "Small Edition Film", year: 2024)
+    # Use an existing fixture film that has no selection yet
+    small_film = films(:with_multiple_countries)
     small_selection = Selection.create!(edition: small_edition, film: small_film, category: category)
 
     # Rate the film by 4 of the 6 critics (meets per-edition threshold: max(ceil(6/3),4) = 4)
@@ -181,30 +181,40 @@ class YearInReviewTest < ActiveSupport::TestCase
   end
 
   test "#assign_top_selections! uses Bayesian ranking to correctly order films" do
-    # Set up two films: one with a perfect average from few ratings (minimum qualifying count),
-    # one with a slightly lower average but many more ratings.
-    # With a low enough global mean, the Bayesian score ranks the well-supported film higher.
+    # Create a controlled edition with exactly 12 critics to isolate the critic pool.
+    # Per-edition threshold = max(ceil(12/3), 4) = 4, so film_a (4 ratings) just qualifies.
+    controlled_edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2024,
+      code: "BAYES24",
+      start_date: "2024-07-01",
+      end_date: "2024-07-10",
+      slug: "bayes24",
+    )
+    category = Category.create!(edition: controlled_edition, name: "Competition", position: 1)
 
-    film_a = Film.create!(title: "High Avg Low Count", year: 2024)
-    film_b = Film.create!(title: "Slightly Lower Avg High Count", year: 2024)
+    critics = 12.times.map do |i|
+      critic = Critic.create!(first_name: "Bayesian#{i}", last_name: "Test", country: "US")
+      Attendance.create!(critic: critic, edition: controlled_edition)
+      critic
+    end
 
-    edition = editions(:base)
-    category = categories(:base)
+    # Use existing fixture films that have no selections yet
+    film_a = films(:with_multiple_countries)
+    film_b = films(:with_multiple_directors)
 
-    selection_a = Selection.create!(edition: edition, film: film_a, category: category)
-    selection_b = Selection.create!(edition: edition, film: film_b, category: category)
+    selection_a = Selection.create!(edition: controlled_edition, film: film_a, category: category)
+    selection_b = Selection.create!(edition: controlled_edition, film: film_b, category: category)
 
-    # film_a: 4 ratings at 5.0 (minimum qualifying count, perfect score)
-    4.times do |i|
-      critic = Critic.create!(first_name: "CriticA#{i}", last_name: "Test", country: "US")
+    # film_a: 4 ratings at 5.0 (at the per-edition threshold; perfect score)
+    critics.first(4).each do |critic|
       Rating.create!(critic: critic, selection: selection_a, score: 5.0, skip_cache_average_ratings_callback: true)
     end
 
-    # film_b: 30 ratings at 4.8 (large sample, slightly lower avg)
-    # The fixture films (avg ~2.4) pull the global mean low enough that
-    # film_b's higher confidence overcomes the 0.2 raw average gap.
-    30.times do |i|
-      critic = Critic.create!(first_name: "CriticB#{i}", last_name: "Test", country: "US")
+    # film_b: 12 ratings at 4.8 (full edition coverage; slightly lower avg)
+    # The global mean is pulled down by the lower-scoring fixture films, so
+    # film_b's larger sample size gives it a higher Bayesian score despite the lower average.
+    critics.each do |critic|
       Rating.create!(critic: critic, selection: selection_b, score: 4.8, skip_cache_average_ratings_callback: true)
     end
 
@@ -221,7 +231,7 @@ class YearInReviewTest < ActiveSupport::TestCase
     # Bayesian weighting should rank the well-supported film_b above film_a
     assert(
       entry_b.weighted_score > entry_a.weighted_score,
-      "film_b (4.8 avg, 30 ratings) should have a higher weighted score than film_a (5.0 avg, 4 ratings)",
+      "film_b (4.8 avg, 12 ratings) should have a higher weighted score than film_a (5.0 avg, 4 ratings)",
     )
     assert(
       top.index(entry_b) < top.index(entry_a),
