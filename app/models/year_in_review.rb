@@ -106,23 +106,73 @@ class YearInReview < ApplicationRecord
   private
 
   def assign_top_selections!(edition_ids)
-    # Aggregate ratings across ALL editions in the year, per film.
-    # Requires ≥1/3 of the critic pool (min 4). Ranks by combined average.
+    # Step 1: Per-edition qualification using pre-computed thresholds.
+    # Batch-load attending critic counts per edition in a single query to avoid N+1.
+    edition_critic_counts = Attendance
+      .where(edition_id: edition_ids)
+      .group(:edition_id)
+      .pluck(:edition_id, Arel.sql("COUNT(DISTINCT critic_id)"))
+      .to_h
+
+    edition_thresholds = edition_ids.each_with_object({}) do |id, hash|
+      critic_count = edition_critic_counts[id] || 0
+      hash[id] = [(critic_count / 3.0).ceil, Summarizable::MIN_RATINGS_FLOOR].max
+    end
+
+    # Build a CASE expression so all editions can be qualified in a single SQL query.
+    # Values are safe to interpolate: edition IDs are integers from pluck(:id) and
+    # thresholds are integers computed via ceil on attendance counts.
+    threshold_case = "CASE selections.edition_id " \
+      + edition_thresholds.map { |id, t| "WHEN #{id.to_i} THEN #{t.to_i}" }.join(" ") \
+      + " ELSE #{Summarizable::MIN_RATINGS_FLOOR} END"
+
+    qualifying_film_ids = Rating
+      .joins(:selection)
+      .where(selections: { edition_id: edition_ids })
+      .group("selections.edition_id, selections.film_id")
+      .having(Arel.sql("COUNT(ratings.id) >= #{threshold_case}"))
+      .pluck("selections.film_id")
+      .uniq
+
+    year_in_review_top_selections.destroy_all
+    return if qualifying_film_ids.empty?
+
+    # Step 2: Compute combined stats across all editions for qualifying films.
     film_aggregates = Rating
       .joins(selection: :film)
-      .where(selections: { edition_id: edition_ids })
+      .where(selections: { edition_id: edition_ids, film_id: qualifying_film_ids })
       .where(films: { year: year })
       .group("films.id")
-      .having("COUNT(ratings.id) >= ?", min_ratings_for_summary)
-      .order("AVG(ratings.score) DESC")
-      .limit(5)
       .pluck(Arel.sql("films.id, AVG(ratings.score), COUNT(ratings.id)"))
+
+    return if film_aggregates.empty?
+
+    # Step 3: Compute global mean C directly in SQL across all qualifying ratings.
+    qualifying_film_ids_for_year = film_aggregates.map(&:first)
+    global_mean = Rating
+      .joins(:selection)
+      .where(selections: { edition_id: edition_ids, film_id: qualifying_film_ids_for_year })
+      .average(:score)
+      &.to_f || 0.0
+
+    # Step 4: Bayesian weighted ranking.
+    # weighted_score = (v / (v + m)) * R + (m / (v + m)) * C
+    # R = raw average, v = rating count, m = year-wide min_ratings_for_summary (tuning constant), C = global mean.
+    # Films with fewer ratings are pulled closer to the mean, reducing noise from small samples.
+    # Derive m from critics_count (already set in generate!) to avoid an extra query.
+    m = [(critics_count / 3.0).ceil, Summarizable::MIN_RATINGS_FLOOR].max.to_f
+    scored_films = film_aggregates.map do |film_id, avg_rating, ratings_count|
+      v = ratings_count.to_f
+      weighted = (v / (v + m)) * avg_rating + (m / (v + m)) * global_mean
+      [film_id, avg_rating, ratings_count, weighted]
+    end
+
+    # Step 5: Rank by weighted score descending, take top 5.
+    top_films = scored_films.sort_by { |_, _, _, weighted| -weighted }.first(5)
 
     # For each top film, pick a representative selection (the one with the most ratings)
     # to use for featured_rating, poster, etc.
-    year_in_review_top_selections.destroy_all
-
-    film_aggregates.each_with_index do |(film_id, avg_rating, ratings_count), index|
+    top_films.each_with_index do |(film_id, avg_rating, ratings_count, weighted_score), index|
       representative = Selection
         .joins(:ratings)
         .where(edition_id: edition_ids, film_id: film_id)
@@ -135,6 +185,7 @@ class YearInReview < ApplicationRecord
         position: index + 1,
         combined_average_rating: avg_rating,
         combined_ratings_count: ratings_count,
+        weighted_score: weighted_score,
       )
     end
   end
