@@ -40,3 +40,4 @@
 !/app/assets/builds/.keep
 
 lib/csv_extraction
+db/backup
