@@ -237,6 +237,103 @@ class YearInReviewTest < ActiveSupport::TestCase
     assert_respond_to(year_in_review, :year_in_review_top_selections)
   end
 
+  test "#assign_top_selections! qualifies film at one edition even if it does not qualify at another" do
+    # Create a large edition (15 critics) — threshold = max(ceil(15/3), 4) = 5
+    large_edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2024,
+      code: "LARGE24",
+      start_date: "2024-08-01",
+      end_date: "2024-08-10",
+      slug: "large24",
+    )
+    large_category = Category.create!(edition: large_edition, name: "Main", position: 1)
+
+    large_critics = 15.times.map do |i|
+      critic = Critic.create!(first_name: "Large#{i}", last_name: "Test", country: "US")
+      Attendance.create!(critic: critic, edition: large_edition)
+      critic
+    end
+
+    # Create a small edition (6 critics) — threshold = max(ceil(6/3), 4) = 4
+    small_edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2024,
+      code: "SMALL24",
+      start_date: "2024-06-01",
+      end_date: "2024-06-07",
+      slug: "small24",
+    )
+    small_category = Category.create!(edition: small_edition, name: "Main", position: 1)
+
+    small_critics = 6.times.map do |i|
+      critic = Critic.create!(first_name: "Small#{i}", last_name: "Test", country: "US")
+      Attendance.create!(critic: critic, edition: small_edition)
+      critic
+    end
+
+    # Same film appears at both editions
+    film = films(:with_multiple_countries)
+    large_selection = Selection.create!(edition: large_edition, film: film, category: large_category)
+    small_selection = Selection.create!(edition: small_edition, film: film, category: small_category)
+
+    # Film gets 4 ratings at the small edition (meets small threshold of 4)
+    small_critics.first(4).each do |critic|
+      create_rating(critic: critic, selection: small_selection, score: 4.5)
+    end
+    small_selection.update!(average_rating: 4.5)
+
+    # Film gets only 3 ratings at the large edition (does NOT meet large threshold of 5)
+    large_critics.first(3).each do |critic|
+      create_rating(critic: critic, selection: large_selection, score: 4.0)
+    end
+    large_selection.update!(average_rating: 4.0)
+
+    year_in_review = year_in_reviews(:base)
+    year_in_review.generate!
+
+    top = year_in_review.top_selections_with_includes.to_a
+    film_entry = top.find { |ts| ts.selection.film_id == film.id }
+
+    # Film qualifies via the small edition and aggregates ratings from both editions
+    assert_not_nil(film_entry, "Film should qualify via small edition even though it doesn't qualify at large edition")
+    assert_equal(7, film_entry.combined_ratings_count, "Should aggregate ratings from both editions")
+  end
+
+  test "#assign_top_selections! returns empty when no films meet any per-edition threshold" do
+    year_in_review = YearInReview.create!(year: 2028)
+
+    # Create an edition with 6 critics — threshold = max(ceil(6/3), 4) = 4
+    edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2028,
+      code: "SPARSE28",
+      start_date: "2028-09-01",
+      end_date: "2028-09-10",
+      slug: "sparse28",
+    )
+    category = Category.create!(edition: edition, name: "Main", position: 1)
+
+    critics = 6.times.map do |i|
+      critic = Critic.create!(first_name: "Sparse#{i}", last_name: "Test", country: "US")
+      Attendance.create!(critic: critic, edition: edition)
+      critic
+    end
+
+    film = Film.create!(title: "Underrated Gem", normalized_title: "Underrated Gem", director: "Nobody", country: "US", year: 2028)
+    selection = Selection.create!(edition: edition, film: film, category: category)
+
+    # Only 3 ratings — below the threshold of 4
+    critics.first(3).each do |critic|
+      create_rating(critic: critic, selection: selection, score: 5.0)
+    end
+    selection.update!(average_rating: 5.0)
+
+    year_in_review.generate!
+
+    assert_empty(year_in_review.top_selections_with_includes.to_a, "No films should qualify when none meet per-edition threshold")
+  end
+
   test "#bombe_moiree_histogram returns empty hash when no bombe moiree" do
     year_in_review = YearInReview.new(year: 2030)
 
