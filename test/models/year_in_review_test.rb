@@ -168,6 +168,7 @@ class YearInReviewTest < ActiveSupport::TestCase
         skip_cache_average_ratings_callback: true,
       )
     end
+    small_selection.update!(average_rating: 5.0)
 
     year_in_review = year_in_reviews(:base)
     year_in_review.generate!
@@ -210,6 +211,7 @@ class YearInReviewTest < ActiveSupport::TestCase
     critics.first(4).each do |critic|
       Rating.create!(critic: critic, selection: selection_a, score: 5.0, skip_cache_average_ratings_callback: true)
     end
+    selection_a.update!(average_rating: 5.0)
 
     # film_b: 12 ratings at 4.8 (full edition coverage; slightly lower avg)
     # The global mean is pulled down by the lower-scoring fixture films, so
@@ -217,6 +219,7 @@ class YearInReviewTest < ActiveSupport::TestCase
     critics.each do |critic|
       Rating.create!(critic: critic, selection: selection_b, score: 4.8, skip_cache_average_ratings_callback: true)
     end
+    selection_b.update!(average_rating: 4.8)
 
     year_in_review = year_in_reviews(:base)
     year_in_review.generate!
