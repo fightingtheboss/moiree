@@ -9,8 +9,10 @@ module Summarizable
   # Compute the minimum ratings threshold for a given critic pool size.
   # Available as both Summarizable.threshold_for(...) and as a class method
   # on any model that includes Summarizable.
-  def self.threshold_for(critic_count)
-    [(critic_count / CRITIC_POOL_DIVISOR).ceil, MIN_RATINGS_FLOOR].max
+  class << self
+    def threshold_for(critic_count)
+      [(critic_count / CRITIC_POOL_DIVISOR).ceil, MIN_RATINGS_FLOOR].max
+    end
   end
 
   # Includers must implement this to define the critic pool size.
