@@ -110,18 +110,8 @@ class YearInReviewTest < ActiveSupport::TestCase
     # Existing ratings on base selection: base (3.5), without_publication (2.5),
     #   frequent_rater (1.0), contrarian (1.5) = 4 ratings
     # Add two more ratings on the SECOND selection for cross-edition aggregation
-    Rating.create!(
-      critic: critics(:without_publication),
-      selection: second_selection,
-      score: 4.0,
-      skip_cache_average_ratings_callback: true,
-    )
-    Rating.create!(
-      critic: critics(:without_ratings),
-      selection: second_selection,
-      score: 5.0,
-      skip_cache_average_ratings_callback: true,
-    )
+    create_rating(critic: critics(:without_publication), selection: second_selection, score: 4.0)
+    create_rating(critic: critics(:without_ratings), selection: second_selection, score: 5.0)
 
     year_in_review = year_in_reviews(:base)
     year_in_review.generate!
@@ -161,12 +151,7 @@ class YearInReviewTest < ActiveSupport::TestCase
 
     # Rate the film by 4 of the 6 critics (meets per-edition threshold: max(ceil(6/3),4) = 4)
     small_critics.first(4).each do |critic|
-      Rating.create!(
-        critic: critic,
-        selection: small_selection,
-        score: 5.0,
-        skip_cache_average_ratings_callback: true,
-      )
+      create_rating(critic: critic, selection: small_selection, score: 5.0)
     end
     small_selection.update!(average_rating: 5.0)
 
@@ -184,6 +169,8 @@ class YearInReviewTest < ActiveSupport::TestCase
   test "#assign_top_selections! uses Bayesian ranking to correctly order films" do
     # Create a controlled edition with exactly 12 critics to isolate the critic pool.
     # Per-edition threshold = max(ceil(12/3), 4) = 4, so film_a (4 ratings) just qualifies.
+    # Note: critics_count on the year_in_review will be 13 (12 controlled + 1 from base
+    # fixture attendance), so m = Summarizable.threshold_for(13) = max(ceil(13/3), 4) = 5.
     controlled_edition = Edition.create!(
       festival: festivals(:with_no_films),
       year: 2024,
@@ -209,15 +196,16 @@ class YearInReviewTest < ActiveSupport::TestCase
 
     # film_a: 4 ratings at 5.0 (at the per-edition threshold; perfect score)
     critics.first(4).each do |critic|
-      Rating.create!(critic: critic, selection: selection_a, score: 5.0, skip_cache_average_ratings_callback: true)
+      create_rating(critic: critic, selection: selection_a, score: 5.0)
     end
     selection_a.update!(average_rating: 5.0)
 
     # film_b: 12 ratings at 4.8 (full edition coverage; slightly lower avg)
-    # The global mean is pulled down by the lower-scoring fixture films, so
-    # film_b's larger sample size gives it a higher Bayesian score despite the lower average.
+    # The global mean includes all ratings in the year (including lower-scoring fixture
+    # films), so film_b's larger sample size gives it a higher Bayesian score despite
+    # the lower average.
     critics.each do |critic|
-      Rating.create!(critic: critic, selection: selection_b, score: 4.8, skip_cache_average_ratings_callback: true)
+      create_rating(critic: critic, selection: selection_b, score: 4.8)
     end
     selection_b.update!(average_rating: 4.8)
 
