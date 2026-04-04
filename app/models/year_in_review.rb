@@ -131,10 +131,9 @@ class YearInReview < ApplicationRecord
       .where(selections: { edition_id: edition_ids })
       .group("selections.edition_id, selections.film_id")
       .having(Arel.sql("COUNT(ratings.id) >= #{threshold_case}"))
+      .distinct
       .pluck("selections.film_id")
-      .uniq
 
-    year_in_review_top_selections.destroy_all
     return if qualifying_film_ids.empty?
 
     # Step 2: Compute combined stats across all editions for qualifying films.
@@ -147,13 +146,13 @@ class YearInReview < ApplicationRecord
 
     return if film_aggregates.empty?
 
-    # Step 3: Compute global mean C directly in SQL across all qualifying ratings.
-    qualifying_film_ids_for_year = film_aggregates.map(&:first)
+    # Step 3: Compute global mean C across all ratings in the year.
+    # Uses the full population mean (not just qualifying films) as the Bayesian prior.
     global_mean = Rating
       .joins(:selection)
-      .where(selections: { edition_id: edition_ids, film_id: qualifying_film_ids_for_year })
+      .where(selections: { edition_id: edition_ids })
       .average(:score)
-      &.to_f || 0.0
+      .to_f
 
     # Step 4: Bayesian weighted ranking.
     # weighted_score = (v / (v + m)) * R + (m / (v + m)) * C
@@ -169,6 +168,9 @@ class YearInReview < ApplicationRecord
 
     # Step 5: Rank by weighted score descending, take top 5.
     top_films = scored_films.sort_by { |_, _, _, weighted| -weighted }.first(5)
+
+    # Clear existing top selections just before inserting new ones.
+    year_in_review_top_selections.destroy_all
 
     # For each top film, pick a representative selection (the one with the most ratings)
     # to use for featured_rating, poster, etc.
