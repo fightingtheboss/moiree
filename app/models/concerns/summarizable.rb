@@ -7,9 +7,7 @@ module Summarizable
   CRITIC_POOL_DIVISOR = 3.0
 
   # Compute the minimum ratings threshold for a given critic pool size.
-  # Available as both Summarizable.threshold_for(...) and as a class method
-  # on any model that includes Summarizable.
-  class << self
+  class_methods do
     def threshold_for(critic_count)
       [(critic_count / CRITIC_POOL_DIVISOR).ceil, MIN_RATINGS_FLOOR].max
     end
@@ -24,7 +22,7 @@ module Summarizable
 
   # Dynamic threshold: 1/3 of the critic pool, with a floor of MIN_RATINGS_FLOOR.
   def min_ratings_for_summary
-    Summarizable.threshold_for(summary_critics_count)
+    self.class.threshold_for(summary_critics_count)
   end
 
   # Override in models without a direct `selections` association.

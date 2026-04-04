@@ -170,7 +170,7 @@ class YearInReviewTest < ActiveSupport::TestCase
     # Create a controlled edition with exactly 12 critics to isolate the critic pool.
     # Per-edition threshold = max(ceil(12/3), 4) = 4, so film_a (4 ratings) just qualifies.
     # Note: critics_count on the year_in_review will be 13 (12 controlled + 1 from base
-    # fixture attendance), so m = Summarizable.threshold_for(13) = max(ceil(13/3), 4) = 5.
+    # fixture attendance), so m = YearInReview.threshold_for(13) = max(ceil(13/3), 4) = 5.
     controlled_edition = Edition.create!(
       festival: festivals(:with_no_films),
       year: 2024,

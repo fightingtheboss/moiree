@@ -116,7 +116,7 @@ class YearInReview < ApplicationRecord
 
     edition_thresholds = edition_ids.each_with_object({}) do |id, hash|
       critic_count = edition_critic_counts[id] || 0
-      hash[id] = Summarizable.threshold_for(critic_count)
+      hash[id] = YearInReview.threshold_for(critic_count)
     end
 
     # Build a CASE expression so all editions can be qualified in a single SQL query.
@@ -159,7 +159,7 @@ class YearInReview < ApplicationRecord
     # R = raw average, v = rating count, m = year-wide min_ratings_for_summary (tuning constant), C = global mean.
     # Films with fewer ratings are pulled closer to the mean, reducing noise from small samples.
     # Derive m from critics_count (already set in generate!) to avoid an extra query.
-    m = Summarizable.threshold_for(critics_count).to_f
+    m = YearInReview.threshold_for(critics_count).to_f
     scored_films = film_aggregates.map do |film_id, avg_rating, ratings_count|
       v = ratings_count.to_f
       weighted = (v / (v + m)) * avg_rating + (m / (v + m)) * global_mean
