@@ -2,6 +2,6 @@
 
 class AddWeightedScoreToYearInReviewTopSelections < ActiveRecord::Migration[8.0]
   def change
-    add_column :year_in_review_top_selections, :weighted_score, :decimal
+    add_column :year_in_review_top_selections, :weighted_score, :decimal, precision: 10, scale: 6
   end
 end
