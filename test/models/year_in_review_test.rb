@@ -133,6 +133,7 @@ class YearInReviewTest < ActiveSupport::TestCase
     # Total: 6 ratings (3.5 + 2.5 + 1.0 + 1.5 + 4.0 + 5.0) = 17.5 / 6 ≈ 2.917
     assert_equal(6, top_for_film.combined_ratings_count)
     assert_in_delta(2.917, top_for_film.combined_average_rating.to_f, 0.01)
+    assert_not_nil(top_for_film.bayesian_score, "Bayesian score should be stored")
   end
 
   test "has many top_selections through year_in_review_top_selections" do
@@ -273,5 +274,127 @@ class YearInReviewTest < ActiveSupport::TestCase
     end
 
     assert_equal(6, year_in_review.min_ratings_for_summary)
+  end
+
+  test "#generate! ranks films with small critic pools using bayesian weighting" do
+    # Create two editions in 2026: one large, one small
+    large_edition = Edition.create!(
+      festival: festivals(:base), year: 2026, code: "LARGE26",
+      start_date: "2026-06-01", end_date: "2026-06-10", slug: "large26",
+    )
+    small_edition = Edition.create!(
+      festival: festivals(:with_no_films), year: 2026, code: "SMALL26",
+      start_date: "2026-09-01", end_date: "2026-09-10", slug: "small26",
+    )
+
+    large_category = Category.create!(edition: large_edition, name: "Main", position: 1)
+    small_category = Category.create!(edition: small_edition, name: "Main", position: 1)
+
+    # A mediocre film at the large edition with many ratings
+    mediocre_film = Film.create!(
+      title: "Mediocre Film", normalized_title: "Mediocre Film",
+      director: "Director A", country: "US", year: 2026,
+    )
+    mediocre_selection = Selection.create!(
+      edition: large_edition, film: mediocre_film, category: large_category,
+      average_rating: 3.0,
+    )
+
+    # An excellent film at the small edition with few ratings
+    excellent_film = Film.create!(
+      title: "Excellent Film", normalized_title: "Excellent Film",
+      director: "Director B", country: "FR", year: 2026,
+    )
+    excellent_selection = Selection.create!(
+      edition: small_edition, film: excellent_film, category: small_category,
+      average_rating: 5.0,
+    )
+
+    # Create 20 critics at the large edition, each rating the mediocre film 3.0
+    20.times do |i|
+      critic = Critic.create!(first_name: "Large#{i}", last_name: "Critic", country: "US")
+      Attendance.create!(critic: critic, edition: large_edition)
+      Rating.create!(critic: critic, selection: mediocre_selection, score: 3.0,
+        skip_cache_average_ratings_callback: true)
+    end
+
+    # Create 3 critics at the small edition, each rating the excellent film 5.0
+    3.times do |i|
+      critic = Critic.create!(first_name: "Small#{i}", last_name: "Critic", country: "FR")
+      Attendance.create!(critic: critic, edition: small_edition)
+      Rating.create!(critic: critic, selection: excellent_selection, score: 5.0,
+        skip_cache_average_ratings_callback: true)
+    end
+
+    year_in_review = YearInReview.create!(year: 2026)
+    year_in_review.generate!
+
+    top = year_in_review.top_selections_with_includes.to_a
+    film_ids = top.map { |ts| ts.selection.film_id }
+
+    assert_includes(film_ids, excellent_film.id,
+      "Highly-rated film from small edition should appear in top selections")
+
+    excellent_entry = top.find { |ts| ts.selection.film_id == excellent_film.id }
+    mediocre_entry = top.find { |ts| ts.selection.film_id == mediocre_film.id }
+
+    assert_operator(excellent_entry.bayesian_score, :>, mediocre_entry.bayesian_score,
+      "Excellent film with few ratings should rank above mediocre film with many ratings")
+  end
+
+  test "#generate! includes films that would have fallen below the old min_ratings threshold" do
+    # Create an edition in 2027 with 12 attending critics (old threshold: ceil(12/3)=4)
+    edition = Edition.create!(
+      festival: festivals(:base), year: 2027, code: "TEST27",
+      start_date: "2027-06-01", end_date: "2027-06-10", slug: "test27",
+    )
+    category = Category.create!(edition: edition, name: "Main", position: 1)
+
+    # Create 12 attending critics
+    created_critics = 12.times.map do |i|
+      critic = Critic.create!(first_name: "Critic#{i}", last_name: "Pool", country: "US")
+      Attendance.create!(critic: critic, edition: edition)
+      critic
+    end
+
+    # Film A: 2 ratings (below old threshold of 4), both perfect 5.0
+    film_a = Film.create!(
+      title: "Hidden Gem", normalized_title: "Hidden Gem",
+      director: "Director A", country: "US", year: 2027,
+    )
+    selection_a = Selection.create!(edition: edition, film: film_a, category: category, average_rating: 5.0)
+    created_critics[0..1].each do |critic|
+      Rating.create!(critic: critic, selection: selection_a, score: 5.0,
+        skip_cache_average_ratings_callback: true)
+    end
+
+    # Film B: 6 ratings (above old threshold), average 3.0
+    film_b = Film.create!(
+      title: "Common Film", normalized_title: "Common Film",
+      director: "Director B", country: "US", year: 2027,
+    )
+    selection_b = Selection.create!(edition: edition, film: film_b, category: category, average_rating: 3.0)
+    created_critics[0..5].each do |critic|
+      Rating.create!(critic: critic, selection: selection_b, score: 3.0,
+        skip_cache_average_ratings_callback: true)
+    end
+
+    year_in_review = YearInReview.create!(year: 2027)
+    year_in_review.generate!
+
+    top = year_in_review.top_selections_with_includes.to_a
+    film_ids = top.map { |ts| ts.selection.film_id }
+
+    assert_includes(film_ids, film_a.id,
+      "Film with only 2 ratings should now be included (previously excluded by hard threshold)")
+  end
+
+  test "#generate! stores bayesian_score on top selections" do
+    year_in_review = year_in_reviews(:base)
+    year_in_review.generate!
+
+    top = year_in_review.top_selections_with_includes.to_a
+    assert(top.all? { |ts| ts.bayesian_score.present? },
+      "All top selections should have a bayesian_score")
   end
 end

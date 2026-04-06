@@ -107,25 +107,25 @@ class YearInReview < ApplicationRecord
 
   def assign_top_selections!(edition_ids)
     # Aggregate ratings across ALL editions in the year, per film.
-    # Requires ≥1/3 of the critic pool (min 4). Ranks by combined average.
+    # No minimum threshold — the Bayesian formula handles weighting.
     film_aggregates = Rating
       .joins(selection: :film)
       .where(selections: { edition_id: edition_ids })
       .where(films: { year: year })
       .group("films.id")
-      .having("COUNT(ratings.id) >= ?", min_ratings_for_summary)
-      .order("AVG(ratings.score) DESC")
-      .limit(5)
-      .pluck(Arel.sql("films.id, AVG(ratings.score), COUNT(ratings.id)"))
+      .pluck(Arel.sql("films.id, SUM(ratings.score), COUNT(ratings.id)"))
+      .map { |film_id, sum, count| { film_id: film_id, sum: sum.to_f, count: count } }
+
+    ranked = TopFilms.new(film_aggregates).ranked
 
     # For each top film, pick a representative selection (the one with the most ratings)
     # to use for featured_rating, poster, etc.
     year_in_review_top_selections.destroy_all
 
-    film_aggregates.each_with_index do |(film_id, avg_rating, ratings_count), index|
+    ranked.each_with_index do |result, index|
       representative = Selection
         .joins(:ratings)
-        .where(edition_id: edition_ids, film_id: film_id)
+        .where(edition_id: edition_ids, film_id: result.film_id)
         .group("selections.id")
         .order("COUNT(ratings.id) DESC")
         .first
@@ -133,8 +133,9 @@ class YearInReview < ApplicationRecord
       year_in_review_top_selections.create!(
         selection: representative,
         position: index + 1,
-        combined_average_rating: avg_rating,
-        combined_ratings_count: ratings_count,
+        bayesian_score: result.bayesian_score,
+        combined_average_rating: result.average_rating,
+        combined_ratings_count: result.ratings_count,
       )
     end
   end
