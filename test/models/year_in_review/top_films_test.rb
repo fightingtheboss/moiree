@@ -23,8 +23,8 @@ class YearInReview::TopFilmsTest < ActiveSupport::TestCase
 
   test "film with many ratings ranks close to its raw average" do
     aggregates = [
-      { film_id: 1, sum: 200.0, count: 50 },  # avg 4.0, many ratings
-      { film_id: 2, sum: 5.0, count: 2 },      # avg 2.5, few ratings
+      { film_id: 1, sum: 200.0, count: 50 }, # avg 4.0, many ratings
+      { film_id: 2, sum: 5.0, count: 2 }, # avg 2.5, few ratings
     ]
     top_films = YearInReview::TopFilms.new(aggregates)
 
@@ -34,8 +34,8 @@ class YearInReview::TopFilmsTest < ActiveSupport::TestCase
 
   test "film with few ratings is pulled toward the global mean" do
     aggregates = [
-      { film_id: 1, sum: 200.0, count: 50 },  # avg 4.0, many ratings
-      { film_id: 2, sum: 10.0, count: 2 },     # avg 5.0, few ratings
+      { film_id: 1, sum: 200.0, count: 50 }, # avg 4.0, many ratings
+      { film_id: 2, sum: 10.0, count: 2 }, # avg 5.0, few ratings
     ]
     top_films = YearInReview::TopFilms.new(aggregates)
 
@@ -47,8 +47,8 @@ class YearInReview::TopFilmsTest < ActiveSupport::TestCase
 
   test "film with few but perfect ratings can rank above a film with many mediocre ratings" do
     aggregates = [
-      { film_id: 1, sum: 15.0, count: 5 },   # avg 3.0, mediocre
-      { film_id: 2, sum: 15.0, count: 3 },    # avg 5.0, excellent but fewer ratings
+      { film_id: 1, sum: 15.0, count: 5 }, # avg 3.0, mediocre
+      { film_id: 2, sum: 15.0, count: 3 }, # avg 5.0, excellent but fewer ratings
     ]
     top_films = YearInReview::TopFilms.new(aggregates)
 
@@ -58,7 +58,7 @@ class YearInReview::TopFilmsTest < ActiveSupport::TestCase
 
   test "all films with the same average produce equal bayesian scores" do
     aggregates = [
-      { film_id: 1, sum: 20.0, count: 5 },   # avg 4.0
+      { film_id: 1, sum: 20.0, count: 5 }, # avg 4.0
       { film_id: 2, sum: 40.0, count: 10 },   # avg 4.0
       { film_id: 3, sum: 8.0, count: 2 },     # avg 4.0
     ]
@@ -112,8 +112,8 @@ class YearInReview::TopFilmsTest < ActiveSupport::TestCase
 
   test "preserves raw average even when bayesian score differs" do
     aggregates = [
-      { film_id: 1, sum: 100.0, count: 25 },  # avg 4.0
-      { film_id: 2, sum: 10.0, count: 2 },     # avg 5.0
+      { film_id: 1, sum: 100.0, count: 25 }, # avg 4.0
+      { film_id: 2, sum: 10.0, count: 2 }, # avg 5.0
     ]
     top_films = YearInReview::TopFilms.new(aggregates)
 
