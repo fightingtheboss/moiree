@@ -110,18 +110,8 @@ class YearInReviewTest < ActiveSupport::TestCase
     # Existing ratings on base selection: base (3.5), without_publication (2.5),
     #   frequent_rater (1.0), contrarian (1.5) = 4 ratings
     # Add two more ratings on the SECOND selection for cross-edition aggregation
-    Rating.create!(
-      critic: critics(:without_publication),
-      selection: second_selection,
-      score: 4.0,
-      skip_cache_average_ratings_callback: true,
-    )
-    Rating.create!(
-      critic: critics(:without_ratings),
-      selection: second_selection,
-      score: 5.0,
-      skip_cache_average_ratings_callback: true,
-    )
+    create_rating(critic: critics(:without_publication), selection: second_selection, score: 4.0)
+    create_rating(critic: critics(:without_ratings), selection: second_selection, score: 5.0)
 
     year_in_review = year_in_reviews(:base)
     year_in_review.generate!
@@ -332,24 +322,15 @@ class YearInReviewTest < ActiveSupport::TestCase
     20.times do |i|
       critic = Critic.create!(first_name: "Large#{i}", last_name: "Critic", country: "US")
       Attendance.create!(critic: critic, edition: large_edition)
-      Rating.create!(
-        critic: critic,
-        selection: mediocre_selection,
-        score: 3.0,
-        skip_cache_average_ratings_callback: true,
-      )
+      create_rating(critic: critic, selection: mediocre_selection, score: 3.0)
     end
 
-    # Create 3 critics at the small edition, each rating the excellent film 5.0
-    3.times do |i|
+    # Create 5 critics at the small edition, each rating the excellent film 5.0
+    # (meets the min_ratings floor of 4)
+    5.times do |i|
       critic = Critic.create!(first_name: "Small#{i}", last_name: "Critic", country: "FR")
       Attendance.create!(critic: critic, edition: small_edition)
-      Rating.create!(
-        critic: critic,
-        selection: excellent_selection,
-        score: 5.0,
-        skip_cache_average_ratings_callback: true,
-      )
+      create_rating(critic: critic, selection: excellent_selection, score: 5.0)
     end
 
     year_in_review = YearInReview.create!(year: 2026)
@@ -375,8 +356,10 @@ class YearInReviewTest < ActiveSupport::TestCase
     )
   end
 
-  test "#generate! includes films that would have fallen below the old min_ratings threshold" do
-    # Create an edition in 2027 with 12 attending critics (old threshold: ceil(12/3)=4)
+  test "#generate! includes films meeting the minimum ratings floor even when below the year-wide threshold" do
+    # Create an edition in 2027 with 30 attending critics
+    # Year-wide threshold would be ceil(30/3)=10, but the floor is 4.
+    # A film with exactly 4 ratings should still qualify via TopFilms.
     edition = Edition.create!(
       festival: festivals(:base),
       year: 2027,
@@ -387,14 +370,14 @@ class YearInReviewTest < ActiveSupport::TestCase
     )
     category = Category.create!(edition: edition, name: "Main", position: 1)
 
-    # Create 12 attending critics
-    created_critics = 12.times.map do |i|
+    # Create 30 attending critics
+    created_critics = 30.times.map do |i|
       critic = Critic.create!(first_name: "Critic#{i}", last_name: "Pool", country: "US")
       Attendance.create!(critic: critic, edition: edition)
       critic
     end
 
-    # Film A: 2 ratings (below old threshold of 4), both perfect 5.0
+    # Film A: 4 ratings (meets floor of 4, but below year-wide threshold of 10), perfect 5.0
     film_a = Film.create!(
       title: "Hidden Gem",
       normalized_title: "Hidden Gem",
@@ -403,16 +386,11 @@ class YearInReviewTest < ActiveSupport::TestCase
       year: 2027,
     )
     selection_a = Selection.create!(edition: edition, film: film_a, category: category, average_rating: 5.0)
-    created_critics[0..1].each do |critic|
-      Rating.create!(
-        critic: critic,
-        selection: selection_a,
-        score: 5.0,
-        skip_cache_average_ratings_callback: true,
-      )
+    created_critics[0..3].each do |critic|
+      create_rating(critic: critic, selection: selection_a, score: 5.0)
     end
 
-    # Film B: 6 ratings (above old threshold), average 3.0
+    # Film B: 12 ratings (above year-wide threshold), average 3.0
     film_b = Film.create!(
       title: "Common Film",
       normalized_title: "Common Film",
@@ -421,13 +399,8 @@ class YearInReviewTest < ActiveSupport::TestCase
       year: 2027,
     )
     selection_b = Selection.create!(edition: edition, film: film_b, category: category, average_rating: 3.0)
-    created_critics[0..5].each do |critic|
-      Rating.create!(
-        critic: critic,
-        selection: selection_b,
-        score: 3.0,
-        skip_cache_average_ratings_callback: true,
-      )
+    created_critics[0..11].each do |critic|
+      create_rating(critic: critic, selection: selection_b, score: 3.0)
     end
 
     year_in_review = YearInReview.create!(year: 2027)
@@ -439,7 +412,7 @@ class YearInReviewTest < ActiveSupport::TestCase
     assert_includes(
       film_ids,
       film_a.id,
-      "Film with only 2 ratings should now be included (previously excluded by hard threshold)",
+      "Film with 4 ratings should qualify via min_ratings floor (would have been excluded by year-wide threshold of 10)",
     )
   end
 
@@ -451,6 +424,128 @@ class YearInReviewTest < ActiveSupport::TestCase
     assert(
       top.all? { |ts| ts.bayesian_score.present? },
       "All top selections should have a bayesian_score",
+    )
+  end
+
+  test "#generate! aggregates ratings from both editions when a film qualifies at one but not the other" do
+    # Large edition (15 critics) — threshold = max(ceil(15/3), 4) = 5
+    large_edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2026,
+      code: "LARGE26",
+      start_date: "2026-08-01",
+      end_date: "2026-08-10",
+      slug: "large26",
+    )
+    large_category = Category.create!(edition: large_edition, name: "Main", position: 1)
+
+    large_critics = 15.times.map do |i|
+      critic = Critic.create!(first_name: "Large#{i}", last_name: "Test", country: "US")
+      Attendance.create!(critic: critic, edition: large_edition)
+      critic
+    end
+
+    # Small edition (6 critics) — threshold = max(ceil(6/3), 4) = 4
+    small_edition = Edition.create!(
+      festival: festivals(:base),
+      year: 2026,
+      code: "SMALL26",
+      start_date: "2026-06-01",
+      end_date: "2026-06-07",
+      slug: "small26",
+    )
+    small_category = Category.create!(edition: small_edition, name: "Main", position: 1)
+
+    small_critics = 6.times.map do |i|
+      critic = Critic.create!(first_name: "Small#{i}", last_name: "Test", country: "US")
+      Attendance.create!(critic: critic, edition: small_edition)
+      critic
+    end
+
+    # Same film at both editions
+    film = Film.create!(
+      title: "Cross-Edition Film",
+      normalized_title: "Cross-Edition Film",
+      director: "Director X",
+      country: "US",
+      year: 2026,
+    )
+    large_selection = Selection.create!(edition: large_edition, film: film, category: large_category)
+    small_selection = Selection.create!(edition: small_edition, film: film, category: small_category)
+
+    # Film gets 4 ratings at the small edition (meets min_ratings floor of 4)
+    small_critics.first(4).each do |critic|
+      create_rating(critic: critic, selection: small_selection, score: 4.5)
+    end
+
+    # Film gets only 3 ratings at the large edition
+    large_critics.first(3).each do |critic|
+      create_rating(critic: critic, selection: large_selection, score: 4.0)
+    end
+
+    # Need another qualifying film so TopFilms has data for the Bayesian prior
+    filler_film = Film.create!(
+      title: "Filler Film",
+      normalized_title: "Filler Film",
+      director: "Director Y",
+      country: "US",
+      year: 2026,
+    )
+    filler_selection = Selection.create!(edition: large_edition, film: filler_film, category: large_category)
+    large_critics.first(6).each do |critic|
+      create_rating(critic: critic, selection: filler_selection, score: 3.0)
+    end
+
+    year_in_review = YearInReview.create!(year: 2026)
+    year_in_review.generate!
+
+    top = year_in_review.top_selections_with_includes.to_a
+    film_entry = top.find { |ts| ts.selection.film_id == film.id }
+
+    # Film qualifies because it has 7 total ratings (4 + 3), above the floor of 4.
+    # Ratings from both editions are aggregated.
+    assert_not_nil(film_entry, "Film should qualify with combined ratings from both editions")
+    assert_equal(7, film_entry.combined_ratings_count, "Should aggregate ratings from both editions")
+  end
+
+  test "#generate! produces no top selections when no films meet the minimum ratings floor" do
+    year_in_review = YearInReview.create!(year: 2028)
+
+    edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2028,
+      code: "SPARSE28",
+      start_date: "2028-09-01",
+      end_date: "2028-09-10",
+      slug: "sparse28",
+    )
+    category = Category.create!(edition: edition, name: "Main", position: 1)
+
+    critics = 6.times.map do |i|
+      critic = Critic.create!(first_name: "Sparse#{i}", last_name: "Test", country: "US")
+      Attendance.create!(critic: critic, edition: edition)
+      critic
+    end
+
+    film = Film.create!(
+      title: "Underrated Gem",
+      normalized_title: "Underrated Gem",
+      director: "Nobody",
+      country: "US",
+      year: 2028,
+    )
+    selection = Selection.create!(edition: edition, film: film, category: category)
+
+    # Only 3 ratings — below the min_ratings floor of 4
+    critics.first(3).each do |critic|
+      create_rating(critic: critic, selection: selection, score: 5.0)
+    end
+
+    year_in_review.generate!
+
+    assert_empty(
+      year_in_review.top_selections_with_includes.to_a,
+      "No films should qualify when none meet the minimum ratings floor",
     )
   end
 end
