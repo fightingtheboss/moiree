@@ -4,6 +4,14 @@ module Summarizable
   extend ActiveSupport::Concern
 
   MIN_RATINGS_FLOOR = 4
+  CRITIC_POOL_DIVISOR = 3.0
+
+  class_methods do
+    # Compute the minimum ratings threshold for a given critic pool size.
+    def threshold_for(critic_count)
+      [(critic_count / CRITIC_POOL_DIVISOR).ceil, MIN_RATINGS_FLOOR].max
+    end
+  end
 
   # Includers must implement this to define the critic pool size.
   # For Edition, this is the number of attending critics.
@@ -14,7 +22,7 @@ module Summarizable
 
   # Dynamic threshold: 1/3 of the critic pool, with a floor of MIN_RATINGS_FLOOR.
   def min_ratings_for_summary
-    [(summary_critics_count / 3.0).ceil, MIN_RATINGS_FLOOR].max
+    self.class.threshold_for(summary_critics_count)
   end
 
   # Override in models without a direct `selections` association.

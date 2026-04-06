@@ -165,6 +165,25 @@ class SummarizableTest < ActiveSupport::TestCase
     assert_equal(4, Summarizable::MIN_RATINGS_FLOOR)
   end
 
+  # --- threshold_for class method ---
+
+  test ".threshold_for returns the floor for small critic pools" do
+    assert_equal(4, Edition.threshold_for(1))
+    assert_equal(4, Edition.threshold_for(6))
+    assert_equal(4, Edition.threshold_for(11))
+  end
+
+  test ".threshold_for returns ceil of 1/3 when above the floor" do
+    assert_equal(5, Edition.threshold_for(13))
+    assert_equal(5, Edition.threshold_for(15))
+    assert_equal(6, Edition.threshold_for(17))
+    assert_equal(10, Edition.threshold_for(30))
+  end
+
+  test ".threshold_for handles zero critics" do
+    assert_equal(4, Edition.threshold_for(0))
+  end
+
   # --- summary_selections default ---
 
   test "#summary_selections defaults to the selections association on Edition" do
