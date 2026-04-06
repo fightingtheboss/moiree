@@ -4,3 +4,6 @@ first:
   year_in_review: base
   selection: base
   position: 1
+  bayesian_score: 3.5
+  combined_average_rating: 3.5
+  combined_ratings_count: 4
