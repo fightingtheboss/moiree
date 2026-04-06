@@ -18,5 +18,9 @@ module ActiveSupport
       post(sign_in_url, params: { email: user.email, password: "Secret1*3*5*" })
       user
     end
+
+    def create_rating(critic:, selection:, score:)
+      Rating.create!(critic: critic, selection: selection, score: score, skip_cache_average_ratings_callback: true)
+    end
   end
 end
