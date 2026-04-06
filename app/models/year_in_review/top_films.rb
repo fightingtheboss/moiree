@@ -3,24 +3,36 @@
 class YearInReview
   class TopFilms
     DEFAULT_LIMIT = 5
+    DEFAULT_MIN_RATINGS = Summarizable::MIN_RATINGS_FLOOR
 
     Result = Data.define(:film_id, :bayesian_score, :average_rating, :ratings_count)
 
-    def initialize(film_aggregates, limit: DEFAULT_LIMIT)
+    # film_aggregates - Array of { film_id:, sum:, count: } hashes for every
+    #   rated film in the year (before any filtering).
+    # min_ratings - Films with fewer ratings are excluded from ranking.
+    #   The global mean and confidence weight are computed from the full
+    #   (unfiltered) pool so the Bayesian prior isn't skewed by survivorship.
+    # limit - Maximum number of results to return.
+    def initialize(film_aggregates, min_ratings: DEFAULT_MIN_RATINGS, limit: DEFAULT_LIMIT)
       @film_aggregates = film_aggregates
+      @min_ratings = min_ratings
       @limit = limit
     end
 
     def ranked
       return [] if @film_aggregates.empty?
 
-      @film_aggregates
+      qualifying_aggregates
         .map { |agg| build_result(agg) }
         .sort_by { |r| -r.bayesian_score }
         .first(@limit)
     end
 
     private
+
+    def qualifying_aggregates
+      @qualifying_aggregates ||= @film_aggregates.select { |agg| agg[:count] >= @min_ratings }
+    end
 
     def build_result(aggregate)
       Result.new(
@@ -35,6 +47,8 @@ class YearInReview
       (confidence_weight * global_mean + sum) / (confidence_weight + count)
     end
 
+    # Computed from ALL films (pre-filter) so the prior reflects the true
+    # population mean, not just the survivors above the min_ratings cutoff.
     def global_mean
       @global_mean ||= begin
         total_sum = @film_aggregates.sum { |agg| agg[:sum] }

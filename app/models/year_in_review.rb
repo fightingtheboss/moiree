@@ -107,7 +107,8 @@ class YearInReview < ApplicationRecord
 
   def assign_top_selections!(edition_ids)
     # Aggregate ratings across ALL editions in the year, per film.
-    # No minimum threshold — the Bayesian formula handles weighting.
+    # Films below the minimum ratings threshold are excluded by TopFilms;
+    # the Bayesian formula handles weighting for everything above the floor.
     film_aggregates = Rating
       .joins(selection: :film)
       .where(selections: { edition_id: edition_ids })
