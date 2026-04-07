@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,242 +12,242 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_07_030451) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_06_022714) do
   create_table "action_text_rich_texts", force: :cascade do |t|
-    t.string "name", null: false
-    t.text "body"
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+    t.string("name", null: false)
+    t.text("body")
+    t.string("record_type", null: false)
+    t.bigint("record_id", null: false)
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.index(["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true)
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
-    t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
-    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+    t.string("name", null: false)
+    t.string("record_type", null: false)
+    t.bigint("record_id", null: false)
+    t.bigint("blob_id", null: false)
+    t.datetime("created_at", null: false)
+    t.index(["blob_id"], name: "index_active_storage_attachments_on_blob_id")
+    t.index(["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true)
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.string "service_name", null: false
-    t.bigint "byte_size", null: false
-    t.string "checksum"
-    t.datetime "created_at", null: false
-    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+    t.string("key", null: false)
+    t.string("filename", null: false)
+    t.string("content_type")
+    t.text("metadata")
+    t.string("service_name", null: false)
+    t.bigint("byte_size", null: false)
+    t.string("checksum")
+    t.datetime("created_at", null: false)
+    t.index(["key"], name: "index_active_storage_blobs_on_key", unique: true)
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
-    t.string "variation_digest", null: false
-    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+    t.bigint("blob_id", null: false)
+    t.string("variation_digest", null: false)
+    t.index(["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true)
   end
 
   create_table "admins", force: :cascade do |t|
-    t.string "username"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string("username")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
   end
 
   create_table "attendances", force: :cascade do |t|
-    t.integer "critic_id", null: false
-    t.integer "edition_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "publication"
-    t.index ["critic_id"], name: "index_attendances_on_critic_id"
-    t.index ["edition_id"], name: "index_attendances_on_edition_id"
+    t.integer("critic_id", null: false)
+    t.integer("edition_id", null: false)
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.string("publication")
+    t.index(["critic_id"], name: "index_attendances_on_critic_id")
+    t.index(["edition_id"], name: "index_attendances_on_edition_id")
   end
 
   create_table "categories", force: :cascade do |t|
-    t.integer "edition_id", null: false
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "position", null: false
-    t.boolean "standalone", default: false, null: false
-    t.index ["edition_id", "position"], name: "index_categories_on_edition_id_and_position", unique: true
-    t.index ["edition_id"], name: "index_categories_on_edition_id"
+    t.integer("edition_id", null: false)
+    t.string("name")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.integer("position", null: false)
+    t.boolean("standalone", default: false, null: false)
+    t.index(["edition_id", "position"], name: "index_categories_on_edition_id_and_position", unique: true)
+    t.index(["edition_id"], name: "index_categories_on_edition_id")
   end
 
   create_table "critics", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.string "publication"
-    t.string "country"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.index ["slug"], name: "index_critics_on_slug", unique: true
+    t.string("first_name")
+    t.string("last_name")
+    t.string("publication")
+    t.string("country")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.string("slug")
+    t.index(["slug"], name: "index_critics_on_slug", unique: true)
   end
 
   create_table "editions", force: :cascade do |t|
-    t.integer "festival_id", null: false
-    t.integer "year"
-    t.string "code"
-    t.string "url"
-    t.date "start_date"
-    t.date "end_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.index ["festival_id", "slug"], name: "index_editions_on_festival_id_and_slug", unique: true
-    t.index ["festival_id"], name: "index_editions_on_festival_id"
+    t.integer("festival_id", null: false)
+    t.integer("year")
+    t.string("code")
+    t.string("url")
+    t.date("start_date")
+    t.date("end_date")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.string("slug")
+    t.index(["festival_id", "slug"], name: "index_editions_on_festival_id_and_slug", unique: true)
+    t.index(["festival_id"], name: "index_editions_on_festival_id")
   end
 
   create_table "episodes", force: :cascade do |t|
-    t.string "title"
-    t.text "description"
-    t.integer "podcast_id", null: false
-    t.string "url"
-    t.text "embed"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.string "provider_id"
-    t.text "summary"
-    t.datetime "published_at"
-    t.integer "duration"
-    t.integer "edition_id"
-    t.index ["edition_id"], name: "index_episodes_on_edition_id"
-    t.index ["podcast_id"], name: "index_episodes_on_podcast_id"
-    t.index ["published_at"], name: "index_episodes_on_published_at"
-    t.index ["slug"], name: "index_episodes_on_slug", unique: true
+    t.string("title")
+    t.text("description")
+    t.integer("podcast_id", null: false)
+    t.string("url")
+    t.text("embed")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.string("slug")
+    t.string("provider_id")
+    t.text("summary")
+    t.datetime("published_at")
+    t.integer("duration")
+    t.integer("edition_id")
+    t.index(["edition_id"], name: "index_episodes_on_edition_id")
+    t.index(["podcast_id"], name: "index_episodes_on_podcast_id")
+    t.index(["published_at"], name: "index_episodes_on_published_at")
+    t.index(["slug"], name: "index_episodes_on_slug", unique: true)
   end
 
   create_table "festivals", force: :cascade do |t|
-    t.string "name"
-    t.string "short_name"
-    t.string "url"
-    t.string "country"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.index ["slug"], name: "index_festivals_on_slug", unique: true
+    t.string("name")
+    t.string("short_name")
+    t.string("url")
+    t.string("country")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.string("slug")
+    t.index(["slug"], name: "index_festivals_on_slug", unique: true)
   end
 
   create_table "films", force: :cascade do |t|
-    t.string "title"
-    t.string "original_title"
-    t.string "director"
-    t.string "country"
-    t.integer "year"
-    t.decimal "overall_average_rating"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.string "normalized_title", null: false
-    t.boolean "rateable", default: true, null: false
-    t.text "summary"
-    t.integer "tmdb_id"
-    t.date "release_date"
-    t.string "poster_path"
-    t.string "backdrop_path"
-    t.index ["slug"], name: "index_films_on_slug", unique: true
+    t.string("title")
+    t.string("original_title")
+    t.string("director")
+    t.string("country")
+    t.integer("year")
+    t.decimal("overall_average_rating")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.string("slug")
+    t.string("normalized_title", null: false)
+    t.boolean("rateable", default: true, null: false)
+    t.text("summary")
+    t.integer("tmdb_id")
+    t.date("release_date")
+    t.string("poster_path")
+    t.string("backdrop_path")
+    t.index(["slug"], name: "index_films_on_slug", unique: true)
   end
 
   create_table "podcasts", force: :cascade do |t|
-    t.string "title", null: false
-    t.text "description"
-    t.integer "user_id", null: false
-    t.string "url"
-    t.string "slug", null: false
-    t.boolean "platform", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["slug"], name: "index_podcasts_on_slug", unique: true
-    t.index ["user_id"], name: "index_podcasts_on_user_id"
+    t.string("title", null: false)
+    t.text("description")
+    t.integer("user_id", null: false)
+    t.string("url")
+    t.string("slug", null: false)
+    t.boolean("platform", default: false)
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.index(["slug"], name: "index_podcasts_on_slug", unique: true)
+    t.index(["user_id"], name: "index_podcasts_on_user_id")
   end
 
   create_table "ratings", force: :cascade do |t|
-    t.integer "critic_id", null: false
-    t.integer "selection_id", null: false
-    t.decimal "score", precision: 2, scale: 1
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "review_url"
-    t.text "impression"
-    t.index ["critic_id"], name: "index_ratings_on_critic_id"
-    t.index ["selection_id"], name: "index_ratings_on_selection_id"
+    t.integer("critic_id", null: false)
+    t.integer("selection_id", null: false)
+    t.decimal("score", precision: 2, scale: 1)
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.string("review_url")
+    t.text("impression")
+    t.index(["critic_id"], name: "index_ratings_on_critic_id")
+    t.index(["selection_id"], name: "index_ratings_on_selection_id")
   end
 
   create_table "selections", force: :cascade do |t|
-    t.integer "edition_id", null: false
-    t.integer "film_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.decimal "average_rating"
-    t.integer "category_id"
-    t.index ["category_id"], name: "index_selections_on_category_id"
-    t.index ["edition_id"], name: "index_selections_on_edition_id"
-    t.index ["film_id"], name: "index_selections_on_film_id"
+    t.integer("edition_id", null: false)
+    t.integer("film_id", null: false)
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.decimal("average_rating")
+    t.integer("category_id")
+    t.index(["category_id"], name: "index_selections_on_category_id")
+    t.index(["edition_id"], name: "index_selections_on_edition_id")
+    t.index(["film_id"], name: "index_selections_on_film_id")
   end
 
   create_table "sessions", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.string "user_agent"
-    t.string "ip_address"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_sessions_on_user_id"
+    t.integer("user_id", null: false)
+    t.string("user_agent")
+    t.string("ip_address")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.index(["user_id"], name: "index_sessions_on_user_id")
   end
 
   create_table "sign_in_tokens", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.index ["user_id"], name: "index_sign_in_tokens_on_user_id"
+    t.integer("user_id", null: false)
+    t.index(["user_id"], name: "index_sign_in_tokens_on_user_id")
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", null: false
-    t.string "password_digest", null: false
-    t.boolean "verified", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "userable_type", null: false
-    t.integer "userable_id", null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["userable_type", "userable_id"], name: "index_users_on_userable"
+    t.string("email", null: false)
+    t.string("password_digest", null: false)
+    t.boolean("verified", default: false, null: false)
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.string("userable_type", null: false)
+    t.integer("userable_id", null: false)
+    t.index(["email"], name: "index_users_on_email", unique: true)
+    t.index(["userable_type", "userable_id"], name: "index_users_on_userable")
   end
 
   create_table "year_in_review_top_selections", force: :cascade do |t|
-    t.integer "year_in_review_id", null: false
-    t.integer "selection_id", null: false
-    t.integer "position", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.decimal "combined_average_rating"
-    t.integer "combined_ratings_count"
-    t.decimal "bayesian_score"
-    t.index ["selection_id"], name: "index_year_in_review_top_selections_on_selection_id"
-    t.index ["year_in_review_id", "position"], name: "idx_yir_top_selections_on_yir_and_position", unique: true
-    t.index ["year_in_review_id", "selection_id"], name: "idx_yir_top_selections_on_yir_and_selection", unique: true
-    t.index ["year_in_review_id"], name: "index_year_in_review_top_selections_on_year_in_review_id"
+    t.integer("year_in_review_id", null: false)
+    t.integer("selection_id", null: false)
+    t.integer("position", null: false)
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.decimal("combined_average_rating")
+    t.integer("combined_ratings_count")
+    t.decimal("bayesian_score")
+    t.index(["selection_id"], name: "index_year_in_review_top_selections_on_selection_id")
+    t.index(["year_in_review_id", "position"], name: "idx_yir_top_selections_on_yir_and_position", unique: true)
+    t.index(["year_in_review_id", "selection_id"], name: "idx_yir_top_selections_on_yir_and_selection", unique: true)
+    t.index(["year_in_review_id"], name: "index_year_in_review_top_selections_on_year_in_review_id")
   end
 
   create_table "year_in_reviews", force: :cascade do |t|
-    t.integer "year", null: false
-    t.integer "editions_count", default: 0, null: false
-    t.integer "critics_count", default: 0, null: false
-    t.integer "films_count", default: 0, null: false
-    t.integer "ratings_count", default: 0, null: false
-    t.integer "five_star_ratings_count", default: 0, null: false
-    t.integer "zero_star_ratings_count", default: 0, null: false
-    t.integer "bombe_moiree_selection_id"
-    t.integer "most_divisive_selection_id"
-    t.datetime "generated_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["bombe_moiree_selection_id"], name: "index_year_in_reviews_on_bombe_moiree_selection_id"
-    t.index ["most_divisive_selection_id"], name: "index_year_in_reviews_on_most_divisive_selection_id"
-    t.index ["year"], name: "index_year_in_reviews_on_year", unique: true
+    t.integer("year", null: false)
+    t.integer("editions_count", default: 0, null: false)
+    t.integer("critics_count", default: 0, null: false)
+    t.integer("films_count", default: 0, null: false)
+    t.integer("ratings_count", default: 0, null: false)
+    t.integer("five_star_ratings_count", default: 0, null: false)
+    t.integer("zero_star_ratings_count", default: 0, null: false)
+    t.integer("bombe_moiree_selection_id")
+    t.integer("most_divisive_selection_id")
+    t.datetime("generated_at")
+    t.datetime("created_at", null: false)
+    t.datetime("updated_at", null: false)
+    t.index(["bombe_moiree_selection_id"], name: "index_year_in_reviews_on_bombe_moiree_selection_id")
+    t.index(["most_divisive_selection_id"], name: "index_year_in_reviews_on_most_divisive_selection_id")
+    t.index(["year"], name: "index_year_in_reviews_on_year", unique: true)
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
