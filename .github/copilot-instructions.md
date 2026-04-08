@@ -122,6 +122,12 @@ bin/rails runner "BackupDbToS3Job.perform_now"  # Run specific job
 - Conform to idiomatic Ruby and Rails as much as possible
 - Use concerns to keep models small and focused where needed (if not reusable, namespace to model)
 - Follow the wisdom of Sandi Metz
+  - Small objects
+  - Duplication is better than the wrong abstraction
+  - Inheritance is not evil
+    - Aim for a shallow, narrow hierarchy
+    - Subclasses should be at the leaf nodes of the object graph
+    - Subclasses should use all of the code in the superclass
 
 **Admin Features:**
 - Controllers: `app/controllers/admin/` (inherit from `Admin::AdminController`)
@@ -135,6 +141,8 @@ bin/rails runner "BackupDbToS3Job.perform_now"  # Run specific job
 
 **Tailwind:** v4 via standalone CLI (`tailwindcss-rails` gem). NO Node.js/npm/PostCSS.
 
+**Documentation:** Update README.md for architectural/dev/deploy changes. Update CHANGELOG.md for all changes.
+
 ## Critical Files Before Changes
 - `config/routes.rb` — Routing
 - `config/application.rb` — Mission Control config
@@ -143,6 +151,13 @@ bin/rails runner "BackupDbToS3Job.perform_now"  # Run specific job
 - `Dockerfile` — Production build
 - `.github/workflows/ci.yml` — CI validation
 - `Gemfile` — Check versions before adding/upgrading
+
+## Production
+
+```bash
+# SSH into production Rails console
+fly ssh console --pty -C "/rails/bin/rails console"
+```
 
 ## Root Files Reference
 ```
