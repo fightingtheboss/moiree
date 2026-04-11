@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-04-11
+- Migrate deployment from Fly.io to Kamal on Hetzner
+  - Replace LiteFS with Litestream for continuous SQLite replication to S3
+  - Use Docker Hub as the container registry
+  - Deploy via Kamal with Thruster as the HTTP accelerator
+  - Update GitHub Actions workflow to deploy with Kamal
+  - Manage deploy secrets via 1Password adapter locally, env vars in CI
+  - Remove BackupDbToS3Job (replaced by Litestream continuous replication)
+
 ## 2026-01-31
 - Concept of unrateable film
   - Should be called out to both critics and to end users
