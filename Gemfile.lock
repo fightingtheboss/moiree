@@ -125,8 +125,6 @@ GEM
     debug (1.10.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
-    dockerfile-rails (1.7.9)
-      rails (>= 3.0.0)
     dotenv (3.2.0)
     drb (2.2.1)
     ed25519 (1.4.0)
@@ -491,7 +489,6 @@ DEPENDENCIES
   countries (~> 7.0)
   csv
   debug
-  dockerfile-rails (>= 1.6)
   faker
   friendly_id (~> 5.5.0)
   image_processing (~> 1.2)
