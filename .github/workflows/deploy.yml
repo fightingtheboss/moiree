@@ -31,8 +31,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Write master key for Kamal secrets
-        run: echo "$RAILS_MASTER_KEY" > config/master.key
+      - name: Write Kamal secrets for CI
+        run: |
+          echo "KAMAL_REGISTRY_PASSWORD=$KAMAL_REGISTRY_PASSWORD" > .kamal/secrets
+          echo "RAILS_MASTER_KEY=$RAILS_MASTER_KEY" >> .kamal/secrets
 
       - name: Deploy with Kamal
         run: bundle exec kamal deploy
