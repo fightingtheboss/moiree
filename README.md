@@ -21,11 +21,14 @@ When an Admin is invited, their account is created and they're sent a link to re
 - Tailwind
   - v4
 
-## Database backup
-- The app is currently deployed to Fly.io
-- We use SQLite in production
-- The SQLite database is backed up every day at midnight via a Solid Queue job (BackupDbToS3Job)
-- Credentials are coordinated between Fly and AWS via OIDC IdP: [Configure fly.io as a OIDC IdP](https://fly.io/blog/oidc-cloud-roles/)
+## Deployment
+- Deployed to a Hetzner VPS using [Kamal](https://kamal-deploy.org)
+- Docker images pushed to Docker Hub
+- SSL via Kamal proxy (Let's Encrypt)
+- SQLite in production with Solid Queue, Solid Cache, and Solid Cable
+- Continuous database replication to S3 via [Litestream](https://litestream.io) (runs as a Puma plugin)
+- File uploads stored on S3 via Active Storage
+- CI/CD via GitHub Actions: tests run on all branches, deploy to production on push to `main`
 
 ## Roadmap
 - Homepage
@@ -97,18 +100,6 @@ When an Admin is invited, their account is created and they're sent a link to re
   - Add a filtering toolbar
     - Allows to filter down by category and country (means we need to show country somewhere)
     - Has a search for film by title to redraw the table
-
-### Kamal Deployments (worth exploring)
-- Install the litestream-ruby gem and configure it to stream the backups to S3
-  - This should replace my ad-hoc job
-- Install kamal
-- Setup a small server on Hetzner and do a deploy
-  - Deploy from a kamal branch rather than main since this will require changes to Dockerfile
-- Use a remote registry rather than local for CI
-- Update script to deploy from GitHub Action
-  - Should have credentials for accessing the registry
-- If all works as expected, perhaps move everything over to the new server?
-
 
 - Ratings from critics outside of festivals
   - Can prompt existing critic pool to rate films after the festival is over
