@@ -13,7 +13,6 @@ proxy:
   app_port: 3000
 
 registry:
-  server: docker.io
   username: fightingtheboss
   password:
     - KAMAL_REGISTRY_PASSWORD
