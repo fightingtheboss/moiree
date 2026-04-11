@@ -9,11 +9,14 @@ servers:
 
 proxy:
   ssl: true
-  host: staging.moir.ee
+  host: moir.ee
   app_port: 3000
 
 registry:
-  server: localhost:5555
+  server: docker.io
+  username: fightingtheboss
+  password:
+    - KAMAL_REGISTRY_PASSWORD
 
 builder:
   arch: amd64
