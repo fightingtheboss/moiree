@@ -1,6 +1,6 @@
 service: moiree
 
-image: moiree
+image: fightingtheboss/moiree
 
 servers:
   web:
