@@ -8,9 +8,12 @@ servers:
       - 157.90.29.34
 
 proxy:
-  ssl: true
+  ssl:
+    certificate_pem: SSL_CERTIFICATE_PEM
+    private_key_pem: SSL_PRIVATE_KEY_PEM
   host: moir.ee
   app_port: 3000
+  forward_headers: true
 
 registry:
   username: fightingtheboss

@@ -19,6 +19,8 @@ jobs:
     env:
       KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      SSL_CERTIFICATE_PEM: ${{ secrets.SSL_CERTIFICATE_PEM }}
+      SSL_PRIVATE_KEY_PEM: ${{ secrets.SSL_PRIVATE_KEY_PEM }}
     steps:
       - uses: actions/checkout@v4
 
@@ -35,6 +37,8 @@ jobs:
         run: |
           echo "KAMAL_REGISTRY_PASSWORD=$KAMAL_REGISTRY_PASSWORD" > .kamal/secrets
           echo "RAILS_MASTER_KEY=$RAILS_MASTER_KEY" >> .kamal/secrets
+          echo "SSL_CERTIFICATE_PEM=$SSL_CERTIFICATE_PEM" >> .kamal/secrets
+          echo "SSL_PRIVATE_KEY_PEM=$SSL_PRIVATE_KEY_PEM" >> .kamal/secrets
 
       - name: Deploy with Kamal
         run: bundle exec kamal deploy
