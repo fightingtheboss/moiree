@@ -24,11 +24,20 @@ When an Admin is invited, their account is created and they're sent a link to re
 ## Deployment
 - Deployed to a Hetzner VPS using [Kamal](https://kamal-deploy.org)
 - Docker images pushed to Docker Hub
-- SSL via Kamal proxy (Let's Encrypt)
+- SSL via Kamal proxy with a Cloudflare Origin Certificate
 - SQLite in production with Solid Queue, Solid Cache, and Solid Cable
 - Continuous database replication to S3 via [Litestream](https://litestream.io) (runs as a Puma plugin)
 - File uploads stored on S3 via Active Storage
 - CI/CD via GitHub Actions: tests run on all branches, deploy to production on push to `main`
+
+### Cloudflare SSL
+- `moir.ee` is proxied through Cloudflare and uses a Cloudflare Origin Certificate instead of Kamal-managed Let's Encrypt
+- Store the certificate PEM and private key PEM as `SSL_CERTIFICATE_PEM` and `SSL_PRIVATE_KEY_PEM`
+- Add those values to the `MOIREE Kamal Credentials` item in 1Password for local deploys
+- Add matching `SSL_CERTIFICATE_PEM` and `SSL_PRIVATE_KEY_PEM` GitHub Actions secrets for CI deploys
+- In Cloudflare, set SSL mode to `Full (Strict)` so Cloudflare validates the origin certificate
+- The origin certificate is stored on the server at `/etc/ssl/cloudflare/moir.ee.pem` with permissions `644`
+- The origin private key is stored on the server at `/etc/ssl/cloudflare/moir.ee.key` with permissions `600`
 
 ## Roadmap
 - Homepage
