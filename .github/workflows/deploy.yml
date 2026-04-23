@@ -22,7 +22,7 @@ jobs:
       SSL_CERTIFICATE_PEM: ${{ secrets.SSL_CERTIFICATE_PEM }}
       SSL_PRIVATE_KEY_PEM: ${{ secrets.SSL_PRIVATE_KEY_PEM }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:

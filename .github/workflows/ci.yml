@@ -22,7 +22,7 @@ jobs:
       RAILS_ENV: test
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       # Add or replace dependency steps here
       - name: Install libvips system deps
         run: |
@@ -56,7 +56,7 @@ jobs:
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: Checkout code
-  #       uses: actions/checkout@v3
+  #       uses: actions/checkout@v6
   #     - name: Install Ruby and gems
   #       uses: ruby/setup-ruby@v1
   #       with:

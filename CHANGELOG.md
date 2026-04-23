@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-04-22
+- Update GitHub Actions checkout steps to `actions/checkout@v6`
+  - Removes reliance on the Node 20 runtime in the CI and deploy workflows
+  - Picks up the latest checkout action changes, including improved credential handling
+
 ## 2026-04-11
 - Migrate deployment from Fly.io to Kamal on Hetzner
   - Replace LiteFS with Litestream for continuous SQLite replication to S3
