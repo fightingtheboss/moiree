@@ -7,6 +7,7 @@
   - Deploy via Kamal with Thruster as the HTTP accelerator
   - Update GitHub Actions workflow to deploy with Kamal
   - Manage deploy secrets via 1Password adapter locally, env vars in CI
+  - Support Cloudflare-proxied SSL with origin certificate secrets for Kamal
   - Remove BackupDbToS3Job (replaced by Litestream continuous replication)
 
 ## 2026-01-31
