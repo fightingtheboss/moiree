@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-04-23
+- Fix GitHub Actions deploy handling for Cloudflare origin certificate secrets
+  - Write PEM values to files before building `.kamal/secrets` so Kamal can load valid multiline certs
+
 ## 2026-04-22
 - Update GitHub Actions checkout steps to `actions/checkout@v6`
   - Removes reliance on the Node 20 runtime in the CI and deploy workflows

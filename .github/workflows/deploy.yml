@@ -35,10 +35,12 @@ jobs:
 
       - name: Write Kamal secrets for CI
         run: |
+          printf '%s' "$SSL_CERTIFICATE_PEM" > .kamal/ssl_certificate.pem
+          printf '%s' "$SSL_PRIVATE_KEY_PEM" > .kamal/ssl_private_key.pem
           echo "KAMAL_REGISTRY_PASSWORD=$KAMAL_REGISTRY_PASSWORD" > .kamal/secrets
           echo "RAILS_MASTER_KEY=$RAILS_MASTER_KEY" >> .kamal/secrets
-          echo "SSL_CERTIFICATE_PEM=$SSL_CERTIFICATE_PEM" >> .kamal/secrets
-          echo "SSL_PRIVATE_KEY_PEM=$SSL_PRIVATE_KEY_PEM" >> .kamal/secrets
+          echo 'SSL_CERTIFICATE_PEM=$(cat .kamal/ssl_certificate.pem)' >> .kamal/secrets
+          echo 'SSL_PRIVATE_KEY_PEM=$(cat .kamal/ssl_private_key.pem)' >> .kamal/secrets
 
       - name: Deploy with Kamal
         run: bundle exec kamal deploy
