@@ -6,6 +6,7 @@
 
 ## 2026-04-22
 - Update GitHub Actions checkout steps to `actions/checkout@v6`
+  - Update `webfactory/ssh-agent` to `v0.10.0` and audit workflow actions for Node 20 dependencies
   - Removes reliance on the Node 20 runtime in the CI and deploy workflows
   - Picks up the latest checkout action changes, including improved credential handling
 
