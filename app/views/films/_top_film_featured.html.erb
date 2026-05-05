@@ -47,7 +47,6 @@
           <p class="text-indigo-300 text-sm mt-1">
             <%= film.countries.join(", ") %> • <%= film.year %>
           </p>
-          <p class="text-sm text-indigo-300 mt-2 bg-white/15 rounded-full px-3 py-0.5 inline-block">Avg <strong class="text-white"><%= number_with_precision(display_average, precision: 1) %></strong> from <%= pluralize(display_count, "rating") %></p>
         </header>
 
         <p class="text-indigo-300 italic mt-3"><%= film.summary %></p>
