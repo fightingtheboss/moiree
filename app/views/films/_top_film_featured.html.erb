@@ -51,15 +51,17 @@
 
         <p class="text-indigo-300 italic mt-3"><%= film.summary %></p>
 
-        <% if selection.featured_rating&.impression.present? %>
-          <blockquote class="border-l-4 border-indigo-500 pl-4 mt-4">
-            <p class="font-sentient italic text-indigo-100 leading-relaxed line-clamp-3">
-              "<%= truncate(selection.featured_rating.impression, length: 150) %>"
-            </p>
-            <footer class="mt-2 text-sm text-indigo-300">
-              — <%= selection.featured_rating.critic.name %>
-            </footer>
-          </blockquote>
+        <% if false # hidden: critic impression on top 5 films %>
+          <% if selection.featured_rating&.impression.present? %>
+            <blockquote class="border-l-4 border-indigo-500 pl-4 mt-4">
+              <p class="font-sentient italic text-indigo-100 leading-relaxed line-clamp-3">
+                "<%= truncate(selection.featured_rating.impression, length: 150) %>"
+              </p>
+              <footer class="mt-2 text-sm text-indigo-300">
+                — <%= selection.featured_rating.critic.name %>
+              </footer>
+            </blockquote>
+          <% end %>
         <% end %>
       </div>
     </div>

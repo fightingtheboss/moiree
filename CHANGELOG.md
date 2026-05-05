@@ -2,6 +2,7 @@
 
 ## 2026-05-05
 - Remove average rating label from top 5 films on the homepage
+- Hide critic impression from the bottom of top 5 film cards on year-in-review pages
 
 ## 2026-04-23
 - Remove Skylight monitoring

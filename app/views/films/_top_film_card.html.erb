@@ -37,15 +37,17 @@
         </p>
       </header>
 
-      <% if selection.featured_rating&.impression.present? %>
-        <blockquote class="border-l-4 border-indigo-200 pl-4 mt-4">
-          <p class="font-sentient italic text-gray-700 text-sm leading-relaxed line-clamp-3">
-            "<%= selection.featured_rating.impression %>"
-          </p>
-          <footer class="mt-2 text-xs text-gray-500">
-            — <%= selection.featured_rating.critic.name %>
-          </footer>
-        </blockquote>
+      <% if false # hidden: critic impression on top 5 films %>
+        <% if selection.featured_rating&.impression.present? %>
+          <blockquote class="border-l-4 border-indigo-200 pl-4 mt-4">
+            <p class="font-sentient italic text-gray-700 text-sm leading-relaxed line-clamp-3">
+              "<%= selection.featured_rating.impression %>"
+            </p>
+            <footer class="mt-2 text-xs text-gray-500">
+              — <%= selection.featured_rating.critic.name %>
+            </footer>
+          </blockquote>
+        <% end %>
       <% end %>
     </div>
   <% end %>
