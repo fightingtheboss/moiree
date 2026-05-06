@@ -4,6 +4,8 @@
 - Remove average rating label from top 5 films on the homepage
 
 ## 2026-04-23
+- Remove Skylight monitoring
+  - Drop the `skylight` gem and remove its application config
 - Fix GitHub Actions deploy handling for Cloudflare origin certificate secrets
   - Write PEM values to files before building `.kamal/secrets` so Kamal can load valid multiline certs
 
