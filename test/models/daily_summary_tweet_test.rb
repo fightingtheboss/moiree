@@ -3,162 +3,88 @@
 require "test_helper"
 
 class DailySummaryTweetTest < ActiveSupport::TestCase
-  test "#ratings should return all ratings from the last 24h for the edition" do
-    edition = editions(:base)
-    rating = ratings(:base)
-
-    Rating.create!(
-      edition: edition,
-      critic: critics(:without_ratings),
-      selection: selections(:base),
-      score: 4.5,
-      created_at: 25.hours.ago,
-    )
-
-    assert(DailySummaryTweet.new(edition).ratings.include?(rating))
-    assert_equal(3, DailySummaryTweet.new(edition).ratings.count)
+  def premiere_selection(edition:, title:, director:, num_ratings: 4, score: 3.0)
+    film = Film.create!(title: title, director: director, country: "FR", year: 2026)
+    selection = Selection.create!(edition: edition, film: film, category: categories(:base))
+    [critics(:base), critics(:without_publication), critics(:without_ratings), critics(:frequent_rater)]
+      .first(num_ratings)
+      .each do |critic|
+        Attendance.find_or_create_by!(critic: critic, edition: edition)
+        Rating.create!(selection: selection, critic: critic, score: score, created_at: 1.hour.ago)
+      end
+    selection.cache_average_rating
+    selection
   end
 
-  test "#critics should return all critics who rated films in the last 24h" do
+  test "#premiere_selections returns selections with first rating in last 24h and at least 4 ratings" do
     edition = editions(:base)
+    selection = premiere_selection(edition: edition, title: "Premiere Film", director: "Jane Smith")
 
-    Rating.create!(
-      edition: edition,
-      critic: critics(:without_ratings),
-      selection: selections(:base),
-      score: 4.5,
-      created_at: 25.hours.ago,
-    )
-
-    assert_equal(2, DailySummaryTweet.new(edition).critics.count)
+    assert_includes DailySummaryTweet.new(edition).premiere_selections, selection
   end
 
-  test "#selections should return all selections that were rated in the last 24h" do
+  test "#premiere_selections excludes selections with fewer than 4 ratings" do
     edition = editions(:base)
+    selection = premiere_selection(edition: edition, title: "Few Ratings Film", director: "Jane Smith", num_ratings: 3)
 
-    Rating.create!(
-      edition: edition,
-      critic: critics(:without_ratings),
-      selection: selections(:base),
-      score: 4.5,
-      created_at: 25.hours.ago,
-    )
-
-    assert_equal(2, DailySummaryTweet.new(edition).selections.count)
+    refute_includes DailySummaryTweet.new(edition).premiere_selections, selection
   end
 
-  test "#films should return all films that were rated in the last 24h" do
+  test "#premiere_selections excludes selections whose first rating was more than 24h ago" do
     edition = editions(:base)
-
-    Rating.create!(
-      edition: edition,
-      critic: critics(:without_ratings),
-      selection: selections(:base),
-      score: 4.5,
-      created_at: 25.hours.ago,
-    )
-
-    assert_equal(2, DailySummaryTweet.new(edition).films.count)
+    # selections(:base) has ratings from 1.week.ago — not a premiere
+    refute_includes DailySummaryTweet.new(edition).premiere_selections, selections(:base)
   end
 
-  test "#trending should return the top and bottom films by average rating" do
-    edition = editions(:base)
-    edition.selections.find_each(&:cache_average_rating)
+  test "#text returns the formatted premiere tweet" do
+    travel_to Time.zone.local(2026, 5, 7) do
+      edition = editions(:base)
+      premiere_selection(edition: edition, title: "Premiere Film", director: "Jane Smith")
 
-    summary = DailySummaryTweet.new(edition)
+      expected = <<~TWEET.chomp
+        TIFF24: May 7 Recap
 
-    assert_equal(2, summary.trending.first.count)
-    assert_equal(2, summary.trending.last.count)
+        PREMIERE FILM (Smith): 3.00 from 4 ratings
+
+        Check out all of our critics scores from the festival here: http://localhost:3000/editions/tiff24
+      TWEET
+
+      assert_equal expected, DailySummaryTweet.new(edition).text
+    end
   end
 
-  test "#header should return the header text for the tweet" do
-    edition = editions(:base)
-    edition.update(start_date: 1.week.ago, end_date: 1.week.from_now)
+  test "#text truncates the film list when tweet exceeds 280 characters" do
+    travel_to Time.zone.local(2026, 5, 7) do
+      edition = editions(:base)
+      %w[Alpha Beta Gamma Delta].each do |name|
+        premiere_selection(
+          edition: edition,
+          title: "A Very Long Film Title Number #{name}",
+          director: "Director #{name}",
+        )
+      end
 
-    summary = DailySummaryTweet.new(edition)
-    header = summary.header
-
-    assert_match(/TIFF24 Day 8 Ratings/, header)
-    assert_match(/2 critics/, header)
-    assert_match(/2 films/, header)
+      result = DailySummaryTweet.new(edition).text
+      assert result.chars.size <= 280, "Tweet was #{result.chars.size} chars, expected ≤ 280"
+    end
   end
 
-  test "#film_lists should return the top and bottom films by average rating" do
-    edition = editions(:base)
-    edition.selections.find_each(&:cache_average_rating)
+  test "#post! posts the tweet text to the X API" do
+    travel_to Time.zone.local(2026, 5, 7) do
+      edition = editions(:base)
+      premiere_selection(edition: edition, title: "Premiere Film", director: "Jane Smith")
 
-    summary = DailySummaryTweet.new(edition)
-    film_lists = summary.film_lists
+      expected_text = <<~TWEET.chomp
+        TIFF24: May 7 Recap
 
-    assert_match(/Top 2 \(avg\)/, film_lists)
-    assert_match(/Bottom 2 \(avg\)/, film_lists)
-  end
+        PREMIERE FILM (Smith): 3.00 from 4 ratings
 
-  test "#text should return the full tweet text" do
-    edition = editions(:base)
-    edition.update(start_date: 1.week.ago, end_date: 1.week.from_now)
-    edition.selections.find_each(&:cache_average_rating)
+        Check out all of our critics scores from the festival here: http://localhost:3000/editions/tiff24
+      TWEET
 
-    tweet = <<~TWEET
-      ⭐️ TIFF24 Day 8 Ratings ⭐️
-      There were 3 ratings from 2 critics across 2 films
-      http://localhost:3000/editions/tiff24
+      X::Client.any_instance.expects(:post).with("tweets", { text: expected_text }.to_json).returns(true)
 
-      Top 2 (avg)
-      • With Original Title → 4.50
-      • Festival Film → 3.50
-
-      Bottom 2 (avg)
-      • With Original Title → 4.50
-      • Festival Film → 3.50
-    TWEET
-
-    assert_equal DailySummaryTweet.new(edition).text, tweet
-  end
-
-  # TODO: Flesh out all of the tests around the tweet length logic
-
-  # test "#text should return a shorter tweet if the full tweet is too long" do
-  #   edition = editions(:base)
-  #   edition.update(start_date: 1.week.ago, end_date: 1.week.from_now)
-  #   edition.selections.find_each(&:cache_average_rating)
-
-  #   tweet = <<~TWEET
-  #     ⭐️ TIFF24 Day 8 Ratings ⭐️
-  #     There were 3 ratings from 2 critics across 2 films
-  #     http://localhost:3000/editions/tiff24
-
-  #     Top 1 (avg)
-  #     • With Original Title → 4.5
-
-  #     Bottom 1 (avg)
-  #     • With Original Title → 4.5
-  #   TWEET
-
-  #   assert_equal DailySummaryTweet.new(edition).text, tweet
-  # end
-
-  test "#post! should post the tweet to the API" do
-    edition = editions(:base)
-    edition.update(start_date: 1.week.ago, end_date: 1.week.from_now)
-    edition.selections.find_each(&:cache_average_rating)
-
-    tweet = <<~TWEET
-      ⭐️ TIFF24 Day 8 Ratings ⭐️
-      There were 3 ratings from 2 critics across 2 films
-      http://localhost:3000/editions/tiff24
-
-      Top 2 (avg)
-      • With Original Title → 4.50
-      • Festival Film → 3.50
-
-      Bottom 2 (avg)
-      • With Original Title → 4.50
-      • Festival Film → 3.50
-    TWEET
-
-    X::Client.any_instance.expects(:post).with("tweets", { text: tweet }.to_json).returns(true)
-
-    DailySummaryTweet.new(edition).post!
+      DailySummaryTweet.new(edition).post!
+    end
   end
 end
