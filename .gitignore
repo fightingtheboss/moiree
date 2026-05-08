@@ -44,3 +44,7 @@ db/backup
 
 # Ignore superpowers docs
 /docs
+
+# Ignore claude local settings and worktrees
+/.claude/worktrees
+/.claude/settings.local.json
