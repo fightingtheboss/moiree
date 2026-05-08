@@ -8,7 +8,7 @@ class DailySummaryTweetJob < ApplicationJob
       Edition.current.each do |edition|
         summary = DailySummaryTweet.new(edition)
 
-        next if summary.ratings.none?
+        next if summary.premiere_selections.none?
 
         summary.post!
       end
