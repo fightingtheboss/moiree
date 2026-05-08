@@ -3,9 +3,16 @@
 require "test_helper"
 
 class DailySummaryTweetJobTest < ActiveJob::TestCase
-  # setup do
-  #   X::Client.any_instance.stubs(:post).returns(true)
-  # end
+  def premiere_selection(edition:, title:, director:, score: 3.0)
+    film = Film.create!(title: title, director: director, country: "FR", year: 2026)
+    selection = Selection.create!(edition: edition, film: film, category: categories(:base))
+    [critics(:base), critics(:without_publication), critics(:without_ratings), critics(:frequent_rater)].each do |critic|
+      Attendance.find_or_create_by!(critic: critic, edition: edition)
+      Rating.create!(selection: selection, critic: critic, score: score, created_at: 1.hour.ago)
+    end
+    selection.cache_average_rating
+    selection
+  end
 
   test "should do nothing if no current editions" do
     edition = editions(:base)
@@ -13,58 +20,36 @@ class DailySummaryTweetJobTest < ActiveJob::TestCase
 
     DailySummaryTweet.any_instance.expects(:post!).never
 
-    perform_enqueued_jobs do
-      DailySummaryTweetJob.perform_later
-    end
+    perform_enqueued_jobs { DailySummaryTweetJob.perform_later }
   end
 
-  test "should do nothing if no ratings" do
+  test "should do nothing if no premiere selections" do
     edition = editions(:base)
     edition.update(start_date: 1.week.ago, end_date: 1.week.from_now)
-    Rating.destroy_all
+    # All existing fixture ratings have old created_at — no premieres
 
     DailySummaryTweet.any_instance.expects(:post!).never
 
-    perform_enqueued_jobs do
-      DailySummaryTweetJob.perform_later
-    end
+    perform_enqueued_jobs { DailySummaryTweetJob.perform_later }
   end
 
-  test "should do nothing if no new ratings" do
-    edition = editions(:base)
-    edition.update(start_date: 1.week.ago, end_date: 1.week.from_now)
-    edition.ratings.update_all(created_at: 2.days.ago)
+  test "should post daily summary when premiere selections exist" do
+    travel_to Time.zone.local(2026, 5, 7) do
+      edition = editions(:base)
+      edition.update(start_date: 1.week.ago, end_date: 1.week.from_now)
+      premiere_selection(edition: edition, title: "Premiere Film", director: "Jane Smith")
 
-    DailySummaryTweet.any_instance.expects(:post!).never
+      expected_text = <<~TWEET.chomp
+        TIFF24: May 7 Recap
 
-    perform_enqueued_jobs do
-      DailySummaryTweetJob.perform_later
-    end
-  end
+        PREMIERE FILM (Smith): 3.00 from 4 ratings
 
-  test "should tweet daily summary" do
-    edition = editions(:base)
-    edition.update(start_date: 1.week.ago, end_date: 1.week.from_now)
-    edition.selections.find_each(&:cache_average_rating)
+        Check out all of our critics scores from the festival here: http://localhost:3000/editions/tiff24
+      TWEET
 
-    tweet = <<~TWEET
-      ⭐️ TIFF24 Day 8 Ratings ⭐️
-      There were 3 ratings from 2 critics across 2 films
-      http://localhost:3000/editions/tiff24
+      X::Client.any_instance.expects(:post).with("tweets", { text: expected_text }.to_json).returns(true)
 
-      Top 2 (avg)
-      • With Original Title → 4.50
-      • Festival Film → 3.50
-
-      Bottom 2 (avg)
-      • With Original Title → 4.50
-      • Festival Film → 3.50
-    TWEET
-
-    X::Client.any_instance.expects(:post).with("tweets", { text: tweet }.to_json).returns(true)
-
-    perform_enqueued_jobs do
-      DailySummaryTweetJob.perform_later
+      perform_enqueued_jobs { DailySummaryTweetJob.perform_later }
     end
   end
 end
