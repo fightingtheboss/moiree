@@ -27,6 +27,7 @@ class DailySummaryTweet
     until tweet.length <= 280
       selections.pop
       break if selections.empty?
+
       tweet = build_tweet(selections)
     end
     tweet
