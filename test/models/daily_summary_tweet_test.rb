@@ -56,7 +56,7 @@ class DailySummaryTweetTest < ActiveSupport::TestCase
   test "#text truncates the film list when tweet exceeds 280 characters" do
     travel_to Time.zone.local(2026, 5, 7) do
       edition = editions(:base)
-      %w[Alpha Beta Gamma Delta].each do |name|
+      ["Alpha", "Beta", "Gamma", "Delta"].each do |name|
         premiere_selection(
           edition: edition,
           title: "A Very Long Film Title Number #{name}",
