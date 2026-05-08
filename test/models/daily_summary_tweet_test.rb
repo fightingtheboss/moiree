@@ -66,6 +66,7 @@ class DailySummaryTweetTest < ActiveSupport::TestCase
 
       result = DailySummaryTweet.new(edition).text
       assert result.chars.size <= 280, "Tweet was #{result.chars.size} chars, expected ≤ 280"
+      assert_match(/A VERY LONG FILM TITLE NUMBER/, result, "Expected at least one film line to survive truncation")
     end
   end
 
