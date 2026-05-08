@@ -22,12 +22,12 @@ class DailySummaryTweet
   end
 
   def text
-    films = premiere_selections.dup
-    tweet = build_tweet(films)
-    until tweet.chars.size <= 280
-      films.pop
-      break if films.empty?
-      tweet = build_tweet(films)
+    selections = premiere_selections.dup
+    tweet = build_tweet(selections)
+    until tweet.length <= 280
+      selections.pop
+      break if selections.empty?
+      tweet = build_tweet(selections)
     end
     tweet
   end
