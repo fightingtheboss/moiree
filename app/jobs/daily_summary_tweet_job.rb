@@ -4,14 +4,14 @@ class DailySummaryTweetJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
-    if Edition.current.any?
-      Edition.current.each do |edition|
-        summary = DailySummaryTweet.new(edition)
+    Edition.current.each do |edition|
+      local_time = Time.now.in_time_zone(edition.timezone)
+      next unless local_time.hour == 23 && local_time.min >= 45
 
-        next if summary.premiere_selections.none?
+      summary = DailySummaryTweet.new(edition)
+      next if summary.premiere_selections.none?
 
-        summary.post!
-      end
+      summary.post!
     end
   end
 end
