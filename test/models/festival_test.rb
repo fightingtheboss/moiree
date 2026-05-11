@@ -57,4 +57,22 @@ class FestivalTest < ActiveSupport::TestCase
 
     assert(festival.past_editions.include?(edition))
   end
+
+  test "timezone defaults to UTC for a new festival" do
+    festival = Festival.new(name: "Test", short_name: "TEST", url: "https://test.com", country: "CA")
+    assert_equal "UTC", festival.timezone
+  end
+
+  test "is invalid with an unrecognized timezone" do
+    festival = festivals(:base)
+    festival.timezone = "Narnia/Cair_Paravel"
+    assert_not festival.valid?
+    assert_match(/is not included/, festival.errors.full_messages.join)
+  end
+
+  test "is valid with a recognized ActiveSupport timezone name" do
+    festival = festivals(:base)
+    festival.timezone = "Paris"
+    assert festival.valid?
+  end
 end
