@@ -12,13 +12,16 @@ class DailySummaryTweet
   end
 
   def premiere_selections
-    @premiere_selections ||= edition.selections
-      .joins(:ratings)
-      .group("selections.id")
-      .having("MIN(ratings.created_at) > ?", 1.day.ago)
-      .having("COUNT(ratings.id) >= ?", MIN_RATINGS)
-      .preload(:film, :ratings)
-      .sort_by { |s| -s.ratings.size }
+    @premiere_selections ||= begin
+      local_midnight = Time.now.in_time_zone(edition.timezone).beginning_of_day
+      edition.selections
+        .joins(:ratings)
+        .group("selections.id")
+        .having("MIN(ratings.created_at) > ?", local_midnight)
+        .having("COUNT(ratings.id) >= ?", MIN_RATINGS)
+        .preload(:film, :ratings)
+        .sort_by { |s| -s.ratings.size }
+    end
   end
 
   def text
@@ -39,16 +42,17 @@ class DailySummaryTweet
 
   private
 
-  def build_tweet(films)
-    header + film_lines(films) + footer
+  def build_tweet(selections)
+    header + film_lines(selections) + footer
   end
 
   def header
-    "#{edition.code}: #{Time.zone.today.strftime("%B %-d")} Recap\n\n"
+    local_date = Time.now.in_time_zone(edition.timezone).to_date
+    "#{edition.code}: #{local_date.strftime("%B %-d")} Recap\n\n"
   end
 
-  def film_lines(films)
-    films.map do |selection|
+  def film_lines(selections)
+    selections.map do |selection|
       last_name = selection.film.directors.first.split(" ").last
       avg = number_to_rounded(selection.average_rating, precision: 2)
       "#{selection.film.title.upcase} (#{last_name}): #{avg} from #{pluralize(selection.ratings.size, "rating")}"
