@@ -105,6 +105,11 @@ class EditionTest < ActiveSupport::TestCase
     assert edition.ratings.include?(rating)
   end
 
+  test "#timezone delegates to the festival's timezone" do
+    edition = editions(:base)
+    assert_equal edition.festival.timezone, edition.timezone
+  end
+
   test "includes Summarizable concern" do
     assert_includes(Edition.ancestors, Summarizable)
   end

@@ -20,7 +20,7 @@ class Edition < ApplicationRecord
   validates :year, numericality: { only_integer: true, greater_than: 2023 }
   validates :end_date, comparison: { greater_than: :start_date }
 
-  delegate :name, :short_name, :country, to: :festival
+  delegate :name, :short_name, :country, :timezone, to: :festival
 
   def summary_critics_count
     critics.count
