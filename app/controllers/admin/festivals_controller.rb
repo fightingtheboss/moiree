@@ -51,7 +51,7 @@ class Admin
     private
 
     def festival_params
-      params.require(:festival).permit(:name, :short_name, :url, :country)
+      params.require(:festival).permit(:name, :short_name, :url, :country, :timezone)
     end
   end
 end
