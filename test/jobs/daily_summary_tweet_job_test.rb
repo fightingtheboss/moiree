@@ -3,17 +3,6 @@
 require "test_helper"
 
 class DailySummaryTweetJobTest < ActiveJob::TestCase
-  def premiere_selection(edition:, title:, director:, score: 3.0)
-    film = Film.create!(title: title, director: director, country: "FR", year: 2026)
-    selection = Selection.create!(edition: edition, film: film, category: categories(:base))
-    [critics(:base), critics(:without_publication), critics(:without_ratings), critics(:frequent_rater)].each do |critic|
-      Attendance.find_or_create_by!(critic: critic, edition: edition)
-      Rating.create!(selection: selection, critic: critic, score: score, created_at: 1.hour.ago)
-    end
-    selection.cache_average_rating
-    selection
-  end
-
   test "should do nothing if no current editions" do
     edition = editions(:base)
     edition.update(start_date: 2.weeks.ago, end_date: 1.week.ago)
