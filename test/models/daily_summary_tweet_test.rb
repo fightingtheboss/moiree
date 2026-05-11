@@ -3,19 +3,6 @@
 require "test_helper"
 
 class DailySummaryTweetTest < ActiveSupport::TestCase
-  def premiere_selection(edition:, title:, director:, num_ratings: 4, score: 3.0)
-    film = Film.create!(title: title, director: director, country: "FR", year: 2026)
-    selection = Selection.create!(edition: edition, film: film, category: categories(:base))
-    [critics(:base), critics(:without_publication), critics(:without_ratings), critics(:frequent_rater)]
-      .first(num_ratings)
-      .each do |critic|
-        Attendance.find_or_create_by!(critic: critic, edition: edition)
-        Rating.create!(selection: selection, critic: critic, score: score, created_at: 1.hour.ago)
-      end
-    selection.cache_average_rating
-    selection
-  end
-
   test "#premiere_selections returns selections with first rating in last 24h and at least 4 ratings" do
     edition = editions(:base)
     selection = premiere_selection(edition: edition, title: "Premiere Film", director: "Jane Smith")
