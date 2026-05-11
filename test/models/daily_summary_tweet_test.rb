@@ -4,10 +4,12 @@ require "test_helper"
 
 class DailySummaryTweetTest < ActiveSupport::TestCase
   test "#premiere_selections returns selections with first rating today in the festival timezone and at least 4 ratings" do
-    edition = editions(:base)
-    selection = premiere_selection(edition: edition, title: "Premiere Film", director: "Jane Smith")
+    travel_to Time.zone.local(2026, 5, 10, 23, 50, 0) do
+      edition = editions(:base)
+      selection = premiere_selection(edition: edition, title: "Premiere Film", director: "Jane Smith")
 
-    assert_includes DailySummaryTweet.new(edition).premiere_selections, selection
+      assert_includes DailySummaryTweet.new(edition).premiere_selections, selection
+    end
   end
 
   test "#premiere_selections excludes selections with fewer than 4 ratings" do

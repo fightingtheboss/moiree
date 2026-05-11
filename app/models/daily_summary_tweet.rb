@@ -25,6 +25,8 @@ class DailySummaryTweet
   end
 
   def text
+    return "" if premiere_selections.none?
+
     selections = premiere_selections.dup
     tweet = build_tweet(selections)
     until tweet.length <= 280
