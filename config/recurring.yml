@@ -12,4 +12,4 @@
 production:
   daily_summary_tweet:
     class: "DailySummaryTweetJob"
-    schedule: "every day at 11:50pm"
+    schedule: "*/15 * * * *"
