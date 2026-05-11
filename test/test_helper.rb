@@ -23,14 +23,14 @@ module ActiveSupport
       Rating.create!(critic: critic, selection: selection, score: score, skip_cache_average_ratings_callback: true)
     end
 
-    def premiere_selection(edition:, title:, director:, num_ratings: 4, score: 3.0)
+    def premiere_selection(edition:, title:, director:, num_ratings: 4, score: 3.0, created_at: 1.hour.ago)
       film = Film.create!(title: title, director: director, country: "FR", year: 2026)
       selection = Selection.create!(edition: edition, film: film, category: categories(:base))
       [critics(:base), critics(:without_publication), critics(:without_ratings), critics(:frequent_rater)]
         .first(num_ratings)
         .each do |critic|
           Attendance.find_or_create_by!(critic: critic, edition: edition)
-          Rating.create!(selection: selection, critic: critic, score: score, created_at: 1.hour.ago)
+          Rating.create!(selection: selection, critic: critic, score: score, created_at: created_at)
         end
       selection.cache_average_rating
       selection
