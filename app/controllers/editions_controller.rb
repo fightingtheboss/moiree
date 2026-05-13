@@ -3,6 +3,8 @@
 class EditionsController < ApplicationController
   layout "application"
 
+  helper_method :params_cache_key
+
   def index
     @editions_by_year = Edition.past
       .includes(:festival, :ratings, :films, :critics)
@@ -14,6 +16,8 @@ class EditionsController < ApplicationController
     hidden_critics = params[:critics]
 
     @edition = edition = Edition.friendly.find(params[:id])
+    return if fresh_when(etag: [@edition, params_cache_key], last_modified: @edition.updated_at, public: true)
+
     @selections = @edition.selections.includes(:category, :film, ratings: :critic).order("films.title")
 
     if only_show_rated?
@@ -57,5 +61,9 @@ class EditionsController < ApplicationController
 
   def only_show_rated?
     params[:saf] == "false" || (params[:saf].nil? && @edition.current? && @edition.ratings.any?)
+  end
+
+  def params_cache_key
+    Digest::MD5.hexdigest(params.to_unsafe_h.except("controller", "action", "format", "locale").to_s)
   end
 end
