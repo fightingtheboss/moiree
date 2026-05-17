@@ -25,7 +25,7 @@
             <thead>
               <tr class="sticky top-[3.4rem] left-0 z-10">
                 <th class="border border-indigo-100 border-l-0 px-2 pl-4 py-1 text-left bg-indigo-700 text-white text-sm w-4/5">Average rating</th>
-                <th class="border border-indigo-100 border-r-0 px-2 py-1 bg-indigo-700 text-white text-sm"><%= number_with_precision(@film.ratings.for(edition).counting_towards_aggregates.average(:score), precision: 1) %></th>
+                <th class="border border-indigo-100 border-r-0 px-2 py-1 bg-indigo-700 text-white text-sm"><%= number_with_precision(@film.ratings.for(edition).counting_towards_aggregates.average(:score).to_f, precision: 1) %></th>
               </tr>
               <tr class="sticky top-[5.1rem] left-0 z-10 shadow-sm">
                 <th class="border border-indigo-100 border-l-0 text-left px-4 py-1 bg-indigo-50 text-sm w-4/5">Critic</th>
