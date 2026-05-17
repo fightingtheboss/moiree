@@ -48,4 +48,42 @@ class Admin::RatingsControllerTest < ActionDispatch::IntegrationTest
     assert(rating.walked_out?)
     assert_equal(0.0, rating.score.to_f)
   end
+
+  test "update normalizes score to zero when toggled to walked out" do
+    rating = ratings(:base)
+
+    patch admin_festival_edition_selection_rating_path(@festival, @edition, @selection, rating), params: {
+      rating: {
+        score: 4.5,
+        walked_out: true,
+        critic_id: rating.critic_id,
+      },
+    }
+
+    assert_redirected_to(admin_festival_edition_path(@festival, @edition))
+    assert(rating.reload.walked_out?)
+    assert_equal(0.0, rating.score.to_f)
+  end
+
+  test "update allows switching from walked out back to scored rating" do
+    rating = Rating.create!(
+      score: 5.0,
+      walked_out: true,
+      critic: critics(:without_ratings),
+      selection: @selection,
+      skip_cache_average_ratings_callback: true,
+    )
+
+    patch admin_festival_edition_selection_rating_path(@festival, @edition, @selection, rating), params: {
+      rating: {
+        score: 3.5,
+        walked_out: false,
+        critic_id: rating.critic_id,
+      },
+    }
+
+    assert_redirected_to(admin_festival_edition_path(@festival, @edition))
+    assert_not(rating.reload.walked_out?)
+    assert_equal(3.5, rating.score.to_f)
+  end
 end
