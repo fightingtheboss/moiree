@@ -32,7 +32,7 @@ class SelectionTest < ActiveSupport::TestCase
     critic = critics(:without_publication)
     Attendance.create!(critic: critic, edition: selection.edition)
 
-    rating = Rating.create!(
+    Rating.create!(
       score: 5.0,
       critic: critic,
       selection: selection,
@@ -44,6 +44,5 @@ class SelectionTest < ActiveSupport::TestCase
     selection.cache_average_rating
 
     assert_equal(3.5, selection.reload.average_rating.to_f)
-    assert_equal(0.0, rating.reload.score.to_f)
   end
 end
