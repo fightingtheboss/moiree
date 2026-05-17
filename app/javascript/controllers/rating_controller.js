@@ -16,7 +16,7 @@ export default class extends Controller {
   toggleWalkedOut() {
     if (!this.hasWalkedOutTarget) return;
 
-    const walkedOut = this.walkedOutTarget.checked;
+    const walkedOut = this.isWalkedOut();
     this.scoreTarget.disabled = walkedOut;
 
     if (walkedOut) {
@@ -29,7 +29,7 @@ export default class extends Controller {
   }
 
   updateScoreDisplay(score) {
-    if (this.hasWalkedOutTarget && this.walkedOutTarget.checked) {
+    if (this.isWalkedOut()) {
       this.scoreDisplayTarget.textContent = "🚪🚶";
       return;
     }
@@ -37,5 +37,9 @@ export default class extends Controller {
     const numericScore = Number(score);
     const displayScore = numericScore === 0 ? "💣" : (numericScore === 5 ? "🔥" : score);
     this.scoreDisplayTarget.textContent = displayScore;
+  }
+
+  isWalkedOut() {
+    return this.hasWalkedOutTarget && this.walkedOutTarget.checked;
   }
 }
