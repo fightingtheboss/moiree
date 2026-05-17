@@ -127,8 +127,8 @@ class YearInReview < ApplicationRecord
     ranked.each_with_index do |result, index|
       representative = Selection
         .joins(:ratings)
-        .merge(Rating.counting_towards_aggregates)
         .where(edition_id: edition_ids, film_id: result.film_id)
+        .where(ratings: { walked_out: false })
         .group("selections.id")
         .order("COUNT(ratings.id) DESC")
         .first
