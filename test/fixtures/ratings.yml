@@ -24,13 +24,13 @@ frequent_rater_base:
   critic: frequent_rater
   selection: base
   score: 1.0
-  created_at: <%= 1.week.ago.to_fs(:db) %>
+  created_at: 2024-01-01 00:00:00
 
 contrarian_base:
   critic: contrarian
   selection: base
   score: 1.5
-  created_at: <%= 1.week.ago.to_fs(:db) %>
+  created_at: 2024-01-01 00:00:00
 
 # With original title: 4 total ratings (4.5, 0.0, 5.0, 1.0) → high std dev → most divisive
 # Also provides a 5-star and 0-star rating for five_star_ratings/zero_star_ratings queries.
@@ -38,16 +38,16 @@ without_publication_original:
   critic: without_publication
   selection: with_original_title
   score: 0.0
-  created_at: <%= 1.week.ago.to_fs(:db) %>
+  created_at: 2024-01-01 00:00:00
 
 without_ratings_original:
   critic: without_ratings
   selection: with_original_title
   score: 5.0
-  created_at: <%= 1.week.ago.to_fs(:db) %>
+  created_at: 2024-01-01 00:00:00
 
 frequent_rater_original:
   critic: frequent_rater
   selection: with_original_title
   score: 1.0
-  created_at: <%= 1.week.ago.to_fs(:db) %>
+  created_at: 2024-01-01 00:00:00
