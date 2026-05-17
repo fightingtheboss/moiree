@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-05-17
+- Add walked-out ratings support
+  - Add `walked_out` flag on ratings and normalize walked-out scores to `0.0`
+  - Exclude walked-out ratings from averages and year-in-review aggregations
+  - Add walked-out checkbox/support text in admin rating modal and disable score slider when selected
+  - Render walked-out ratings as `🚪🚶` in rating displays
+
 ## 2026-05-05
 - Remove average rating label from top 5 films on the homepage
 - Hide critic impression from the bottom of top 5 film cards on year-in-review pages

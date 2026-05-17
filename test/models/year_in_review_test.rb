@@ -427,6 +427,37 @@ class YearInReviewTest < ActiveSupport::TestCase
     )
   end
 
+  test "#generate! excludes walked out ratings from top film aggregation" do
+    second_edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2024,
+      code: "CANNES24",
+      start_date: "2024-05-14",
+      end_date: "2024-05-25",
+      slug: "cannes24",
+    )
+    category = Category.create!(edition: second_edition, name: "Competition", position: 1)
+    film = films(:base)
+    second_selection = Selection.create!(edition: second_edition, film: film, category: category)
+    critic = critics(:without_ratings)
+    Attendance.create!(critic: critic, edition: second_edition)
+
+    Rating.create!(
+      critic: critic,
+      selection: second_selection,
+      score: 5.0,
+      walked_out: true,
+      skip_cache_average_ratings_callback: true,
+    )
+
+    year_in_review = year_in_reviews(:base)
+    year_in_review.generate!
+
+    top_for_film = year_in_review.top_selections_with_includes.to_a.find { |ts| ts.selection.film_id == film.id }
+    assert_equal(4, top_for_film.combined_ratings_count)
+    assert_in_delta(2.125, top_for_film.combined_average_rating.to_f, 0.01)
+  end
+
   test "#generate! aggregates ratings from both editions when a film qualifies at one but not the other" do
     # Large edition (15 critics) — threshold = max(ceil(15/3), 4) = 5
     large_edition = Edition.create!(

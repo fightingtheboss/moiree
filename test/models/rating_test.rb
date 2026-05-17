@@ -161,4 +161,28 @@ class RatingTest < ActiveSupport::TestCase
 
     rating.save
   end
+
+  test "walked out ratings are normalized to zero score" do
+    rating = Rating.create!(
+      score: 4.5,
+      walked_out: true,
+      critic: critics(:without_ratings),
+      selection: selections(:base),
+      skip_cache_average_ratings_callback: true,
+    )
+
+    assert_equal(0.0, rating.score.to_f)
+  end
+
+  test ".counting_towards_aggregates excludes walked out ratings" do
+    walked_out_rating = Rating.create!(
+      score: 4.5,
+      walked_out: true,
+      critic: critics(:without_ratings),
+      selection: selections(:base),
+      skip_cache_average_ratings_callback: true,
+    )
+
+    assert_not_includes(Rating.counting_towards_aggregates, walked_out_rating)
+  end
 end

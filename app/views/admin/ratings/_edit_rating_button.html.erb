@@ -11,7 +11,7 @@
     class: "inline-block bg-teal-500 hover:bg-teal-700 text-white font-semibold py-1 px-2 rounded-sm text-xs",
     id: dom_id(rating)
   ) do %>
-    Your rating: <strong><%= rating.score %></strong>
+    Your rating: <strong><%= display_rating(rating.score, walked_out: rating.walked_out?) %></strong>
   <% end %>
   <%= button_to "🗑️", admin_festival_edition_selection_rating_path(festival, edition, selection, Current.user.userable.ratings.find_by(selection: selection)), method: :delete, data: { "turbo-confirm": "Are you sure you want to delete your rating for #{selection.film.title}? This action is irreversible."} %>
 </div>

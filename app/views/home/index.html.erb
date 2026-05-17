@@ -72,7 +72,7 @@
                               </p>
                               <%= link_to rating.film.title, film_path(rating.film), class: "text-lg font-medium text-indigo-900 hover:text-indigo-600 leading-tight" %>
                             </div>
-                            <span class="font-black text-lg text-white bg-indigo-600 rounded-full w-12 h-12 flex items-center justify-center shrink-0 shadow-md"><%= display_rating(rating.score) %></span>
+                            <span class="font-black text-lg text-white bg-indigo-600 rounded-full w-12 h-12 flex items-center justify-center shrink-0 shadow-md"><%= display_rating(rating.score, walked_out: rating.walked_out?) %></span>
                           </li>
                         <% end %>
                       </ul>

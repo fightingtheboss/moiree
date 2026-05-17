@@ -17,7 +17,7 @@ class Admin
         respond_to do |format|
           format.html { redirect_to(admin_festival_edition_path(@festival, @edition), notice: "Rating created") }
           format.turbo_stream do
-            flash.now[:notice] = "#{@rating.critic.name} rated #{@rating.film.title} #{@rating.score} stars"
+            flash.now[:notice] = rating_notice_message(@rating)
 
             turbo_response = [turbo_stream.prepend("flash", partial: "layouts/flash")]
             turbo_response << turbo_stream.update(
@@ -58,7 +58,7 @@ class Admin
         respond_to do |format|
           format.html { redirect_to(admin_festival_edition_path(@festival, @edition), notice: "Rating updated") }
           format.turbo_stream do
-            flash.now[:notice] = "#{@rating.critic.name} rated #{@rating.film.title} #{@rating.score} stars"
+            flash.now[:notice] = rating_notice_message(@rating)
             render(turbo_stream: [
               turbo_stream.prepend("flash", partial: "layouts/flash"),
               turbo_stream.update(
@@ -126,7 +126,13 @@ class Admin
     end
 
     def rating_params
-      params.require(:rating).permit(:score, :impression, :review_url, :critic_id)
+      params.require(:rating).permit(:score, :impression, :review_url, :critic_id, :walked_out)
+    end
+
+    def rating_notice_message(rating)
+      return "#{rating.critic.name} walked out of #{rating.film.title}" if rating.walked_out?
+
+      "#{rating.critic.name} rated #{rating.film.title} #{rating.score} stars"
     end
   end
 end

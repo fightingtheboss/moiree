@@ -2,15 +2,40 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="rating"
 export default class extends Controller {
-  static targets = ["score", "scoreDisplay"]
+  static targets = ["score", "scoreDisplay", "walkedOut"]
 
   connect() {
-    this.scoreDisplayTarget.textContent = this.scoreTarget.value;
+    this.toggleWalkedOut();
+    this.updateScoreDisplay(this.scoreTarget.value);
   }
 
   onChange(event) {
-    const score = event.target.value;
-    const displayScore = score === "0" ? "💣" : (score === "5" ? "🔥" : score);
+    this.updateScoreDisplay(event.target.value);
+  }
+
+  toggleWalkedOut() {
+    if (!this.hasWalkedOutTarget) return;
+
+    const walkedOut = this.walkedOutTarget.checked;
+    this.scoreTarget.disabled = walkedOut;
+
+    if (walkedOut) {
+      this.scoreTarget.value = "0.0";
+      this.scoreDisplayTarget.textContent = "🚪🚶";
+      return;
+    }
+
+    this.updateScoreDisplay(this.scoreTarget.value);
+  }
+
+  updateScoreDisplay(score) {
+    if (this.hasWalkedOutTarget && this.walkedOutTarget.checked) {
+      this.scoreDisplayTarget.textContent = "🚪🚶";
+      return;
+    }
+
+    const numericScore = Number(score);
+    const displayScore = numericScore === 0 ? "💣" : (numericScore === 5 ? "🔥" : score);
     this.scoreDisplayTarget.textContent = displayScore;
   }
 }

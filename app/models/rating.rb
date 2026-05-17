@@ -7,6 +7,10 @@ class Rating < ApplicationRecord
   has_one :edition, through: :selection
   has_one :film, through: :selection
 
+  scope :counting_towards_aggregates, -> { where(walked_out: false) }
+
+  before_validation :set_walked_out_score
+
   validates :score, presence: true
   validates :score,
     numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 5 },
@@ -27,6 +31,10 @@ class Rating < ApplicationRecord
   after_commit :cache_average_ratings, unless: :skip_cache_average_ratings_callback
 
   private
+
+  def set_walked_out_score
+    self.score = 0.0 if walked_out?
+  end
 
   def cache_average_ratings
     CacheAverageRatingJob.perform_later(selection)

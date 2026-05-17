@@ -14,19 +14,20 @@ class Selection < ApplicationRecord
 
   # Returns the highest-scored rating that has an impression
   def featured_rating
-    ratings.where.not(impression: [nil, ""]).order(score: :desc).first
+    ratings.counting_towards_aggregates.where.not(impression: [nil, ""]).order(score: :desc).first
   end
 
   def cache_average_rating
-    update(average_rating: ratings.where(critic: edition.critics).average(:score).to_f)
+    update(average_rating: ratings.counting_towards_aggregates.where(critic: edition.critics).average(:score).to_f)
   end
 
   def ratings_standard_deviation
-    number_of_ratings = ratings.size
+    counted_ratings = ratings.counting_towards_aggregates
+    number_of_ratings = counted_ratings.size
 
     return 0 if number_of_ratings < 4
 
-    variance = ratings.map do |r|
+    variance = counted_ratings.map do |r|
       (r.score - average_rating)**2
     end.sum / (number_of_ratings - 1)
 

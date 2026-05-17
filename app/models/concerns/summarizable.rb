@@ -35,6 +35,7 @@ module Summarizable
   def bombe_moiree
     summary_selections
       .joins(:ratings)
+      .merge(Rating.counting_towards_aggregates)
       .group("selections.id")
       .having("COUNT(ratings.id) >= ?", min_ratings_for_summary)
       .order(average_rating: :asc)
@@ -45,9 +46,9 @@ module Summarizable
   def most_divisive
     summary_selections
       .includes(:ratings)
-      .where.not(ratings: { id: nil })
+      .where(ratings: { walked_out: false })
       .to_a
-      .select { |s| s.ratings.size >= min_ratings_for_summary }
+      .select { |s| s.ratings.counting_towards_aggregates.size >= min_ratings_for_summary }
       .max_by(&:ratings_standard_deviation)
   end
 
@@ -55,7 +56,7 @@ module Summarizable
   def build_histogram(selection)
     return {} unless selection
 
-    histogram = selection.ratings.group_by(&:score).transform_values(&:size)
+    histogram = selection.ratings.counting_towards_aggregates.group_by(&:score).transform_values(&:size)
     (0..5).step(0.5).each { |score| histogram[score.to_d] ||= 0 }
     histogram.sort.to_h
   end
@@ -87,6 +88,6 @@ module Summarizable
   private
 
   def summary_ratings
-    Rating.joins(:selection).merge(summary_selections)
+    Rating.counting_towards_aggregates.joins(:selection).merge(summary_selections)
   end
 end

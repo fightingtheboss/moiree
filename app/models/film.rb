@@ -48,7 +48,7 @@ class Film < ApplicationRecord
   end
 
   def cache_overall_average_rating
-    update(overall_average_rating: ratings.average(:score).to_f)
+    update(overall_average_rating: ratings.counting_towards_aggregates.average(:score).to_f)
   end
 
   def directors

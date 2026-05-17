@@ -11,7 +11,7 @@
         </header>
       </div>
       <div class="self-center">
-        <p class="text-4xl font-bold rounded-full bg-radial-gradient-center p-10"><%= display_rating(@rating.score) %></p>
+        <p class="text-4xl font-bold rounded-full bg-radial-gradient-center p-10"><%= display_rating(@rating.score, walked_out: @rating.walked_out?) %></p>
       </div>
     </div>
   </div>

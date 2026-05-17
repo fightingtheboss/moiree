@@ -37,7 +37,7 @@
                   </td>
                   <td class="border border-indigo-100 p-2 text-center"><%= rating.selection.category.name %></td>
                   <td class="relative border border-indigo-100 border-r-0 p-2 text-center">
-                    <%= display_rating(rating.score) %>
+                    <%= display_rating(rating.score, walked_out: rating.walked_out?) %>
 
                     <% if rating.impression.present? || rating.review_url.present? %>
                       <%= link_to rating_path(rating),

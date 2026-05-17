@@ -67,6 +67,19 @@ class SummarizableTest < ActiveSupport::TestCase
     assert_equal(0, histogram[BigDecimal("5.0")])
   end
 
+  test "#build_histogram excludes walked out ratings" do
+    Rating.create!(
+      score: 2.0,
+      walked_out: true,
+      critic: critics(:without_ratings),
+      selection: selections(:base),
+      skip_cache_average_ratings_callback: true,
+    )
+
+    histogram = @edition.build_histogram(selections(:base))
+    assert_equal(0, histogram[BigDecimal("0.0")])
+  end
+
   # --- bombe_moiree_histogram / most_divisive_histogram ---
 
   test "#bombe_moiree_histogram returns empty hash when no bombe moiree exists" do
