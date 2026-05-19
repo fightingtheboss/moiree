@@ -113,7 +113,7 @@ class YearInReview < ApplicationRecord
       .joins(selection: :film)
       .where(selections: { edition_id: edition_ids })
       .where(films: { year: year })
-      .where(walked_out: false)
+      .merge(Rating.counting_towards_aggregates)
       .group("films.id")
       .pluck(Arel.sql("films.id, SUM(ratings.score), COUNT(ratings.id)"))
       .map { |film_id, sum, count| { film_id: film_id, sum: sum.to_f, count: count } }
@@ -128,7 +128,7 @@ class YearInReview < ApplicationRecord
       representative = Selection
         .joins(:ratings)
         .where(edition_id: edition_ids, film_id: result.film_id)
-        .where(ratings: { walked_out: false })
+        .merge(Rating.counting_towards_aggregates)
         .group("selections.id")
         .order("COUNT(ratings.id) DESC")
         .first
