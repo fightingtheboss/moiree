@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "application_system_test_case"
 
 class Identity::EmailsTest < ApplicationSystemTestCase
@@ -16,7 +18,7 @@ class Identity::EmailsTest < ApplicationSystemTestCase
   end
 
   test "sending a verification email" do
-    @user.update! verified: false
+    @user.update!(verified: false)
 
     click_on "Change email address"
     click_on "Re-send verification email"

@@ -10,5 +10,4 @@ module EditionsHelper
       score
     end
   end
-
 end

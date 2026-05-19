@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class Identity::EmailVerificationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = sign_in_as(users(:admin))
-    @user.update! verified: false
+    @user.update!(verified: false)
   end
 
   test "should send a verification email" do

@@ -54,7 +54,7 @@ class Admin::FilmsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame#new-film-search-results"
     assert_select "h3", text: "TMDB results", count: 0
   end
-  
+
   test "should get lookup_by_tmdb_id with valid id" do
     edition = editions(:base)
     tmdb_movie = stub(
