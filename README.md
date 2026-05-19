@@ -21,6 +21,35 @@ When an Admin is invited, their account is created and they're sent a link to re
 - Tailwind
   - v4
 
+## Development Setup
+
+### Prerequisites
+
+- [Homebrew](https://brew.sh)
+- [mise](https://mise.jdx.dev) — manages the Ruby version (`brew install mise && mise activate`)
+
+### System Dependencies
+
+Install via Homebrew before running `bundle install`:
+
+```sh
+brew install vips
+```
+
+| Package | Purpose | Current Version | Upgrade Heuristic |
+|---|---|---|---|
+| `vips` | Active Storage image processing via `ruby-vips` | 8.16.0 | Safe to `brew upgrade vips` at any time. Prioritize when security advisories are published or when `ruby-vips` in `Gemfile.lock` raises its minimum version requirement. |
+
+Ruby is managed by mise and pinned in `.mise.toml`. Upgrade patch versions promptly for security fixes. Treat minor and major upgrades as deliberate migrations — validate gem compatibility before committing.
+
+### Getting Started
+
+```sh
+mise install    # installs Ruby per .mise.toml
+bundle install
+bin/setup       # prepares the database and starts the dev server
+```
+
 ## Deployment
 - Deployed to a Hetzner VPS using [Kamal](https://kamal-deploy.org)
 - Docker images pushed to Docker Hub

@@ -84,6 +84,10 @@ gem "litestream"
 # Used for tracking performance and errors
 gem "newrelic_rpm"
 
+# Removed from standard library, but still reqired by some gems
+gem "cgi", ">= 0.3.1"
+gem "tsort"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   # Lazy loading the debug gem based on the discussion here: https://github.com/ruby/debug/issues/797
