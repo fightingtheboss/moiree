@@ -42,7 +42,7 @@
                     <h2><%= rating.critic.publication %></h2>
                   </td>
                   <td class="relative h-20 border border-indigo-100 border-r-0 p-2 text-center">
-                    <%= display_rating(rating.score, walked_out: rating.walked_out?) %>
+                    <%= format_rating(rating) %>
 
                     <% if rating.impression.present? || rating.review_url.present? %>
                       <%= link_to rating_path(rating),

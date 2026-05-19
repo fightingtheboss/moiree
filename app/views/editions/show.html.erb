@@ -12,7 +12,7 @@
         <div>
           <h2 class="font-normal text-xs uppercase"><%= @edition.name %></h2>
           <h1 class="font-semibold text-2xl"><%= @edition.code %></h1>
-          <p class="mt-1 text-sm">Ratings are out of 5.0 <span class="text-xs ml-2"><%= display_rating(0, walked_out: true) %> = walkout</span></p>
+          <p class="mt-1 text-sm">Ratings are out of 5.0 <span class="text-xs ml-2"><%= walked_out_indicator %> = walkout</span></p>
         </div>
         <div class="text-right">
           <% if params[:critics].present? %>

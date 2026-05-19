@@ -21,7 +21,7 @@
   <% critics.each do |critic| %>
     <% if (rating = ratings[critic][selection]) %>
       <td class="border p-2 h-20 text-center relative hover:border-indigo-600 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10">
-        <%= display_rating(rating.score, walked_out: rating.walked_out?) %>
+        <%= format_rating(rating) %>
         <% if rating.impression.present? || rating.review_url.present? %>
           <%= link_to rating_path(rating),
               data: {

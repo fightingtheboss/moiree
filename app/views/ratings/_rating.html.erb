@@ -9,7 +9,7 @@
     </header>
   </div>
   <div>
-    <p class="text-center bg-indigo-50 rounded-xs px-2 py-1"><strong class="text-2xl"><%= display_rating(rating.score, walked_out: rating.walked_out?) %></strong></p>
+    <p class="text-center bg-indigo-50 rounded-xs px-2 py-1"><strong class="text-2xl"><%= format_rating(rating) %></strong></p>
 
     <% if rating.impression.present? || rating.review_url.present? %>
       <%= link_to rating_path(rating),

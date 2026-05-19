@@ -112,7 +112,7 @@
                   <% @year_in_review.bombe_moiree_histogram.each do |score, count| %>
                     <li style="--histogramHeight:<%= histogram_height(count, @year_in_review.bombe_moiree_histogram.values.max) %>" class="group/bar relative bg-linear-to-b from-indigo-500 to-indigo-700 rounded h-(--histogramHeight)" title="<%= histogram_title(score, count) %>">
                       <span class="absolute top-2 left-0 right-0 text-xs text-white text-center font-semibold opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= count %></span>
-                      <span class="absolute -bottom-6 left-0 right-0 text-xs text-center opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= display_rating(score) %></span>
+                      <span class="absolute -bottom-6 left-0 right-0 text-xs text-center opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= display_score(score) %></span>
                     </li>
                   <% end %>
                 </ul>
@@ -145,7 +145,7 @@
                   <% @year_in_review.most_divisive_histogram.each do |score, count| %>
                     <li style="--histogramHeight:<%= histogram_height(count, @year_in_review.most_divisive_histogram.values.max) %>" class="group/bar relative bg-linear-to-b from-indigo-500 to-indigo-700 rounded h-(--histogramHeight)" title="<%= histogram_title(score, count) %>">
                       <span class="absolute top-2 left-0 right-0 text-xs text-white text-center font-semibold opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= count %></span>
-                      <span class="absolute -bottom-6 left-0 right-0 text-xs text-center opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= display_rating(score) %></span>
+                      <span class="absolute -bottom-6 left-0 right-0 text-xs text-center opacity-0 group-hover/bar:opacity-100 transition-opacity"><%= display_score(score) %></span>
                     </li>
                   <% end %>
                 </ul>
