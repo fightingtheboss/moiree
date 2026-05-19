@@ -63,7 +63,7 @@ gem "image_processing", "~> 1.2"
 
 gem "bugsnag"
 
-gem "countries", "~> 7.0", require: "countries/global"
+gem "countries", "~> 8.0", require: "countries/global"
 
 gem "pundit", "~> 2.3"
 
