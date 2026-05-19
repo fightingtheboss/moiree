@@ -46,8 +46,6 @@ module Summarizable
   def most_divisive
     summary_selections
       .includes(:ratings)
-      .references(:ratings)
-      .merge(Rating.counting_towards_aggregates)
       .to_a
       .select { |s| s.ratings.counting_towards_aggregates.size >= min_ratings_for_summary }
       .max_by(&:ratings_standard_deviation)
