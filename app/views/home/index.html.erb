@@ -57,7 +57,7 @@
                       <div class="flex justify-between items-center mb-4">
                         <div>
                         <h4 class="font-semibold text-lg text-indigo-900">Latest Ratings</h4>
-                        <p class="text-xs text-gray-500">Ratings are out of 5</p>
+                        <p class="text-xs text-gray-500">Ratings are out of 5 <span class="text-xs ml-2"><%= display_rating(0, walked_out: true) %> = walkout</span></p>
                         </div>
                         <%= link_to "Live Feed →", live_edition_path(edition), class: "text-xs font-medium text-indigo-600 hover:text-indigo-800" %>
                       </div>

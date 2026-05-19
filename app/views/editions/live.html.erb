@@ -10,7 +10,7 @@
       <div>
         <h2 class="font-normal text-xs uppercase"><%= @edition.name %></h2>
         <h1 class="font-semibold text-2xl"><%= @edition.code %></h1>
-        <p class="mt-1 text-sm">Ratings are out of 5.0</p>
+        <p class="mt-1 text-sm">Ratings are out of 5.0 <span class="text-xs ml-2"><%= display_rating(0, walked_out: true) %> = walkout</span></p>
         <% if @edition.current? %>
           <p class="mt-2 text-sm">This page will update automatically when new ratings are added</p>
         <% else %>

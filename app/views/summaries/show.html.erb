@@ -10,7 +10,7 @@
       <div>
         <h2 class="font-normal text-xs uppercase"><%= @edition.name %></h2>
         <h1 class="font-semibold text-2xl leading-tight">Festival summary for <span class="font-extrabold"><%= @edition.code %></span></h1>
-        <p class="mt-1 text-sm">Ratings are out of 5.0</p>
+        <p class="mt-1 text-sm">Ratings are out of 5.0 <span class="text-xs ml-2"><%= display_rating(0, walked_out: true) %> = walkout</span></p>
       </div>
     </div>
   </header>

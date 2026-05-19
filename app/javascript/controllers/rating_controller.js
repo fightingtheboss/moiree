@@ -21,7 +21,7 @@ export default class extends Controller {
 
     if (walkedOut) {
       this.scoreTarget.value = "0.0";
-      this.scoreDisplayTarget.textContent = "🚪🚶";
+      this.#setWalkedOutDisplay();
       return;
     }
 
@@ -30,13 +30,20 @@ export default class extends Controller {
 
   updateScoreDisplay(score) {
     if (this.isWalkedOut()) {
-      this.scoreDisplayTarget.textContent = "🚪🚶";
+      this.#setWalkedOutDisplay();
       return;
     }
 
     const numericScore = Number(score);
     const displayScore = numericScore === 0 ? "💣" : (numericScore === 5 ? "🔥" : score);
     this.scoreDisplayTarget.textContent = displayScore;
+  }
+
+  #setWalkedOutDisplay() {
+    const span = document.createElement("span");
+    span.className = "tracking-[-0.2rem] whitespace-nowrap";
+    span.textContent = "🚪🚶";
+    this.scoreDisplayTarget.replaceChildren(span);
   }
 
   isWalkedOut() {
