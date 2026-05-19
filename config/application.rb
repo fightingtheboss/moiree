@@ -21,7 +21,7 @@ Bundler.require(*Rails.groups)
 module Moiree
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 8.1
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
@@ -37,9 +37,6 @@ module Moiree
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.active_model.i18n_customize_full_message = true
-
-    # `to_time` will always preserve the full timezone rather than offset of the receiver in Rails 8.1.
-    config.active_support.to_time_preserves_timezone = :zone
 
     # Configuration for Mission Control Jobs
     # https://github.com/rails/mission_control-jobs?tab=readme-ov-file#authentication

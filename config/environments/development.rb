@@ -23,8 +23,6 @@ Rails.application.configure do
     config.public_file_server.headers = { "cache-control" => "public, max-age=#{2.days.to_i}" }
   else
     config.action_controller.perform_caching = false
-
-    config.cache_store = :null_store
   end
 
   # Change to :null_store to avoid any caching.
@@ -38,7 +36,6 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
-
 
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
@@ -61,12 +58,8 @@ Rails.application.configure do
   # Highlight code that enqueued background job in logs.
   config.active_job.verbose_enqueue_logs = true
 
-  # Use Solid Queue for Active Job adapter.
-  # config.active_job.queue_adapter = :solid_queue
-  # config.solid_queue.silence_polling = true
-
-  # Suppress logger output for asset requests.
-  config.assets.quiet = true
+  # Highlight code that triggered redirect in logs.
+  config.action_dispatch.verbose_redirect_logs = true
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

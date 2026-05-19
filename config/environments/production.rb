@@ -37,7 +37,7 @@ Rails.application.configure do
   config.log_tags = [ :request_id ]
   config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
 
-  # Change to "debug" to log everything (including potentially personally-identifiable information!)
+  # Change to "debug" to log everything (including potentially personally-identifiable information!).
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Prevent health checks from clogging up the logs.
@@ -56,6 +56,7 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "moir.ee", protocol: "https" }
 
   if Rails.application.credentials.aws_ses
