@@ -42,4 +42,18 @@ class CategoryTest < ActiveSupport::TestCase
 
     assert_equal 2.125, category.overall_average_rating
   end
+
+  test "#overall_average_rating excludes walked out ratings" do
+    category = categories(:base)
+
+    Rating.create!(
+      score: 5.0,
+      walked_out: true,
+      critic: critics(:without_ratings),
+      selection: selections(:base),
+      skip_cache_average_ratings_callback: true,
+    )
+
+    assert_equal(2.125, category.overall_average_rating)
+  end
 end

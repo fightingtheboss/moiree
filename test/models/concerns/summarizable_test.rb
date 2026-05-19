@@ -44,6 +44,29 @@ class SummarizableTest < ActiveSupport::TestCase
     assert_nil(editions(:with_no_films).most_divisive)
   end
 
+  test "#most_divisive excludes walked out ratings from the minimum threshold count" do
+    # Build a selection with 3 regular extreme-score ratings and 1 walked-out rating.
+    # Total = 4, counted = 3 — below min_ratings_for_summary (4), so it should not qualify.
+    film = Film.create!(title: "Polarising Film", director: "Someone", country: "CA", year: 2024)
+    selection = Selection.create!(edition: @edition, film: film, category: categories(:base))
+
+    [[critics(:without_ratings), 0.0], [critics(:contrarian), 5.0], [critics(:frequent_rater), 0.0]].each do |critic, score|
+      Rating.create!(critic: critic, selection: selection, score: score, skip_cache_average_ratings_callback: true)
+    end
+
+    Rating.create!(
+      critic: critics(:base),
+      selection: selection,
+      score: 5.0,
+      walked_out: true,
+      skip_cache_average_ratings_callback: true,
+    )
+
+    result = @edition.most_divisive
+    assert_not_equal(selection, result)
+    assert_equal(selections(:with_original_title), result)
+  end
+
   # --- build_histogram ---
 
   test "#build_histogram returns empty hash for nil selection" do

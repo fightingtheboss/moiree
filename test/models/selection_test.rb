@@ -27,9 +27,24 @@ class SelectionTest < ActiveSupport::TestCase
     assert_equal 4.5, selection.reload.average_rating
   end
 
+  test "#featured_rating excludes walked out ratings" do
+    selection = selections(:base)
+
+    Rating.create!(
+      score: 5.0,
+      walked_out: true,
+      impression: "Left after 20 minutes",
+      critic: critics(:without_ratings),
+      selection: selection,
+      skip_cache_average_ratings_callback: true,
+    )
+
+    assert_nil(selection.featured_rating)
+  end
+
   test "#cache_average_rating excludes walked out ratings from the average" do
     selection = selections(:base)
-    critic = critics(:without_publication)
+    critic = critics(:without_ratings)
     Attendance.create!(critic: critic, edition: selection.edition)
 
     Rating.create!(
