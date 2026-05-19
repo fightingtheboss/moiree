@@ -31,12 +31,6 @@
       data: { rating_target: "score", action: "input->rating#onChange" },
       class: score_slider_classes %>
 
-    <div class="mt-3">
-      <%= form.check_box :walked_out, data: { rating_target: "walkedOut", action: "rating#toggleWalkedOut" } %>
-      <%= form.label :walked_out, "Walked out", class: "text-sm font-semibold text-gray-700" %>
-      <p class="text-xs mt-1 text-slate-600">A walked out rating doesn't count towards averages.</p>
-    </div>
-
     <datalist id="rating-values" class="flex flex-col justify-between [writing-mode:vertical-lr] w-full mt-1">
       <option value="0" label="💣" class="p-0">
       <option value="0.5" class="p-0">
@@ -50,6 +44,12 @@
       <option value="4.5" class="p-0">
       <option value="5" label="🔥" class="p-0">
     </datalist>
+
+    <div class="mt-3">
+      <%= form.check_box :walked_out, data: { rating_target: "walkedOut", action: "rating#toggleWalkedOut" } %>
+      <%= form.label :walked_out, "Walked out", class: "text-sm font-semibold text-gray-700 ml-1" %>
+      <p class="text-xs mt-1 text-slate-600">A walked out rating doesn't count towards averages.</p>
+    </div>
   </div>
   <div class="mb-4">
     <div>
