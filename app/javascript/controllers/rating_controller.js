@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="rating"
 export default class extends Controller {
-  static targets = ["score", "scoreDisplay", "walkedOut"]
+  static targets = ["score", "scoreDisplay", "walkedOut", "scaleLabels"]
 
   connect() {
     this.toggleWalkedOut();
@@ -18,6 +18,10 @@ export default class extends Controller {
 
     const walkedOut = this.isWalkedOut();
     this.scoreTarget.disabled = walkedOut;
+    this.scoreTarget.classList.toggle("grayscale", walkedOut);
+    if (this.hasScaleLabelsTarget) {
+      this.scaleLabelsTarget.classList.toggle("grayscale", walkedOut);
+    }
 
     if (walkedOut) {
       this.scoreTarget.value = "0.0";

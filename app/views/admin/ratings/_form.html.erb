@@ -31,7 +31,7 @@
       data: { rating_target: "score", action: "input->rating#onChange" },
       class: score_slider_classes %>
 
-    <datalist id="rating-values" class="flex flex-col justify-between [writing-mode:vertical-lr] w-full mt-1">
+    <datalist id="rating-values" data-rating-target="scaleLabels" class="flex flex-col justify-between [writing-mode:vertical-lr] w-full mt-1">
       <option value="0" label="💣" class="p-0">
       <option value="0.5" class="p-0">
       <option value="1" label="★" class="p-0 bg-linear-to-br from-indigo-200 to-indigo-700 bg-clip-text text-transparent">
