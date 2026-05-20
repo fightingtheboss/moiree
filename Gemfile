@@ -69,7 +69,7 @@ gem "pundit", "~> 2.3"
 
 gem "positioning"
 
-gem "friendly_id", "~> 5.5.0"
+gem "friendly_id", "~> 5.7.0"
 
 gem "x"
 
