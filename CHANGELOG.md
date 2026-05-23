@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-05-23
+- Make public rating detail modals span the available width on mobile
+  - Keep the impression/review-link modal full width on small screens aside from its side margins
+
 ## 2026-05-17
 - Add walked-out ratings support
   - Add `walked_out` flag on ratings and normalize walked-out scores to `0.0`
