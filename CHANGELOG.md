@@ -2,6 +2,8 @@
 
 ## 2026-05-23
 - Keep walked-out ratings at the bottom on film pages within each edition list
+- Make public rating detail modals span the available width on mobile
+  - Keep the impression/review-link modal full width on small screens aside from its side margins
 
 ## 2026-05-17
 - Add walked-out ratings support
