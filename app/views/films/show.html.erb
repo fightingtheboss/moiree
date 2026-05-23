@@ -33,7 +33,7 @@
               </tr>
             </thead>
             <tbody>
-              <% @film.ratings.includes(:critic).for(edition).order("ratings.score DESC, critics.last_name ASC").references(:critic).each do |rating| %>
+              <% @film.ratings.includes(:critic).for(edition).order("ratings.walked_out ASC, ratings.score DESC, critics.last_name ASC").references(:critic).each do |rating| %>
                 <tr class="hover:bg-indigo-50">
                   <td class="border border-indigo-100 border-l-0 p-2 pl-4">
                     <h1 class="font-semibold leading-tight">

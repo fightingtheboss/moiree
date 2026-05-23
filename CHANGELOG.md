@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-05-23
+- Keep walked-out ratings at the bottom on film pages within each edition list
+
 ## 2026-05-17
 - Add walked-out ratings support
   - Add `walked_out` flag on ratings and normalize walked-out scores to `0.0`
