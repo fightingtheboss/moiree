@@ -9,6 +9,7 @@
 # `replicate` command.
 #
 # For more details, see: https://litestream.io/reference/config/
+sync-interval: 10s
 dbs:
   - path: storage/production.sqlite3
     replicas:
