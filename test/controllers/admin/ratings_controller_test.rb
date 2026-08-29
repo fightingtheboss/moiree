@@ -86,4 +86,60 @@ class Admin::RatingsControllerTest < ActionDispatch::IntegrationTest
     assert_not(rating.reload.walked_out?)
     assert_equal(3.5, rating.score.to_f)
   end
+
+  test "create clears source_edition_id when overriding an inherited rating" do
+    # critics(:without_ratings) has no existing rating at selections(:base)
+    critic = critics(:without_ratings)
+    inherited = Rating.create!(
+      critic: critic,
+      selection: @selection,
+      score: 2.0,
+      source_edition_id: editions(:with_no_films).id,
+      skip_cache_average_ratings_callback: true,
+    )
+
+    post admin_festival_edition_selection_ratings_path(@festival, @edition, @selection),
+      params: { rating: { score: 4.0, critic_id: critic.id } },
+      headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    inherited.reload
+    assert_nil inherited.source_edition_id
+    assert_equal 4.0, inherited.score
+  end
+
+  test "create does not create a duplicate when an inherited rating already exists" do
+    critic = critics(:without_ratings)
+    Rating.create!(
+      critic: critic,
+      selection: @selection,
+      score: 2.0,
+      source_edition_id: editions(:with_no_films).id,
+      skip_cache_average_ratings_callback: true,
+    )
+
+    assert_no_difference "Rating.count" do
+      post admin_festival_edition_selection_ratings_path(@festival, @edition, @selection),
+        params: { rating: { score: 4.0, critic_id: critic.id } },
+        headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    end
+  end
+
+  test "update clears source_edition_id" do
+    critic = critics(:without_ratings)
+    inherited = Rating.create!(
+      critic: critic,
+      selection: @selection,
+      score: 2.0,
+      source_edition_id: editions(:with_no_films).id,
+      skip_cache_average_ratings_callback: true,
+    )
+
+    patch admin_festival_edition_selection_rating_path(@festival, @edition, @selection, inherited),
+      params: { rating: { score: 3.5 } },
+      headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    inherited.reload
+    assert_nil inherited.source_edition_id
+    assert_equal 3.5, inherited.score
+  end
 end

@@ -11,7 +11,12 @@ class Admin
     end
 
     def create
-      @rating = @selection.ratings.build(rating_params)
+      @rating = Rating.find_or_initialize_by(
+        critic_id: rating_params[:critic_id],
+        selection: @selection,
+      )
+      @rating.assign_attributes(rating_params)
+      @rating.source_edition_id = nil
 
       if @rating.save
         respond_to do |format|
@@ -54,6 +59,8 @@ class Admin
     end
 
     def update
+      @rating.source_edition_id = nil
+
       if @rating.update(rating_params)
         respond_to do |format|
           format.html { redirect_to(admin_festival_edition_path(@festival, @edition), notice: "Rating updated") }
