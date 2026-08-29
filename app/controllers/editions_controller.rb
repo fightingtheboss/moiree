@@ -18,7 +18,7 @@ class EditionsController < ApplicationController
     @edition = edition = Edition.friendly.find(params[:id])
     return if fresh_when(etag: [@edition, params_cache_key], last_modified: @edition.updated_at, public: true)
 
-    @selections = @edition.selections.includes(:category, :film, ratings: :critic).order("films.title")
+    @selections = @edition.selections.includes(:category, :film, ratings: [:critic, :source_edition]).order("films.title")
 
     if only_show_rated?
       @selections = @selections.where.associated(:ratings)

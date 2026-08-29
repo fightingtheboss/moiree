@@ -1,17 +1,27 @@
 <div class="flex justify-between items-center">
-  <%= link_to(
-    edit_admin_festival_edition_selection_rating_path(festival, edition, selection, rating),
-    data: {
-      turbo_frame: "modal",
-      controller: "modal",
-      action: "modal#show",
-      "modal-dialog-param": "global-modal",
-      "modal-target-param": dom_id(edition, :films)
-    },
-    class: "inline-block bg-teal-500 hover:bg-teal-700 text-white font-semibold py-1 px-2 rounded-sm text-xs",
-    id: dom_id(rating)
-  ) do %>
-    Your rating: <strong><%= format_rating(rating) %></strong>
-  <% end %>
-  <%= button_to "🗑️", admin_festival_edition_selection_rating_path(festival, edition, selection, Current.user.userable.ratings.find_by(selection: selection)), method: :delete, data: { "turbo-confirm": "Are you sure you want to delete your rating for #{selection.film.title}? This action is irreversible."} %>
+  <div class="flex items-center gap-2">
+    <%= link_to(
+      edit_admin_festival_edition_selection_rating_path(festival, edition, selection, rating),
+      data: {
+        turbo_frame: "modal",
+        controller: "modal",
+        action: "modal#show",
+        "modal-dialog-param": "global-modal",
+        "modal-target-param": dom_id(edition, :films)
+      },
+      class: "inline-block bg-teal-500 hover:bg-teal-700 text-white font-semibold py-1 px-2 rounded-sm text-xs",
+      id: dom_id(rating)
+    ) do %>
+      Your rating: <strong><%= format_rating(rating) %></strong>
+    <% end %>
+    <% if rating.source_edition_id? %>
+      <span class="group relative cursor-help">
+        <%= inline_svg_tag("icons/clock.svg", class: "w-3 fill-gray-400") %>
+        <span class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 px-2 py-1 text-xs text-white bg-gray-800 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+          Rated at <%= rating.source_edition.code %>
+        </span>
+      </span>
+    <% end %>
+  </div>
+  <%= button_to "🗑️", admin_festival_edition_selection_rating_path(festival, edition, selection, rating), method: :delete, data: { "turbo-confirm": "Are you sure you want to delete your rating for #{selection.film.title}? This action is irreversible."} %>
 </div>
