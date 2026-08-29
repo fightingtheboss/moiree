@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Rating < ApplicationRecord
+  include Rating::Inheritable
+
   belongs_to :critic
   belongs_to :selection, touch: true
 

@@ -173,10 +173,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_17_161000) do
     t.string "review_url"
     t.decimal "score", precision: 2, scale: 1
     t.integer "selection_id", null: false
+    t.integer "source_edition_id"
     t.datetime "updated_at", null: false
     t.boolean "walked_out", default: false, null: false
     t.index ["critic_id"], name: "index_ratings_on_critic_id"
     t.index ["selection_id"], name: "index_ratings_on_selection_id"
+    t.index ["source_edition_id"], name: "index_ratings_on_source_edition_id"
   end
 
   create_table "selections", force: :cascade do |t|
@@ -260,6 +262,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_17_161000) do
   add_foreign_key "episodes", "podcasts"
   add_foreign_key "podcasts", "users"
   add_foreign_key "ratings", "critics"
+  add_foreign_key "ratings", "editions", column: "source_edition_id"
   add_foreign_key "ratings", "selections"
   add_foreign_key "selections", "categories"
   add_foreign_key "selections", "editions"
