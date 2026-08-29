@@ -106,17 +106,19 @@ class YearInReview < ApplicationRecord
   private
 
   def assign_top_selections!(edition_ids)
-    # Aggregate ratings across ALL editions in the year, per film.
-    # Films below the minimum ratings threshold are excluded by TopFilms;
-    # the Bayesian formula handles weighting for everything above the floor.
-    film_aggregates = Rating
-      .joins(selection: :film)
+    raw = Rating.native
+      .joins(selection: [:edition, :film])
       .where(selections: { edition_id: edition_ids })
       .where(films: { year: year })
       .merge(Rating.counting_towards_aggregates)
-      .group("films.id")
-      .pluck(Arel.sql("films.id, SUM(ratings.score), COUNT(ratings.id)"))
-      .map { |film_id, sum, count| { film_id: film_id, sum: sum.to_f, count: count } }
+      .pluck("selections.film_id, ratings.critic_id, ratings.score, editions.end_date")
+
+    film_aggregates = raw
+      .group_by { |film_id, critic_id, _, _| [critic_id, film_id] }
+      .values
+      .map { |rows| rows.max_by { |_, _, _, end_date| end_date } }
+      .group_by { |film_id, _, _, _| film_id }
+      .map { |film_id, rows| { film_id:, sum: rows.sum { |_, _, score, _| score.to_f }, count: rows.size } }
 
     ranked = TopFilms.new(film_aggregates).ranked
 

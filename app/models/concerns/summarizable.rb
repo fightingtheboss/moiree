@@ -34,7 +34,7 @@ module Summarizable
   # Bombe Moirée — lowest rated selection with enough ratings
   def bombe_moiree
     summary_selections
-      .joins(:ratings)
+      .joins(:native_ratings)
       .merge(Rating.counting_towards_aggregates)
       .group("selections.id")
       .having("COUNT(ratings.id) >= ?", min_ratings_for_summary)
@@ -45,9 +45,9 @@ module Summarizable
   # Most divisive — highest standard deviation among selections with enough ratings
   def most_divisive
     summary_selections
-      .includes(:ratings)
+      .includes(:native_ratings)
       .to_a
-      .select { |s| s.ratings.counting_towards_aggregates.size >= min_ratings_for_summary }
+      .select { |s| s.native_ratings.reject(&:walked_out?).size >= min_ratings_for_summary }
       .max_by(&:ratings_standard_deviation)
   end
 
@@ -55,7 +55,7 @@ module Summarizable
   def build_histogram(selection)
     return {} unless selection
 
-    histogram = selection.ratings.counting_towards_aggregates.group_by(&:score).transform_values(&:size)
+    histogram = selection.native_ratings.counting_towards_aggregates.group_by(&:score).transform_values(&:size)
     (0..5).step(0.5).each { |score| histogram[score.to_d] ||= 0 }
     histogram.sort.to_h
   end
@@ -87,6 +87,6 @@ module Summarizable
   private
 
   def summary_ratings
-    Rating.counting_towards_aggregates.joins(:selection).merge(summary_selections)
+    Rating.native.counting_towards_aggregates.joins(:selection).merge(summary_selections)
   end
 end

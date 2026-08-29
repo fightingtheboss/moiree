@@ -120,9 +120,12 @@ class YearInReviewTest < ActiveSupport::TestCase
     top_for_film = top.find { |ts| ts.selection.film_id == film.id }
 
     assert_not_nil(top_for_film, "Film should appear in top selections via cross-edition aggregation")
-    # Total: 6 ratings (3.5 + 2.5 + 1.0 + 1.5 + 4.0 + 5.0) = 17.5 / 6 ≈ 2.917
-    assert_equal(6, top_for_film.combined_ratings_count)
-    assert_in_delta(2.917, top_for_film.combined_average_rating.to_f, 0.01)
+    # without_publication rated the film at both editions; only the most recent (base edition,
+    # end_date 2024-09-19 > second_edition end_date 2024-05-25) counts.
+    # Counted ratings: base(3.5) + without_publication(2.5) + frequent_rater(1.0) + contrarian(1.5) + without_ratings(5.0)
+    # Total: 5 ratings, sum = 13.5, average = 2.7
+    assert_equal(5, top_for_film.combined_ratings_count)
+    assert_in_delta(2.7, top_for_film.combined_average_rating.to_f, 0.01)
     assert_not_nil(top_for_film.bayesian_score, "Bayesian score should be stored")
   end
 
@@ -578,5 +581,67 @@ class YearInReviewTest < ActiveSupport::TestCase
       year_in_review.top_selections_with_includes.to_a,
       "No films should qualify when none meet the minimum ratings floor",
     )
+  end
+
+  test "#generate! counts only the most recent native rating when a critic rates the same film at multiple editions" do
+    # Set up two editions in the same year
+    first_edition = Edition.create!(
+      festival: festivals(:base),
+      year: 2026,
+      code: "FIRST26",
+      start_date: "2026-05-01",
+      end_date: "2026-05-10",
+      slug: "first26",
+    )
+    second_edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2026,
+      code: "SECOND26",
+      start_date: "2026-09-01",
+      end_date: "2026-09-10",
+      slug: "second26",
+    )
+
+    cat1 = Category.create!(edition: first_edition, name: "Main", position: 1)
+    cat2 = Category.create!(edition: second_edition, name: "Main", position: 1)
+
+    film = Film.create!(
+      title: "Dedup Film",
+      normalized_title: "Dedup Film",
+      director: "Director",
+      country: "US",
+      year: 2026,
+    )
+
+    sel1 = Selection.create!(edition: first_edition, film: film, category: cat1)
+    sel2 = Selection.create!(edition: second_edition, film: film, category: cat2, average_rating: 3.25)
+
+    # Critic rates the film at both editions natively
+    shared_critic = Critic.create!(first_name: "Shared", last_name: "Critic", country: "US")
+    Attendance.create!(critic: shared_critic, edition: first_edition)
+    Attendance.create!(critic: shared_critic, edition: second_edition)
+
+    create_rating(critic: shared_critic, selection: sel1, score: 2.0)
+    create_rating(critic: shared_critic, selection: sel2, score: 4.0) # more recent
+
+    # Add 3 more critics to meet the min_ratings floor of 4, all at second_edition
+    3.times do |i|
+      c = Critic.create!(first_name: "Pad#{i}", last_name: "Critic", country: "US")
+      Attendance.create!(critic: c, edition: second_edition)
+      create_rating(critic: c, selection: sel2, score: 3.0)
+    end
+
+    year_in_review = YearInReview.create!(year: 2026)
+    year_in_review.generate!
+
+    top = year_in_review.top_selections_with_includes.to_a
+    film_entry = top.find { |ts| ts.selection.film_id == film.id }
+
+    assert_not_nil film_entry
+
+    # shared_critic only counts once (most recent: score 4.0 at second_edition)
+    # Total: shared(4.0) + pad0(3.0) + pad1(3.0) + pad2(3.0) = 13.0 / 4 = 3.25
+    assert_equal 4, film_entry.combined_ratings_count
+    assert_in_delta 3.25, film_entry.combined_average_rating.to_f, 0.01
   end
 end

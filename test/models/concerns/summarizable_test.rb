@@ -225,4 +225,40 @@ class SummarizableTest < ActiveSupport::TestCase
   test "#summary_selections defaults to the selections association on Edition" do
     assert_equal(@edition.selections.order(:id).to_a, @edition.summary_selections.order(:id).to_a)
   end
+
+  # --- inherited ratings are excluded ---
+
+  test "#bombe_moiree excludes inherited ratings from the qualifying count" do
+    ratings(:contrarian_base).update_columns(source_edition_id: editions(:with_no_films).id)
+
+    result = @edition.bombe_moiree
+    assert_not_equal selections(:base), result
+  end
+
+  test "#most_divisive excludes inherited ratings from the qualifying count" do
+    ratings(:frequent_rater_original).update_columns(source_edition_id: editions(:with_no_films).id)
+
+    result = @edition.most_divisive
+    assert_not_equal selections(:with_original_title), result
+  end
+
+  test "#build_histogram excludes inherited ratings" do
+    ratings(:contrarian_base).update_columns(source_edition_id: editions(:with_no_films).id)
+
+    histogram = @edition.build_histogram(selections(:base))
+
+    assert_equal 0, histogram[BigDecimal("1.5")]
+  end
+
+  test "#five_star_ratings excludes inherited ratings" do
+    ratings(:without_ratings_original).update_columns(source_edition_id: editions(:with_no_films).id)
+
+    assert_empty @edition.five_star_ratings
+  end
+
+  test "#zero_star_ratings excludes inherited ratings" do
+    ratings(:without_publication_original).update_columns(source_edition_id: editions(:with_no_films).id)
+
+    assert_empty @edition.zero_star_ratings
+  end
 end
