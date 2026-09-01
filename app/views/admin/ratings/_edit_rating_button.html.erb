@@ -15,7 +15,7 @@
       Your rating: <strong><%= format_rating(rating) %></strong>
     <% end %>
     <% if rating.source_edition_id? %>
-      <span class="group relative cursor-help">
+      <span class="group relative cursor-help" title="Rated at <%= rating.source_edition.code %>">
         <%= inline_svg_tag("icons/clock.svg", class: "w-3 fill-gray-400") %>
         <span class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 px-2 py-1 text-xs text-white bg-gray-800 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
           Rated at <%= rating.source_edition.code %>
@@ -23,5 +23,5 @@
       </span>
     <% end %>
   </div>
-  <%= button_to "🗑️", admin_festival_edition_selection_rating_path(festival, edition, selection, rating), method: :delete, data: { "turbo-confirm": "Are you sure you want to delete your rating for #{selection.film.title}? This action is irreversible."} %>
+  <%= button_to "🗑️", admin_festival_edition_selection_rating_path(festival, edition, selection, rating), method: :delete, "aria-label": "Delete your rating for #{selection.film.title}", data: { "turbo-confirm": "Are you sure you want to delete your rating for #{selection.film.title}? This action is irreversible."} %>
 </div>
