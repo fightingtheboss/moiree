@@ -27,7 +27,8 @@ class Selection < ApplicationRecord
     rated = native_ratings.reject(&:walked_out?)
     return 0 if rated.size < 4
 
-    variance = rated.sum { |r| (r.score - average_rating)**2 } / (rated.size - 1)
+    mean = rated.sum(&:score) / rated.size.to_f
+    variance = rated.sum { |r| (r.score - mean)**2 } / (rated.size - 1)
     Math.sqrt(variance)
   end
 

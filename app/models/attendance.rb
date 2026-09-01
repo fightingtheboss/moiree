@@ -16,6 +16,6 @@ class Attendance < ApplicationRecord
   end
 
   def destroy_inherited_ratings
-    Rating.where(critic:, selection: edition.selections).where.not(source_edition_id: nil).destroy_all
+    Rating.where(critic:, selection: edition.selections).where.not(source_edition_id: nil).delete_all
   end
 end

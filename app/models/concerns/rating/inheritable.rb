@@ -17,6 +17,7 @@ module Rating::Inheritable
         critic:,
         selection:,
         score: source.score,
+        walked_out: source.walked_out,
         review_url: source.review_url,
         impression: source.impression,
         source_edition_id: source.source_edition_id || source.selection.edition_id,
@@ -30,7 +31,7 @@ module Rating::Inheritable
       native
         .joins(selection: :edition)
         .where(critic:, selections: { film_id: })
-        .order("editions.end_date DESC")
+        .order("editions.end_date DESC, ratings.id DESC")
         .first
     end
   end

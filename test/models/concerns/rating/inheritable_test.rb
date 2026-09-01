@@ -148,6 +148,35 @@ class Rating::InheritableTest < ActiveSupport::TestCase
     Rating.inherit_for(critic: critics(:base), selection: new_selection)
   end
 
+  test "Rating.inherit_for preserves walked_out status from the source rating" do
+    critic = critics(:without_ratings)
+    source_selection = selections(:base)
+    Rating.create!(
+      critic:,
+      selection: source_selection,
+      score: 5.0,
+      walked_out: true,
+      skip_cache_average_ratings_callback: true,
+    )
+
+    second_edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2025,
+      code: "WALKOUT25",
+      start_date: "2025-06-01",
+      end_date: "2025-06-10",
+      slug: "walkout25",
+    )
+    category = Category.create!(edition: second_edition, name: "Main", position: 1)
+    new_selection = Selection.create!(edition: second_edition, film: films(:base), category:)
+
+    Rating.inherit_for(critic:, selection: new_selection)
+
+    inherited = Rating.find_by(critic:, selection: new_selection)
+    assert inherited.walked_out?
+    assert_equal 0.0, inherited.score.to_f
+  end
+
   test "Rating.inherit_for picks the most recent native rating when critic has multiple" do
     # ratings(:base) is for critics(:base) at editions(:base) (end_date: 2024-09-19)
     # Create a second native rating for the same critic+film at a later edition

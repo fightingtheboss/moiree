@@ -185,4 +185,16 @@ class RatingTest < ActiveSupport::TestCase
 
     assert_not_includes(Rating.counting_towards_aggregates, walked_out_rating)
   end
+
+  test "the database enforces one rating per critic per selection even bypassing validations" do
+    existing_rating = ratings(:base)
+
+    assert_raises(ActiveRecord::RecordNotUnique) do
+      Rating.insert!({
+        critic_id: existing_rating.critic_id,
+        selection_id: existing_rating.selection_id,
+        score: 4.0,
+      })
+    end
+  end
 end
