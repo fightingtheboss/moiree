@@ -41,7 +41,7 @@ class Admin
               turbo_stream.replace(
                 helpers.dom_id(@attendance.critic),
                 partial: "admin/attendances/critic",
-                locals: { critic: @attendance.critic, attendance: @attendance },
+                locals: { critic: @attendance.critic, attendance: @attendance, edition: @edition },
               ),
             ])
           end

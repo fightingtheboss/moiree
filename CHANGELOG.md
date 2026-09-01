@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-01
+- Fix `NameError` when adding a critic to an edition's attendance list
+  - The `create` turbo_stream response was missing the `edition` local passed to the critic partial
+
 ## 2026-05-23
 - Make public rating detail modals span the available width on mobile
   - Keep the impression/review-link modal full width on small screens aside from its side margins
