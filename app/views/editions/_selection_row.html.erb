@@ -23,7 +23,7 @@
       <td class="border p-2 h-20 text-center relative hover:border-indigo-600 hover:after:h-[10000px] hover:after:left-0 hover:after:absolute hover:after:top-[-5000px] hover:after:w-full hover:after:-z-0 hover:after:bg-indigo-600/10 after:pointer-events-none">
         <span class="<%= rating.source_edition_id? ? 'opacity-40 inline-block' : '' %>"><%= format_rating(rating) %></span>
         <% if rating.source_edition_id? %>
-          <span class="group/inherited absolute top-1 right-1 cursor-help">
+          <span class="group/inherited absolute top-1 right-1 cursor-help" title="Rated at <%= rating.source_edition.code %>">
             <%= inline_svg_tag("icons/clock.svg", class: "w-3 fill-gray-400") %>
             <span class="absolute right-0 bottom-full mb-1 px-2 py-1 text-xs text-white bg-indigo-950 rounded whitespace-nowrap opacity-0 group-hover/inherited:opacity-100 transition-opacity pointer-events-none z-50">
               Rated at <%= rating.source_edition.code %>
