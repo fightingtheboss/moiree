@@ -103,4 +103,26 @@ class AttendanceTest < ActiveSupport::TestCase
     assert_not Rating.exists?(inherited_at_base.id)
     assert Rating.exists?(other_native.id)
   end
+
+  test "destroying an Attendance does not enqueue CacheAverageRatingJob for deleted inherited ratings" do
+    critic = critics(:without_ratings)
+    edition = editions(:base)
+    attendance = Attendance.create!(critic: critic, edition: edition)
+
+    new_film = Film.create!(title: "New Film", director: "New Director", country: "US", year: 2024)
+    category = edition.categories.first
+    new_selection = Selection.create!(edition: edition, film: new_film, category: category)
+
+    Rating.create!(
+      critic: critic,
+      selection: new_selection,
+      score: 3.5,
+      source_edition_id: editions(:with_no_films).id,
+      skip_cache_average_ratings_callback: true,
+    )
+
+    CacheAverageRatingJob.expects(:perform_later).never
+
+    attendance.destroy
+  end
 end
