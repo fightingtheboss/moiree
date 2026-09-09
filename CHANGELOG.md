@@ -6,6 +6,10 @@
 - Bump `image_processing` from 1.14.0 to 2.1.0 and add `ruby-vips` as an explicit dependency
   - `image_processing` 2.x no longer bundles `mini_magick`/`ruby-vips` transitively; without declaring `ruby-vips` directly the app fails to boot (`config/initializers/vips.rb` requires `vips`)
 
+## 2026-09-08
+- Sort the edition ratings grid case-insensitively and ignoring leading articles ("The", "A", "An")
+  - Add `Film#sort_title`, computed alongside `normalized_title` whenever the title changes
+
 ## 2026-09-01
 - Fix `NameError` when adding a critic to an edition's attendance list
   - The `create` turbo_stream response was missing the `edition` local passed to the critic partial

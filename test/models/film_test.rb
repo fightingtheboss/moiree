@@ -27,6 +27,36 @@ class FilmTest < ActiveSupport::TestCase
     assert_equal "Eaiu", film.normalized_title
   end
 
+  test "should set sort_title to a downcased, transliterated version of the title" do
+    film = Film.create!(title: "Éåîü", director: "Test", country: "CA,US", year: 2022)
+
+    assert_equal "eaiu", film.sort_title
+  end
+
+  test "should strip a leading 'the' from sort_title" do
+    film = Film.create!(title: "The Great Escape", director: "Test", country: "US", year: 1963)
+
+    assert_equal "great escape", film.sort_title
+  end
+
+  test "should strip a leading 'a' from sort_title" do
+    film = Film.create!(title: "A Clockwork Orange", director: "Test", country: "GB", year: 1971)
+
+    assert_equal "clockwork orange", film.sort_title
+  end
+
+  test "should strip a leading 'an' from sort_title" do
+    film = Film.create!(title: "An American in Paris", director: "Test", country: "US", year: 1951)
+
+    assert_equal "american in paris", film.sort_title
+  end
+
+  test "should not strip words that merely start with an article" do
+    film = Film.create!(title: "Alien", director: "Test", country: "US", year: 1979)
+
+    assert_equal "alien", film.sort_title
+  end
+
   test "#countries should return the common names of the countries" do
     film = films(:with_multiple_countries)
 

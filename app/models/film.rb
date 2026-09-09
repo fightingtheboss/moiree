@@ -4,6 +4,8 @@ class Film < ApplicationRecord
   include Importable, Searchable
   include FriendlyId
 
+  IGNORED_LEADING_ARTICLES = /\A(the|a|an)\s+/
+
   has_many :selections, dependent: :destroy, inverse_of: :film
   has_many :editions, through: :selections
   has_many :ratings, through: :selections do
@@ -82,5 +84,6 @@ class Film < ApplicationRecord
 
   def normalize_title
     self.normalized_title = I18n.transliterate(title)
+    self.sort_title = normalized_title.downcase.sub(IGNORED_LEADING_ARTICLES, "")
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_01_025702) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_08_130000) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -145,12 +145,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_025702) do
     t.boolean "rateable", default: true, null: false
     t.date "release_date"
     t.string "slug"
+    t.string "sort_title", null: false
     t.text "summary"
     t.string "title"
     t.integer "tmdb_id"
     t.datetime "updated_at", null: false
     t.integer "year"
     t.index ["slug"], name: "index_films_on_slug", unique: true
+    t.index ["sort_title"], name: "index_films_on_sort_title"
   end
 
   create_table "podcasts", force: :cascade do |t|
