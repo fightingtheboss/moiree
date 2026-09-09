@@ -2,6 +2,13 @@
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=4.0.4
+
+# Pin libvips, like RUBY_VERSION above, so upgrades are deliberate rather than picked up
+# silently on every build. Check the current version with `apt-cache policy libvips-dev`
+# inside the base image. The runtime package is the real "libvips42t64", not the virtual
+# "libvips".
+ARG LIBVIPS_VERSION=8.16.1-1+deb13u1
+
 FROM ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
@@ -20,10 +27,11 @@ RUN gem update --system --no-document && \
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
+ARG LIBVIPS_VERSION
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git pkg-config libyaml-dev libvips-dev && \
+    apt-get install --no-install-recommends -y build-essential git pkg-config libyaml-dev "libvips-dev=${LIBVIPS_VERSION}" && \
     rm -rf /var/lib/apt/lists/*
 
 # Install application gems
@@ -44,10 +52,11 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base
+ARG LIBVIPS_VERSION
 
 # Install packages needed for deployment
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y ca-certificates curl libsqlite3-0 libjemalloc2 libvips && \
+    apt-get install --no-install-recommends -y ca-certificates curl libsqlite3-0 libjemalloc2 "libvips42t64=${LIBVIPS_VERSION}" && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application

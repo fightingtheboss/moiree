@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2026-09-09
+- Pin the `libvips` version installed in the Dockerfile (`8.16.1-1+deb13u1`, matching `RUBY_VERSION`'s pattern)
+  - `apt-get install libvips`/`libvips-dev` were unpinned, so a Debian repo update could silently change runtime behavior between builds; pin both stages and bump deliberately going forward
 - Switch Dependabot to weekly, grouped updates
   - Bundler and GitHub Actions updates now run weekly instead of daily, with patch/minor bumps grouped into a single PR per ecosystem so they stop piling up one-PR-per-dependency
 - Bump `image_processing` from 1.14.0 to 2.1.0 and add `ruby-vips` as an explicit dependency
