@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class AddSortTitleToFilms < ActiveRecord::Migration[7.1]
-  IGNORED_LEADING_ARTICLES = /\A(the|a|an)\s+/
+  IGNORED_LEADING_ARTICLES =
+    /\A(?:(?:the|a|an|le|la|les|un|une|des|el|los|las|unos|unas|il|lo|gli|uno|una)\s+|(?:l|un)['’])/
 
   def up
     add_column(:films, :sort_title, :string)
