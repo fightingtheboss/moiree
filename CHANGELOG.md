@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-09
+- Switch Dependabot to weekly, grouped updates
+  - Bundler and GitHub Actions updates now run weekly instead of daily, with patch/minor bumps grouped into a single PR per ecosystem so they stop piling up one-PR-per-dependency
+
 ## 2026-09-01
 - Fix `NameError` when adding a critic to an edition's attendance list
   - The `create` turbo_stream response was missing the `edition` local passed to the critic partial
