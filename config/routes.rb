@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   get  "sign-in", to: "sessions#new"
   post "sign-in", to: "sessions#create"
-  delete  "sign-out", to: "sessions#destroy"
+  delete "sign-out", to: "sessions#destroy"
 
   get "magic", to: "sessions/passwordlesses#new"
   post "magic", to: "sessions/passwordlesses#create"
@@ -41,6 +41,7 @@ Rails.application.routes.draw do
         get :lookup_by_tmdb_id, to: "films#lookup_by_tmdb_id"
 
         resources :attendances, only: [:index, :create, :edit, :update, :destroy]
+        resources :social_posts, only: [:new, :create, :show]
 
         resources :categories, only: [:index, :update] do
           patch :reorder, on: :member

@@ -1,0 +1,16 @@
+<%# app/views/admin/social_posts/show.html.erb %>
+<div class="p-4">
+  <h2 class="text-xl font-bold mb-4">Instagram Post</h2>
+  <p class="mb-2">Status: <span class="font-semibold"><%= @social_post.status.titleize %></span></p>
+
+  <% case @social_post.status %>
+  <% when "posted" %>
+    <p class="text-sm text-gray-600">
+      Posted <%= time_ago_in_words(@social_post.posted_at) %> ago. External ID: <%= @social_post.external_id %>
+    </p>
+  <% when "failed" %>
+    <p class="text-sm text-red-600">Error: <%= @social_post.error %></p>
+  <% else %>
+    <p class="text-sm text-gray-600">Publishing… refresh this page in a moment.</p>
+  <% end %>
+</div>

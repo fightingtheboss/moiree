@@ -1,0 +1,32 @@
+<%# app/views/admin/social_posts/new.html.erb %>
+<div class="p-4">
+  <h2 class="text-xl font-bold mb-4">Post Top Films to Instagram</h2>
+
+  <% if @existing_post_today %>
+    <div class="bg-yellow-100 text-yellow-800 p-3 rounded mb-4 text-sm">
+      Already posted today at <%= @existing_post_today.posted_at&.strftime("%l:%M%p") %>.
+    </div>
+  <% end %>
+
+  <% if @carousel.images.empty? %>
+    <p class="text-sm text-gray-600 mb-4">No films have enough ratings yet to build a carousel.</p>
+  <% else %>
+    <div class="flex gap-4 overflow-x-auto mb-4">
+      <% @carousel.images.each do |image| %>
+        <img
+          src="data:image/png;base64,<%= Base64.strict_encode64(image.write_to_buffer(".png")) %>"
+          class="w-48 h-48 object-cover rounded shrink-0"
+        >
+      <% end %>
+    </div>
+
+    <%= form_with model: @social_post, url: admin_festival_edition_social_posts_path(@festival, @edition) do |form| %>
+      <%= form.hidden_field :content_type %>
+      <div class="mb-4">
+        <%= form.label :caption, class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= form.text_area :caption, rows: 6, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+      </div>
+      <%= form.submit "Post to Instagram", class: "bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-sm text-sm" %>
+    <% end %>
+  <% end %>
+</div>

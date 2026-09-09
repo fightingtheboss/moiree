@@ -33,6 +33,11 @@
             <%= link_to "Critics", admin_festival_edition_attendances_path(@festival, @edition), class: "inline-block" %>
           </li>
         <% end %>
+        <% if policy(SocialPost).create? %>
+          <li class="py-2 mr-4 align-middle text-center hover:text-indigo-700 hover:border-b-indigo-700 hover:border-b-2 <%= "text-indigo-700 border-b-indigo-700 border-b-2" if controller_name == "social_posts" %>">
+            <%= link_to "Social", new_admin_festival_edition_social_post_path(@festival, @edition), class: "inline-block" %>
+          </li>
+        <% end %>
       </ul>
     </nav>
     <section class="md:min-h-[calc(100vh-9.25rem)]">
