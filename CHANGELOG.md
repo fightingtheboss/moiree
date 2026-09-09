@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2026-09-09
+- Fix `Vips::Error: svgload_buffer: operation is blocked` breaking edition share images in production
+  - `image_processing` 2.x calls `Vips.block_untrusted(true)` on load as an XXE/SSRF mitigation, which blocks SVG loading; `SharesController#overview` renders our own template-generated SVG, so unblock that loader specifically in `config/initializers/vips.rb`
 - Switch Dependabot to weekly, grouped updates
   - Bundler and GitHub Actions updates now run weekly instead of daily, with patch/minor bumps grouped into a single PR per ecosystem so they stop piling up one-PR-per-dependency
 - Bump `image_processing` from 1.14.0 to 2.1.0 and add `ruby-vips` as an explicit dependency
