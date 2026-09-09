@@ -9,6 +9,7 @@
 ## 2026-09-08
 - Sort the edition ratings grid case-insensitively and ignoring leading articles ("The", "A", "An")
   - Add `Film#sort_title`, computed alongside `normalized_title` whenever the title changes
+  - Extend the ignored-article list to French, Spanish, and Italian definite/indefinite articles, including elided forms ("L'Avventura", "Un'Estate Italiana")
 
 ## 2026-09-01
 - Fix `NameError` when adding a critic to an edition's attendance list

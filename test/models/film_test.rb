@@ -57,6 +57,48 @@ class FilmTest < ActiveSupport::TestCase
     assert_equal "alien", film.sort_title
   end
 
+  test "should strip a leading French definite article" do
+    film = Film.create!(title: "Le Mepris", director: "Test", country: "FR", year: 1963)
+
+    assert_equal "mepris", film.sort_title
+  end
+
+  test "should strip a leading Spanish definite article" do
+    film = Film.create!(title: "El Bar", director: "Test", country: "ES", year: 2017)
+
+    assert_equal "bar", film.sort_title
+  end
+
+  test "should strip a leading Italian definite article" do
+    film = Film.create!(title: "Il Postino", director: "Test", country: "IT", year: 1994)
+
+    assert_equal "postino", film.sort_title
+  end
+
+  test "should strip a leading Spanish plural definite article" do
+    film = Film.create!(title: "Los Olvidados", director: "Test", country: "MX", year: 1950)
+
+    assert_equal "olvidados", film.sort_title
+  end
+
+  test "should strip an elided Italian or French article ('l'')" do
+    film = Film.create!(title: "L'Avventura", director: "Test", country: "IT", year: 1960)
+
+    assert_equal "avventura", film.sort_title
+  end
+
+  test "should strip an elided article before a vowel ('un'')" do
+    film = Film.create!(title: "Un'Estate Italiana", director: "Test", country: "IT", year: 1983)
+
+    assert_equal "estate italiana", film.sort_title
+  end
+
+  test "known limitation: strips articles that are part of a proper noun" do
+    film = Film.create!(title: "Los Angeles Plays Itself", director: "Test", country: "US", year: 2003)
+
+    assert_equal "angeles plays itself", film.sort_title
+  end
+
   test "#countries should return the common names of the countries" do
     film = films(:with_multiple_countries)
 

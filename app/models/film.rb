@@ -4,7 +4,13 @@ class Film < ApplicationRecord
   include Importable, Searchable
   include FriendlyId
 
-  IGNORED_LEADING_ARTICLES = /\A(the|a|an)\s+/
+  # Mirrors library cataloging's "non-filing articles" convention (e.g. MARC's filing-indicator)
+  # for languages common at film festivals. This is a hand-tuned list, not language detection —
+  # the same tradeoff catalogers accept, which means proper nouns that happen to start with an
+  # article in another language ("Los Angeles Plays Itself", "La La Land") sort under their
+  # second word instead of their first.
+  IGNORED_LEADING_ARTICLES =
+    /\A(?:(?:the|a|an|le|la|les|un|une|des|el|los|las|unos|unas|il|lo|gli|uno|una)\s+|(?:l|un)['’])/
 
   has_many :selections, dependent: :destroy, inverse_of: :film
   has_many :editions, through: :selections
