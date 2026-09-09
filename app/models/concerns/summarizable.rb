@@ -73,7 +73,7 @@ module Summarizable
       .where(score: 5.0)
       .joins(:critic, :film)
       .includes(:critic, :film)
-      .order("films.title")
+      .order("films.sort_title")
   end
 
   def zero_star_ratings
@@ -81,7 +81,7 @@ module Summarizable
       .where(score: 0.0)
       .joins(:critic, :film)
       .includes(:critic, :film)
-      .order("films.title")
+      .order("films.sort_title")
   end
 
   private

@@ -3,6 +3,7 @@
 base:
   title: Festival Film
   normalized_title: Festival Film
+  sort_title: festival film
   original_title:
   director: Sarah Polley
   country: CA
@@ -11,6 +12,7 @@ base:
 with_accented_title:
   title: Folie à Exposé
   normalized_title: Folie a Expose
+  sort_title: folie a expose
   original_title:
   director: Todd Field
   country: US
@@ -19,6 +21,7 @@ with_accented_title:
 with_original_title:
   title: With Original Title
   normalized_title: With Original Title
+  sort_title: with original title
   original_title: Avec Titre Original
   director: Spike Jones
   country: US
@@ -27,6 +30,7 @@ with_original_title:
 with_multiple_countries:
   title: With Multiple Countries
   normalized_title: With Multiple Countries
+  sort_title: with multiple countries
   original_title:
   director: Christopher Nolan
   country: US, GB
@@ -35,6 +39,7 @@ with_multiple_countries:
 with_multiple_directors:
   title: With Mulitple Directors
   normalized_title: With Mulitple Directors
+  sort_title: with mulitple directors
   original_title:
   director: Joel Coen, Ethan Coen
   country: US

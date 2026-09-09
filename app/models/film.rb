@@ -4,6 +4,14 @@ class Film < ApplicationRecord
   include Importable, Searchable
   include FriendlyId
 
+  # Mirrors library cataloging's "non-filing articles" convention (e.g. MARC's filing-indicator)
+  # for languages common at film festivals. This is a hand-tuned list, not language detection —
+  # the same tradeoff catalogers accept, which means proper nouns that happen to start with an
+  # article in another language ("Los Angeles Plays Itself", "La La Land") sort under their
+  # second word instead of their first.
+  IGNORED_LEADING_ARTICLES =
+    /\A(?:(?:the|a|an|le|la|les|un|une|des|el|los|las|unos|unas|il|lo|gli|uno|una)\s+|(?:l|un)')/
+
   has_many :selections, dependent: :destroy, inverse_of: :film
   has_many :editions, through: :selections
   has_many :ratings, through: :selections do
@@ -81,6 +89,9 @@ class Film < ApplicationRecord
   end
 
   def normalize_title
-    self.normalized_title = I18n.transliterate(title)
+    # I18n.transliterate has no ASCII approximation for curly apostrophes and replaces them with "?",
+    # which would break IGNORED_LEADING_ARTICLES' elided-article match ("L’Avventura") — normalize first.
+    self.normalized_title = I18n.transliterate(title.tr("’", "'"))
+    self.sort_title = normalized_title.downcase.sub(IGNORED_LEADING_ARTICLES, "")
   end
 end

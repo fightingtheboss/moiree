@@ -25,7 +25,7 @@ class Admin
     end
 
     def show
-      @selections = @edition.selections.includes(:category, :film, ratings: :critic).order("films.title")
+      @selections = @edition.selections.includes(:category, :film, ratings: :critic).order("films.sort_title")
       @films = @selections.map(&:film)
       render("admin/selections/index")
     end
