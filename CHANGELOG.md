@@ -11,6 +11,7 @@
   - Add `Film#sort_title`, computed alongside `normalized_title` whenever the title changes
   - Extend the ignored-article list to French, Spanish, and Italian definite/indefinite articles, including elided forms ("L'Avventura", "Un'Estate Italiana")
   - Fix elided-article stripping for titles using a curly apostrophe ("L’Avventura"), which `I18n.transliterate` was mangling before the article regex could match it
+  - Use `films.sort_title` for the other film-title orderings (critic ratings page, year-in-review/edition five-star and zero-star lists, admin edition and film selection lists) so sorting is consistent everywhere
 
 ## 2026-09-01
 - Fix `NameError` when adding a critic to an edition's attendance list
