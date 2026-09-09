@@ -10,21 +10,11 @@ class FilmsControllerTest < ActionDispatch::IntegrationTest
 
   test "walked out ratings are listed after non-walkout ratings" do
     selection = selections(:base)
-    non_walkout_critic = Critic.create!(
-      first_name: "Zed",
-      last_name: "Zulu",
-      publication: "Sight and Sound",
-      country: "US",
-    )
-    walkout_critic = Critic.create!(
-      first_name: "Ada",
-      last_name: "Alpha",
-      publication: "MUBI",
-      country: "US",
-    )
+    non_walkout_critic = critics(:without_ratings)
+    walkout_critic = critics(:unaffiliated)
 
     Rating.create!(selection: selection, critic: non_walkout_critic, score: 0.0)
-    Rating.create!(selection: selection, critic: walkout_critic, score: 4.0, walked_out: true)
+    Rating.create!(selection: selection, critic: walkout_critic, walked_out: true)
 
     get film_url(selection.film)
     assert_response :success

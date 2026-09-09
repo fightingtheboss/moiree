@@ -28,7 +28,7 @@
               </tr>
             </thead>
             <tbody>
-              <% @ratings.for(edition).order(score: :desc).each do |rating| %>
+              <% @ratings.for(edition).order("ratings.walked_out ASC, ratings.score DESC").each do |rating| %>
                 <tr class="hover:bg-indigo-50">
                   <td class="border border-indigo-100 border-l-0 p-2 pl-4">
                     <h1 class="font-semibold leading-tight"><%= link_to rating.film.title, film_url(rating.film), target: "_top", class: "hover:italic hover:text-indigo-700" %></h1>
