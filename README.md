@@ -68,6 +68,16 @@ bin/setup       # prepares the database and starts the dev server
 - The origin certificate is stored on the server at `/etc/ssl/cloudflare/moir.ee.pem` with permissions `644`
 - The origin private key is stored on the server at `/etc/ssl/cloudflare/moir.ee.key` with permissions `600`
 
+### Instagram credentials
+
+Posting a carousel to Instagram (`Share::Publisher::Instagram`) requires a Meta Graph API long-lived access token and the target Instagram Business Account id, stored under `instagram:` in Rails credentials (`access_token`, `business_account_id`). Run `bin/rails credentials:edit` and add:
+
+```yaml
+instagram:
+  access_token: <long-lived Meta Graph API token for the IG Business account>
+  business_account_id: <the Instagram Business Account id>
+```
+
 ## Roadmap
 - Homepage
   - Continue to start with any ongoing festivals
