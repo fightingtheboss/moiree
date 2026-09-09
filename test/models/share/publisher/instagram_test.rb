@@ -3,6 +3,15 @@
 require "test_helper"
 require "webmock/minitest"
 
+# `webmock/minitest` calls `WebMock.enable!` once, process-wide, at require time — this is not
+# scoped to this test file. Rails' `parallelize` requires every test file into the parent process
+# before forking workers, so whichever worker loads this file has WebMock enabled (and, by
+# WebMock's own strict defaults, all unstubbed connections blocked — including localhost) for the
+# rest of that worker's run. System tests in the same worker talk to the local browser driver over
+# real Net::HTTP on localhost, so we must explicitly allow localhost through while still blocking
+# unstubbed external hosts.
+WebMock.disable_net_connect!(allow_localhost: true)
+
 class Share::Publisher::InstagramTest < ActiveSupport::TestCase
   BASE = "https://graph.facebook.com/v21.0"
 
