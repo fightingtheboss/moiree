@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_01_025702) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_09_132130) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -208,6 +208,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_025702) do
     t.index ["user_id"], name: "index_sign_in_tokens_on_user_id"
   end
 
+  create_table "social_posts", force: :cascade do |t|
+    t.text "caption"
+    t.string "content_type", null: false
+    t.datetime "created_at", null: false
+    t.integer "edition_id", null: false
+    t.text "error"
+    t.string "external_id"
+    t.string "platform", null: false
+    t.datetime "posted_at"
+    t.string "status", default: "pending", null: false
+    t.datetime "updated_at", null: false
+    t.index ["edition_id"], name: "index_social_posts_on_edition_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", null: false
@@ -270,6 +284,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_025702) do
   add_foreign_key "selections", "films"
   add_foreign_key "sessions", "users"
   add_foreign_key "sign_in_tokens", "users"
+  add_foreign_key "social_posts", "editions"
   add_foreign_key "year_in_review_top_selections", "selections"
   add_foreign_key "year_in_review_top_selections", "year_in_reviews"
   add_foreign_key "year_in_reviews", "selections", column: "bombe_moiree_selection_id"

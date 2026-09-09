@@ -16,6 +16,8 @@ class Edition < ApplicationRecord
   has_many :films, through: :selections
   has_many :ratings, through: :selections
 
+  has_many :social_posts, dependent: :destroy
+
   validates :code, :year, :start_date, :end_date, presence: true
   validates :year, numericality: { only_integer: true, greater_than: 2023 }
   validates :end_date, comparison: { greater_than: :start_date }
