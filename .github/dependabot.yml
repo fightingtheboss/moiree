@@ -9,10 +9,20 @@ updates:
 - package-ecosystem: bundler
   directory: "/"
   schedule:
-    interval: daily
+    interval: weekly
   open-pull-requests-limit: 10
+  groups:
+    patch-and-minor:
+      update-types:
+      - "minor"
+      - "patch"
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
-    interval: daily
+    interval: weekly
   open-pull-requests-limit: 10
+  groups:
+    patch-and-minor:
+      update-types:
+      - "minor"
+      - "patch"
