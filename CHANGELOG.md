@@ -11,6 +11,7 @@
   - The `create` turbo_stream response was missing the `edition` local passed to the critic partial
 
 ## 2026-05-23
+- Keep walked-out ratings at the bottom on film pages and critic pages within each edition list
 - Make public rating detail modals span the available width on mobile
   - Keep the impression/review-link modal full width on small screens aside from its side margins
 

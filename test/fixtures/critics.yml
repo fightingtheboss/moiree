@@ -28,3 +28,9 @@ contrarian:
   last_name: Kael
   publication: The New Yorker
   country: US
+
+unaffiliated:
+  first_name: Ada
+  last_name: Alpha
+  publication: MUBI
+  country: US
