@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby "4.0.4"
 
 # Use specific branch of Rails
-gem "rails", "8.1.3"
+gem "rails", "8.1.3.1"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
