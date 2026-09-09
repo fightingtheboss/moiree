@@ -93,6 +93,12 @@ class FilmTest < ActiveSupport::TestCase
     assert_equal "estate italiana", film.sort_title
   end
 
+  test "should strip an elided article using a curly apostrophe" do
+    film = Film.create!(title: "L’Avventura", director: "Test", country: "IT", year: 1960)
+
+    assert_equal "avventura", film.sort_title
+  end
+
   test "known limitation: strips articles that are part of a proper noun" do
     film = Film.create!(title: "Los Angeles Plays Itself", director: "Test", country: "US", year: 2003)
 
