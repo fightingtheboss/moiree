@@ -3,20 +3,28 @@
 require "test_helper"
 require "webmock/minitest"
 
-# `webmock/minitest` calls `WebMock.enable!` once, process-wide, at require time — this is not
-# scoped to this test file. Rails' `parallelize` requires every test file into the parent process
-# before forking workers, so whichever worker loads this file has WebMock enabled (and, by
-# WebMock's own strict defaults, all unstubbed connections blocked — including localhost) for the
-# rest of that worker's run. System tests in the same worker talk to the local browser driver over
-# real Net::HTTP on localhost, so we must explicitly allow localhost through while still blocking
-# unstubbed external hosts.
-WebMock.disable_net_connect!(allow_localhost: true)
+# `webmock/minitest` calls `WebMock.enable!` once, process-wide, at require time — and by
+# WebMock's own strict defaults that immediately blocks every unstubbed connection, not just
+# ones made by this file's own tests. Rails' `parallelize` requires every test file into a
+# single parent process before forking workers, so this happens once, in that shared parent,
+# before any test runs — every forked worker inherits the block for its *entire life*, not just
+# while this file's tests are running. That broke real-network tests elsewhere in the suite
+# (e.g. Admin::FilmsController/SelectionsController tests that genuinely hit api.themoviedb.org).
+# Undo the blanket block immediately, then re-enable it narrowly via setup/teardown so only this
+# class's own test methods are ever affected — each worker is single-threaded and runs tests
+# sequentially, so no other test can be "in progress" during that window.
+WebMock.allow_net_connect!
 
 class Share::Publisher::InstagramTest < ActiveSupport::TestCase
   BASE = "https://graph.facebook.com/v21.0"
 
   setup do
+    WebMock.disable_net_connect!(allow_localhost: true)
     @publisher = Share::Publisher::Instagram.new(access_token: "test-token", ig_user_id: "123")
+  end
+
+  teardown do
+    WebMock.allow_net_connect!
   end
 
   test "#publish! creates a container per image, a carousel container, then publishes" do
