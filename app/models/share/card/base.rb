@@ -24,9 +24,28 @@ module Share
       end
 
       def draw_text(image, text, x:, y:, font:, color: [0, 0, 0])
-        mask = Vips::Image.text(text, font: font)
+        mask = Vips::Image.text(CGI.escapeHTML(text), font: font)
         layer = solid_color(mask.width, mask.height, color).bandjoin(mask)
         image.composite2(layer, :over, x: x, y: y)
+      end
+
+      # Pango markup has no ellipsize option in the installed libvips, so truncation is
+      # done client-side by measuring rendered width and trimming until it fits.
+      #
+      # Takes and returns raw (unescaped) text — callers pass the result straight into
+      # #draw_text, which does the Pango escaping. Width is measured on the escaped form
+      # (matching what #draw_text will eventually render), which is slightly conservative
+      # since e.g. "&amp;" measures wider than the "&" glyph it renders as — fine for a
+      # truncation bound, and avoids double-escaping.
+      def truncate_to_fit(text, font:, max_width:)
+        return text if Vips::Image.text(CGI.escapeHTML(text), font: font).width <= max_width
+
+        truncated = text.dup
+        loop do
+          truncated = truncated[0..-2]
+          candidate = "#{truncated}…"
+          return candidate if Vips::Image.text(CGI.escapeHTML(candidate), font: font).width <= max_width || truncated.empty?
+        end
       end
 
       # composite2 blends via colourspace conversion, so both operands need a

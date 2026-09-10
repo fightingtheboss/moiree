@@ -57,6 +57,40 @@ class PublishCarouselJobTest < ActiveJob::TestCase
     assert_equal "Graph API is down", social_post.error
   end
 
+  test "attaches images as JPEGs (Instagram's Graph API rejects PNG for carousel items)" do
+    rated_selection(title: "Great Film", scores: [5.0, 5.0, 5.0, 5.0])
+    social_post = SocialPost.create!(edition: @edition, content_type: "edition_top_films", platform: "instagram", caption: "x")
+    Share::Publisher::Instagram.any_instance.stubs(:publish!).returns("external-123")
+
+    PublishCarouselJob.perform_now(social_post.id)
+    social_post.reload
+    attachment = social_post.images.first
+
+    assert_equal "image/jpeg", attachment.content_type
+    assert_equal "1.jpg", attachment.filename.to_s
+  end
+
+  test "is a no-op when the social post is already posted, and does not re-publish" do
+    rated_selection(title: "Great Film", scores: [5.0, 5.0, 5.0, 5.0])
+    social_post = SocialPost.create!(
+      edition: @edition,
+      content_type: "edition_top_films",
+      platform: "instagram",
+      caption: "x",
+      status: "posted",
+      external_id: "already-posted-123",
+      posted_at: Time.current,
+    )
+    Share::Publisher::Instagram.any_instance.expects(:publish!).never
+
+    PublishCarouselJob.perform_now(social_post.id)
+    social_post.reload
+
+    assert_equal "posted", social_post.status
+    assert_equal "already-posted-123", social_post.external_id
+    assert_equal 0, social_post.images.count
+  end
+
   private
 
   def rated_selection(title:, scores:)
