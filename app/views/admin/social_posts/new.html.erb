@@ -8,8 +8,11 @@
     </div>
   <% end %>
 
-  <% if @carousel.images.empty? %>
-    <p class="text-sm text-gray-600 mb-4">No films have enough ratings yet to build a carousel.</p>
+  <% if @carousel.images.size < Share::Publisher::Instagram::MIN_CAROUSEL_ITEMS %>
+    <p class="text-sm text-gray-600 mb-4">
+      Not enough films with enough ratings yet to build a carousel (need at least
+      <%= Share::Publisher::Instagram::MIN_CAROUSEL_ITEMS %>).
+    </p>
   <% else %>
     <div class="flex gap-4 overflow-x-auto mb-4">
       <% @carousel.images.each do |image| %>

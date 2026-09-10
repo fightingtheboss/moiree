@@ -15,6 +15,23 @@ class Admin::SocialPostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "new does not render the submit form when fewer than MIN_CAROUSEL_ITEMS films qualify" do
+    edition = editions(:with_no_films)
+    category = Category.create!(edition: edition, name: "Category")
+    film = Film.create!(title: "Solo Film", director: "Test Director", country: "US", year: 2026)
+    selection = Selection.create!(edition: edition, film: film, category: category)
+    raters = [critics(:base), critics(:without_publication), critics(:without_ratings), critics(:frequent_rater)]
+    raters.each do |critic|
+      Rating.create!(critic: critic, selection: selection, score: 5.0, skip_cache_average_ratings_callback: true)
+    end
+
+    get new_admin_festival_edition_social_post_url(edition.festival, edition)
+
+    assert_response :success
+    assert_select "input[type=submit]", false
+    assert_match "Not enough films", response.body
+  end
+
   test "create enqueues PublishCarouselJob and redirects to the status page" do
     edition = editions(:base)
 

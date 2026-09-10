@@ -25,4 +25,16 @@ class SocialPostTest < ActiveSupport::TestCase
 
     assert_equal editions(:base), social_post.edition
   end
+
+  test "is invalid with a content_type not registered in PublishCarouselJob::CONTENT_TYPES" do
+    social_post = SocialPost.new(edition: editions(:base), content_type: "bogus", platform: "instagram")
+
+    assert_not social_post.valid?
+  end
+
+  test "is invalid with a platform not registered in PublishCarouselJob::PUBLISHERS" do
+    social_post = SocialPost.new(edition: editions(:base), content_type: "edition_top_films", platform: "bogus")
+
+    assert_not social_post.valid?
+  end
 end
