@@ -48,7 +48,7 @@ module Share
           .pluck(Arel.sql("selections.film_id"), Arel.sql("SUM(ratings.score)"), Arel.sql("COUNT(ratings.id)"))
           .map { |film_id, sum, count| { film_id: film_id, sum: sum.to_f, count: count } }
 
-        YearInReview::TopFilms.new(aggregates, min_ratings: Summarizable::MIN_RATINGS_FLOOR, limit: @limit).ranked
+        YearInReview::TopFilms.new(aggregates, min_ratings: @edition.min_ratings_for_summary, limit: @limit).ranked
       end
 
       def representative_selection(film_id)

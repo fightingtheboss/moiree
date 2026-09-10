@@ -44,6 +44,13 @@ class Share::Content::EditionTopFilmsTest < ActiveSupport::TestCase
     assert_equal Share::Card::FilmRank, content.card_class_for(content.slides.first)
   end
 
+  test "#slides uses the edition's dynamic min_ratings_for_summary threshold, not the fixed floor" do
+    @edition.stubs(:min_ratings_for_summary).returns(5)
+    rated_selection(title: "Just Under Dynamic Threshold", scores: [4.0, 4.0, 4.0, 4.0])
+
+    assert_empty Share::Content::EditionTopFilms.new(@edition).slides
+  end
+
   test "#caption lists ranked film titles and links to the edition" do
     rated_selection(title: "Great Film", scores: [5.0, 5.0, 5.0, 5.0])
 

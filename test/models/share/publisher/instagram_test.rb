@@ -52,7 +52,7 @@ class Share::Publisher::InstagramTest < ActiveSupport::TestCase
     end
   end
 
-  test "#publish! raises with the Graph API's error message on failure" do
+  test "#publish! raises with the Graph API's error body on failure" do
     stub_request(:post, "#{BASE}/123/media")
       .to_return(status: 400, body: { error: { message: "Invalid image URL" } }.to_json)
 
@@ -60,5 +60,16 @@ class Share::Publisher::InstagramTest < ActiveSupport::TestCase
       @publisher.publish!(image_urls: ["https://example.com/1.png", "https://example.com/2.png"], caption: "hello")
     end
     assert_includes error.message, "Invalid image URL"
+  end
+
+  test "#publish! raises with the raw response body, not JSON::ParserError, on a non-JSON error response" do
+    stub_request(:post, "#{BASE}/123/media")
+      .to_return(status: 502, body: "<html><body>Bad Gateway</body></html>")
+
+    error = assert_raises(RuntimeError) do
+      @publisher.publish!(image_urls: ["https://example.com/1.png", "https://example.com/2.png"], caption: "hello")
+    end
+    assert_includes error.message, "502"
+    assert_includes error.message, "Bad Gateway"
   end
 end

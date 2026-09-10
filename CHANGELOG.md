@@ -4,6 +4,7 @@
 - Add Instagram carousel posting for edition top films
   - New `Share::Card`/`Share::Content`/`Share::Carousel`/`Share::Publisher` engine renders ranked film cards with libvips (no headless browser) and posts them as an Instagram carousel via the Graph API
   - Admin-triggered from a new "Social" tab on the edition admin page; posts are tracked in a new `SocialPost` model with status/history
+  - Fix whole-branch review findings: escape film titles for Pango markup, post JPEGs (not PNGs) to Instagram, truncate long titles to fit the card, dispatch content/publisher classes from a registered lookup table instead of hardcoding, guard `PublishCarouselJob` against double-posting on retry, use the edition's dynamic `min_ratings_for_summary` threshold for carousel ranking, surface non-JSON Graph API error bodies instead of raising `JSON::ParserError`, hide the "Post to Instagram" button when fewer than 2 films qualify, and install a default font in the production image for libvips text rendering
 - Switch Dependabot to weekly, grouped updates
   - Bundler and GitHub Actions updates now run weekly instead of daily, with patch/minor bumps grouped into a single PR per ecosystem so they stop piling up one-PR-per-dependency
 - Bump `image_processing` from 1.14.0 to 2.1.0 and add `ruby-vips` as an explicit dependency

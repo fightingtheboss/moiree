@@ -3,7 +3,11 @@
 module Share
   module Publisher
     class Instagram < Base
-      GRAPH_API_BASE = "https://graph.facebook.com/v21.0"
+      # Meta retires Graph API versions on a roughly two-year cadence — check
+      # https://developers.facebook.com/docs/graph-api/changelog for the current
+      # version before this one is deprecated.
+      GRAPH_API_VERSION = "v21.0"
+      GRAPH_API_BASE = "https://graph.facebook.com/#{GRAPH_API_VERSION}"
       MIN_CAROUSEL_ITEMS = 2
       MAX_CAROUSEL_ITEMS = 10
 
@@ -48,13 +52,12 @@ module Share
       def post(path, params)
         uri = URI("#{GRAPH_API_BASE}#{path}")
         response = Net::HTTP.post_form(uri, params.merge(access_token: @access_token))
-        body = JSON.parse(response.body)
 
         unless response.is_a?(Net::HTTPSuccess)
-          raise "Instagram Graph API error (#{response.code}): #{body.dig("error", "message") || response.body}"
+          raise "Instagram Graph API error (#{response.code}): #{response.body}"
         end
 
-        body
+        JSON.parse(response.body)
       end
     end
   end
