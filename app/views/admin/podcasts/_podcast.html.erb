@@ -19,7 +19,7 @@
       <% end %>
 
       <% if podcast.platform? %>
-        <p class="text-xs text-gray-400">Platform podcasts have episodes added via webhooks from Transistor.fm.</p>
+        <p class="text-xs text-gray-400">Platform podcasts have episodes imported from Transistor.fm every 4 hours.</p>
       <% end %>
 
       <% if !podcast.platform? && policy(Episode).new? %>

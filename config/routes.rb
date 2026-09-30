@@ -70,9 +70,7 @@ Rails.application.routes.draw do
     end
 
     resources :podcasts do
-      resources :episodes, controller: "podcasts/episodes" do
-        post :webhook, on: :collection
-      end
+      resources :episodes, controller: "podcasts/episodes"
     end
 
     resources :users, only: [:index, :destroy] do
