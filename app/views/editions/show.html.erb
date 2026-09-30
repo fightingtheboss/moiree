@@ -4,7 +4,7 @@
 
 <%= render partial: "shared/edition_nav", locals: { edition: @edition } %>
 
-<div class="overflow-x-auto overflow-y-scroll h-[calc(100vh-4.375rem)] w-full">
+<div class="overflow-x-auto overflow-y-scroll h-[calc(100vh-4.375rem)] w-full" data-controller="blur-on-scroll" data-action="scroll->blur-on-scroll#blur">
   <%= turbo_frame_tag "edition-ratings" do %>
 
     <header class="p-4 text-left w-full sticky top-0 left-0">
