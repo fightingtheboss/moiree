@@ -43,12 +43,10 @@ class EditionsController < ApplicationController
         critic.define_singleton_method(:country_emoji) { Country[country].emoji_flag }
       end
 
-    @ratings = @critics.to_h do |critic|
-      ratings_by_selection = @selections.to_h do |selection|
-        [selection, selection.ratings.find { |rating| rating.critic == critic }]
+    @ratings = @critics.index_with do |critic|
+      @selections.index_with do |selection|
+        selection.ratings.find { |rating| rating.critic == critic }
       end
-
-      [critic, ratings_by_selection]
     end
   end
 
