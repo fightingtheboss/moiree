@@ -14,6 +14,9 @@
   - Year in review stat counts and five-star/zero-star lists stay native-only, since an inherited rating copies a rating from an earlier edition that may fall in the same year
   - Show a "N here + M from earlier festivals" tooltip on the edition grid average when it includes inherited ratings
   - Label inherited ratings in edition summary five-star/zero-star lists with the edition they were rated at
+  - Show the grid's inherited-rating and average tooltips on tap/focus so they work on mobile, and hide them when the grid scrolls
+  - Replace their native `title` tooltips, which appeared alongside the custom tooltip, with `aria-label`s
+  - Wrap the average tooltip and anchor it to the right so it stays on screen on mobile
 - Fix film overall average double-counting critics whose rating was inherited into a later edition
   - `Film#cache_overall_average_rating` now counts each critic once, using their most recent native rating (by edition end date), and skips critics whose most recent rating is a walk-out
 
