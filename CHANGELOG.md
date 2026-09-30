@@ -17,6 +17,7 @@
   - Show the grid's inherited-rating and average tooltips on tap/focus so they work on mobile, and hide them when the grid scrolls
   - Replace their native `title` tooltips, which appeared alongside the custom tooltip, with `aria-label`s
   - Wrap the average tooltip and anchor it to the right so it stays on screen on mobile
+- Keep category titles in view when scrolling the edition grid horizontally
 - Fix film overall average double-counting critics whose rating was inherited into a later edition
   - `Film#cache_overall_average_rating` now counts each critic once, using their most recent native rating (by edition end date), and skips critics whose most recent rating is a walk-out
 
