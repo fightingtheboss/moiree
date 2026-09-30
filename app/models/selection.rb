@@ -6,7 +6,6 @@ class Selection < ApplicationRecord
   belongs_to :category, inverse_of: :selections
 
   has_many :ratings, dependent: :destroy
-  has_many :native_ratings, -> { native }, class_name: "Rating"
   has_many :critics, through: :ratings
 
   validates :edition_id, uniqueness: { scope: :film_id }
@@ -20,11 +19,11 @@ class Selection < ApplicationRecord
   end
 
   def cache_average_rating
-    update(average_rating: native_ratings.where(critic: edition.critics).counting_towards_aggregates.average(:score).to_f)
+    update(average_rating: ratings.where(critic: edition.critics).counting_towards_aggregates.average(:score).to_f)
   end
 
   def ratings_standard_deviation
-    rated = native_ratings.reject(&:walked_out?)
+    rated = ratings.reject(&:walked_out?)
     return 0 if rated.size < 4
 
     mean = rated.sum(&:score) / rated.size.to_f

@@ -105,6 +105,12 @@ class YearInReview < ApplicationRecord
 
   private
 
+  # An inherited rating is a copy of a native rating from an earlier edition, which may fall in
+  # the same year, so only native ratings count to avoid counting a critic's rating twice.
+  def summary_ratings
+    super.native
+  end
+
   def assign_top_selections!(edition_ids)
     raw = Rating.native
       .joins(selection: [:edition, :film])

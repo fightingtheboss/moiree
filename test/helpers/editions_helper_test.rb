@@ -3,6 +3,25 @@
 require "test_helper"
 
 class EditionsHelperTest < ActionView::TestCase
+  # --- average_rating_breakdown ---
+
+  test "#average_rating_breakdown returns nil when no ratings are inherited" do
+    assert_nil(average_rating_breakdown(selections(:base)))
+  end
+
+  test "#average_rating_breakdown splits ratings from this edition and earlier ones" do
+    ratings(:contrarian_base).update_columns(source_edition_id: editions(:with_no_films).id)
+
+    assert_equal("3 here + 1 from earlier festivals", average_rating_breakdown(selections(:base).reload))
+  end
+
+  test "#average_rating_breakdown excludes walked-out ratings" do
+    ratings(:contrarian_base).update_columns(source_edition_id: editions(:with_no_films).id)
+    ratings(:frequent_rater_base).update_columns(walked_out: true, score: 0.0)
+
+    assert_equal("2 here + 1 from earlier festivals", average_rating_breakdown(selections(:base).reload))
+  end
+
   # --- format_rating ---
 
   test "#format_rating returns the walked-out indicator for a walked-out rating" do

@@ -23,6 +23,14 @@ module EditionsHelper
     end
   end
 
+  def average_rating_breakdown(selection)
+    counted = selection.ratings.reject(&:walked_out?)
+    inherited_count = counted.count(&:source_edition_id?)
+    return if inherited_count.zero?
+
+    "#{counted.size - inherited_count} here + #{inherited_count} from earlier festivals"
+  end
+
   def walked_out_indicator
     content_tag(:span, "🚪🚶", class: "tracking-[-0.2rem] whitespace-nowrap")
   end
