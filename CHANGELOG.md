@@ -8,6 +8,12 @@
   - `transistor:import_episodes` now uses the same import code
   - Remove the Transistor webhook endpoint (`POST /admin/podcasts/:podcast_id/episodes/webhook`)
 - Respond with 404 instead of a 500 (`undefined method 'title' for nil`) when a public podcast episode is not found
+- Count inherited ratings in edition averages and summaries, so they reflect what the edition's attending critics think of each film rather than only ratings made at the festival
+  - `Selection#cache_average_rating` averages native and inherited ratings from attending critics; remove the `Selection#native_ratings` association
+  - Edition summaries (minimum-ratings threshold, Bombe Moirée, most divisive, histograms, five-star/zero-star lists) include inherited ratings
+  - Year in review stat counts and five-star/zero-star lists stay native-only, since an inherited rating copies a rating from an earlier edition that may fall in the same year
+  - Show a "N here + M from earlier festivals" tooltip on the edition grid average when it includes inherited ratings
+  - Label inherited ratings in edition summary five-star/zero-star lists with the edition they were rated at
 - Fix film overall average double-counting critics whose rating was inherited into a later edition
   - `Film#cache_overall_average_rating` now counts each critic once, using their most recent native rating (by edition end date), and skips critics whose most recent rating is a walk-out
 

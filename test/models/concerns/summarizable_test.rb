@@ -226,39 +226,37 @@ class SummarizableTest < ActiveSupport::TestCase
     assert_equal(@edition.selections.order(:id).to_a, @edition.summary_selections.order(:id).to_a)
   end
 
-  # --- inherited ratings are excluded ---
+  # --- inherited ratings count on Edition (the attending critics' view) ---
 
-  test "#bombe_moiree excludes inherited ratings from the qualifying count" do
+  test "#bombe_moiree includes inherited ratings in the qualifying count" do
     ratings(:contrarian_base).update_columns(source_edition_id: editions(:with_no_films).id)
 
-    result = @edition.bombe_moiree
-    assert_not_equal selections(:base), result
+    assert_equal selections(:base), @edition.bombe_moiree
   end
 
-  test "#most_divisive excludes inherited ratings from the qualifying count" do
+  test "#most_divisive includes inherited ratings in the qualifying count" do
     ratings(:frequent_rater_original).update_columns(source_edition_id: editions(:with_no_films).id)
 
-    result = @edition.most_divisive
-    assert_not_equal selections(:with_original_title), result
+    assert_equal selections(:with_original_title), @edition.most_divisive
   end
 
-  test "#build_histogram excludes inherited ratings" do
+  test "#build_histogram includes inherited ratings" do
     ratings(:contrarian_base).update_columns(source_edition_id: editions(:with_no_films).id)
 
     histogram = @edition.build_histogram(selections(:base))
 
-    assert_equal 0, histogram[BigDecimal("1.5")]
+    assert_equal 1, histogram[BigDecimal("1.5")]
   end
 
-  test "#five_star_ratings excludes inherited ratings" do
+  test "#five_star_ratings includes inherited ratings" do
     ratings(:without_ratings_original).update_columns(source_edition_id: editions(:with_no_films).id)
 
-    assert_empty @edition.five_star_ratings
+    assert_includes @edition.five_star_ratings, ratings(:without_ratings_original)
   end
 
-  test "#zero_star_ratings excludes inherited ratings" do
+  test "#zero_star_ratings includes inherited ratings" do
     ratings(:without_publication_original).update_columns(source_edition_id: editions(:with_no_films).id)
 
-    assert_empty @edition.zero_star_ratings
+    assert_includes @edition.zero_star_ratings, ratings(:without_publication_original)
   end
 end

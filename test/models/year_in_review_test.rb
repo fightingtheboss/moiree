@@ -225,6 +225,31 @@ class YearInReviewTest < ActiveSupport::TestCase
     assert(year_in_review.zero_star_ratings.all? { |r| r.score == 0.0 })
   end
 
+  test "#five_star_ratings does not count a rating inherited into a later edition in the same year twice" do
+    year_in_review = year_in_reviews(:base)
+    later_edition = festivals(:base).editions.create!(
+      code: "LATER24",
+      year: 2024,
+      start_date: Date.new(2024, 10, 1),
+      end_date: Date.new(2024, 10, 10),
+    )
+    later_selection = Selection.create!(
+      edition: later_edition,
+      film: films(:with_original_title),
+      category: categories(:base),
+    )
+    original = ratings(:without_ratings_original)
+    Rating.create!(
+      critic: original.critic,
+      selection: later_selection,
+      score: original.score,
+      source_edition: editions(:base),
+      skip_cache_average_ratings_callback: true,
+    )
+
+    assert_equal([original], year_in_review.five_star_ratings.to_a)
+  end
+
   test "#bombe_moiree_histogram uses cached bombe_moiree_selection" do
     year_in_review = year_in_reviews(:base)
     year_in_review.update!(bombe_moiree_selection: nil)
