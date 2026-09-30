@@ -2,7 +2,9 @@
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=4.0.4
-FROM ruby:$RUBY_VERSION-slim AS base
+# Pin the Debian release so apt packages (e.g. libvips) only change via security updates,
+# not a silent base-image move to a new Debian major. Bump deliberately.
+FROM ruby:$RUBY_VERSION-slim-trixie AS base
 
 # Rails app lives here
 WORKDIR /rails

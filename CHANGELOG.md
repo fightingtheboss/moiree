@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2026-09-30
+- Pin the Docker base image to Debian trixie (`ruby:$RUBY_VERSION-slim-trixie`)
+  - Keeps apt packages like libvips on trixie's versions (security fixes still apply) instead of jumping versions if the `-slim` tag moves to a newer Debian release
 - Import podcast episodes from Transistor.fm on a schedule instead of via webhook
   - Cloudflare Bot Fight Mode served Transistor webhook requests a managed challenge, so TIFF 2026 episodes were never created; the free plan cannot exempt a path from Bot Fight Mode
   - Add `SyncPodcastEpisodesJob`, scheduled every 4 hours, which creates any published Transistor episodes not yet imported. Previously imported episodes are left untouched so admin edits are preserved
