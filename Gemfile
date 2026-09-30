@@ -72,8 +72,6 @@ gem "positioning"
 
 gem "friendly_id", "~> 5.7.0"
 
-gem "x"
-
 gem "inline_svg"
 
 # Used by Active Storage for S3 file uploads

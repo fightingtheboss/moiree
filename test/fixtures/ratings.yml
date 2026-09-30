@@ -16,7 +16,6 @@ without_publication:
   score: 2.5
 
 # Additional ratings to meet min_ratings_for_summary threshold (floor of 4).
-# All use created_at in the past so DailySummaryTweet tests (last 24h filter) are unaffected.
 # Critics below do NOT have attendances, so cache_average_rating (which scopes to attending critics) is unaffected.
 
 # Base selection: 4 total ratings (3.5, 2.5, 1.0, 1.5) → low average → bombe moirée

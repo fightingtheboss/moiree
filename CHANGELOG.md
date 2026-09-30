@@ -1,6 +1,9 @@
 # Changelog
 
 ## 2026-09-30
+- Remove the daily summary tweet
+  - X API posting now requires a paid plan, so `DailySummaryTweetJob` could no longer post
+  - Remove `DailySummaryTweet`, `DailySummaryTweetJob`, its recurring schedule, and the `x` gem
 - Import podcast episodes from Transistor.fm on a schedule instead of via webhook
   - Cloudflare Bot Fight Mode served Transistor webhook requests a managed challenge, so TIFF 2026 episodes were never created; the free plan cannot exempt a path from Bot Fight Mode
   - Add `SyncPodcastEpisodesJob`, scheduled every 4 hours, which creates any published Transistor episodes not yet imported. Previously imported episodes are left untouched so admin edits are preserved
