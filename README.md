@@ -57,6 +57,7 @@ bin/setup       # prepares the database and starts the dev server
 - SQLite in production with Solid Queue, Solid Cache, and Solid Cable
 - Continuous database replication to S3 via [Litestream](https://litestream.io) (runs as a Puma plugin)
 - File uploads stored on S3 via Active Storage
+- Podcast episodes are imported from the Transistor.fm API every 4 hours by `SyncPodcastEpisodesJob` (`config/recurring.yml`); run `bin/rails transistor:import_episodes` to import on demand. Transistor webhooks are not used because Cloudflare Bot Fight Mode challenges them and the free plan cannot exempt a path from it
 - CI/CD via GitHub Actions: tests run on all branches, deploy to production on push to `main`
 
 ### Cloudflare SSL

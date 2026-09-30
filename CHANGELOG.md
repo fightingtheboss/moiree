@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-30
+- Import podcast episodes from Transistor.fm on a schedule instead of via webhook
+  - Cloudflare Bot Fight Mode served Transistor webhook requests a managed challenge, so TIFF 2026 episodes were never created; the free plan cannot exempt a path from Bot Fight Mode
+  - Add `SyncPodcastEpisodesJob`, scheduled every 4 hours, which creates any published Transistor episodes not yet imported. Previously imported episodes are left untouched so admin edits are preserved
+  - Add a `Transistor` API client; only episodes with status `published` are fetched, so scheduled episodes no longer appear before their release
+  - `transistor:import_episodes` now uses the same import code
+  - Remove the Transistor webhook endpoint (`POST /admin/podcasts/:podcast_id/episodes/webhook`)
+
 ## 2026-09-09
 - Fix `Vips::Error: svgload_buffer: operation is blocked` breaking edition share images in production
   - `image_processing` 2.x calls `Vips.block_untrusted(true)` on load as an XXE/SSRF mitigation, which blocks SVG loading; `SharesController#overview` renders our own template-generated SVG, so unblock that loader specifically in `config/initializers/vips.rb`
