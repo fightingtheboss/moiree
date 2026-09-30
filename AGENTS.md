@@ -49,7 +49,7 @@ fly ssh console --pty -C "/rails/bin/rails console"   # SSH into Rails console
 
 ### Naming
 
-- Classes: `PascalCase` (`YearInReview`, `DailySummaryTweet`)
+- Classes: `PascalCase` (`YearInReview`, `ImportResult`)
 - Methods/variables: `snake_case` (`cache_average_rating`, `edition_ids`)
 - Predicates: end with `?` (`stale?`, `attending?`, `admin?`)
 - Constants: `SCREAMING_SNAKE_CASE` (`MIN_RATINGS_FLOOR`, `BASE_URL`)

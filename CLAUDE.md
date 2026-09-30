@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This App Is
 
-Moirée (`moir.ee`) is a film festival rating aggregation platform. Critics rate films at festivals; the app aggregates those ratings into scored selections, edition summaries, and year-in-review pages. It also manages podcast episodes via Transistor.fm and posts daily summary tweets during active festivals.
+Moirée (`moir.ee`) is a film festival rating aggregation platform. Critics rate films at festivals; the app aggregates those ratings into scored selections, edition summaries, and year-in-review pages. It also manages podcast episodes via Transistor.fm.
 
 ## Commands
 
@@ -84,7 +84,7 @@ Ratings use a Bayesian average. `Selection` has cached average and Bayesian scor
 
 ### Background Jobs
 
-Solid Queue runs inside Puma (`SOLID_QUEUE_IN_PUMA=true` in production). `DailySummaryTweetJob` posts at 11:50pm during active festivals. Mission Control UI is at `/admin/jobs`.
+Solid Queue runs inside Puma (`SOLID_QUEUE_IN_PUMA=true` in production). Mission Control UI is at `/admin/jobs`.
 
 ### Share Images
 
