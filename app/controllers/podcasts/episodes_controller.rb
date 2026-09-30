@@ -3,6 +3,6 @@
 class Podcasts::EpisodesController < ApplicationController
   def show
     @podcast = Podcast.friendly.find(params[:podcast_id])
-    @episode = @podcast.episodes.find_by(slug: params[:id])
+    @episode = @podcast.episodes.friendly.find(params[:id])
   end
 end

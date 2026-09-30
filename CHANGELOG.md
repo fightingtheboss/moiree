@@ -7,6 +7,7 @@
   - Add a `Transistor` API client; only episodes with status `published` are fetched, so scheduled episodes no longer appear before their release
   - `transistor:import_episodes` now uses the same import code
   - Remove the Transistor webhook endpoint (`POST /admin/podcasts/:podcast_id/episodes/webhook`)
+- Respond with 404 instead of a 500 (`undefined method 'title' for nil`) when a public podcast episode is not found
 
 ## 2026-09-09
 - Fix `Vips::Error: svgload_buffer: operation is blocked` breaking edition share images in production
