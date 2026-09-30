@@ -18,6 +18,8 @@
   - Replace their native `title` tooltips, which appeared alongside the custom tooltip, with `aria-label`s
   - Wrap the average tooltip and anchor it to the right so it stays on screen on mobile
 - Keep category titles in view when scrolling the edition grid horizontally
+- Fix the edition grid page showing two vertical scrollbars on desktop
+  - The grid's height calc predated the Patreon banner, so the page overflowed by the banner's height; use `dvh` so mobile browser toolbars don't cause the same overflow
 - Fix film overall average double-counting critics whose rating was inherited into a later edition
   - `Film#cache_overall_average_rating` now counts each critic once, using their most recent native rating (by edition end date), and skips critics whose most recent rating is a walk-out
 
