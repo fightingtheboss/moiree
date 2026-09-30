@@ -13,3 +13,6 @@ production:
   daily_summary_tweet:
     class: "DailySummaryTweetJob"
     schedule: "*/15 * * * *"
+  sync_podcast_episodes:
+    class: "SyncPodcastEpisodesJob"
+    schedule: "every 4 hours"
