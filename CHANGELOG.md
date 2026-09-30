@@ -8,6 +8,8 @@
   - `transistor:import_episodes` now uses the same import code
   - Remove the Transistor webhook endpoint (`POST /admin/podcasts/:podcast_id/episodes/webhook`)
 - Respond with 404 instead of a 500 (`undefined method 'title' for nil`) when a public podcast episode is not found
+- Fix film overall average double-counting critics whose rating was inherited into a later edition
+  - `Film#cache_overall_average_rating` now counts each critic once, using their most recent native rating (by edition end date), and skips critics whose most recent rating is a walk-out
 
 ## 2026-09-09
 - Fix `Vips::Error: svgload_buffer: operation is blocked` breaking edition share images in production

@@ -142,6 +142,48 @@ class FilmTest < ActiveSupport::TestCase
     assert_equal 2.125, film.overall_average_rating
   end
 
+  test "#cache_overall_average_rating does not count inherited ratings twice" do
+    film = films(:base)
+    later_selection = Selection.create!(edition: editions(:with_no_films), film:, category: categories(:base))
+    Rating.create!(
+      critic: critics(:base),
+      selection: later_selection,
+      score: 3.5,
+      source_edition: editions(:base),
+      skip_cache_average_ratings_callback: true,
+    )
+    create_rating(critic: critics(:unaffiliated), selection: later_selection, score: 5.0)
+
+    film.cache_overall_average_rating
+
+    assert_equal 2.7, film.overall_average_rating
+  end
+
+  test "#cache_overall_average_rating uses a critic's most recent rating when they re-rate a film" do
+    film = films(:base)
+    later_selection = Selection.create!(edition: editions(:with_no_films), film:, category: categories(:base))
+    create_rating(critic: critics(:base), selection: later_selection, score: 5.0)
+
+    film.cache_overall_average_rating
+
+    assert_equal 2.5, film.overall_average_rating
+  end
+
+  test "#cache_overall_average_rating excludes a critic whose most recent rating is a walk-out" do
+    film = films(:base)
+    later_selection = Selection.create!(edition: editions(:with_no_films), film:, category: categories(:base))
+    Rating.create!(
+      critic: critics(:base),
+      selection: later_selection,
+      walked_out: true,
+      skip_cache_average_ratings_callback: true,
+    )
+
+    film.cache_overall_average_rating
+
+    assert_equal 1.667, film.overall_average_rating.round(3)
+  end
+
   test "#search with no query returns all films" do
     assert_equal Film.all.count, Film.search(nil).count
   end
