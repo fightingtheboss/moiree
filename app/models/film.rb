@@ -56,7 +56,8 @@ class Film < ApplicationRecord
   end
 
   def cache_overall_average_rating
-    update(overall_average_rating: ratings.counting_towards_aggregates.average(:score).to_f)
+    scores = latest_native_rating_per_critic.reject(&:walked_out?).map(&:score)
+    update(overall_average_rating: scores.empty? ? 0.0 : scores.sum / scores.size)
   end
 
   def directors
@@ -71,6 +72,13 @@ class Film < ApplicationRecord
   end
 
   private
+
+  def latest_native_rating_per_critic
+    ratings.native
+      .joins(selection: :edition)
+      .order("editions.end_date DESC, ratings.id DESC")
+      .uniq(&:critic_id)
+  end
 
   def slug_candidates
     [
