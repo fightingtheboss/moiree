@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   get  "sign-in", to: "sessions#new"
   post "sign-in", to: "sessions#create"
-  delete  "sign-out", to: "sessions#destroy"
+  delete "sign-out", to: "sessions#destroy"
 
   get "magic", to: "sessions/passwordlesses#new"
   post "magic", to: "sessions/passwordlesses#create"
