@@ -17,6 +17,7 @@ When an Admin is invited, their account is created and they're sent a link to re
 ## Stack
 - Ruby on Rails
   - v8
+- Propshaft (asset pipeline)
 - Turbo
 - Tailwind
   - v4

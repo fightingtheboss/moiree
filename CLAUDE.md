@@ -92,7 +92,7 @@ Edition summary/stat share images are generated on-request as PNGs via a dedicat
 
 ### Frontend
 
-Turbo + Stimulus + Tailwind v4. No Node.js, no npm, no PostCSS — Tailwind compiles via the `tailwindcss-rails` gem's standalone CLI. JavaScript lives in `app/javascript/` with importmap.
+Turbo + Stimulus + Tailwind v4. No Node.js, no npm, no PostCSS — Tailwind compiles via the `tailwindcss-rails` gem's standalone CLI. JavaScript lives in `app/javascript/` with importmap. Propshaft serves assets; it has no Sprockets-style `require` directives, so each stylesheet is linked in the layouts.
 
 ### Infrastructure
 

@@ -7,8 +7,8 @@ ruby "4.0.4"
 # Use specific branch of Rails
 gem "rails", "8.1.3.1"
 
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
+# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
+gem "propshaft"
 
 # Use sqlite3 as the database for Active Record
 gem "sqlite3", "~> 2.9"
