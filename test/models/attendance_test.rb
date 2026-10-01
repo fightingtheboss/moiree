@@ -3,6 +3,8 @@
 require "test_helper"
 
 class AttendanceTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   # --- after_commit :enqueue_inherit_ratings ---
 
   test "creating an Attendance enqueues InheritRatingsForAttendanceJob" do
@@ -22,51 +24,46 @@ class AttendanceTest < ActiveSupport::TestCase
     attendance.update!(publication: "Updated Publication")
   end
 
-  # --- before_destroy :destroy_inherited_ratings ---
+  # --- #ratings ---
 
-  test "destroying an Attendance deletes the critic's inherited ratings for that edition" do
-    # Create an attendance for a critic
-    critic = critics(:without_ratings)
-    edition = editions(:base)
-    attendance = Attendance.create!(critic: critic, edition: edition)
-
-    # Create a new selection with no ratings yet
+  test "#ratings returns the critic's native and inherited ratings at the edition" do
+    attendance = attendances(:base)
     new_film = Film.create!(title: "New Film", director: "New Director", country: "US", year: 2024)
-    category = edition.categories.first
-    new_selection = Selection.create!(edition: edition, film: new_film, category: category)
-
-    # Create an inherited rating for this critic at this edition
-    inherited_rating = Rating.create!(
-      critic: critic,
+    new_selection = Selection.create!(edition: attendance.edition, film: new_film, category: categories(:base))
+    inherited = Rating.create!(
+      critic: critics(:base),
       selection: new_selection,
+      score: 3.0,
+      source_edition_id: editions(:with_no_films).id,
+      skip_cache_average_ratings_callback: true,
+    )
+
+    assert_equal [ratings(:base), inherited, ratings(:with_original_title)].sort_by(&:id), attendance.ratings.sort_by(&:id)
+  end
+
+  # --- before_destroy :destroy_ratings ---
+
+  test "destroying an Attendance destroys the critic's native and inherited ratings for that edition" do
+    critic = critics(:without_ratings)
+    attendance = Attendance.create!(critic:, edition: editions(:base))
+    native = ratings(:without_ratings_original)
+    inherited = Rating.create!(
+      critic:,
+      selection: selections(:base),
       score: 3.5,
       source_edition_id: editions(:with_no_films).id,
       skip_cache_average_ratings_callback: true,
     )
 
-    assert_difference "Rating.count", -1 do
+    assert_difference "Rating.count", -2 do
       attendance.destroy
     end
 
-    assert_not Rating.exists?(inherited_rating.id)
+    assert_not Rating.exists?(native.id)
+    assert_not Rating.exists?(inherited.id)
   end
 
-  test "destroying an Attendance preserves the critic's native ratings for that edition" do
-    # Create an attendance for a critic that has a native rating at this edition
-    critic = critics(:base)
-    edition = editions(:base)
-    attendance = Attendance.find_by!(critic: critic, edition: edition)
-    native_rating = ratings(:base) # native rating for critics(:base) at selections(:base)
-
-    assert_no_difference "Rating.count" do
-      attendance.destroy
-    end
-
-    assert Rating.exists?(native_rating.id)
-  end
-
-  test "destroying an Attendance only deletes inherited ratings for that edition, not others" do
-    # Set up: critic has an inherited rating at editions(:base) AND a native rating at another edition
+  test "destroying an Attendance preserves the critic's ratings at other editions" do
     other_edition = Edition.create!(
       festival: festivals(:with_no_films),
       year: 2025,
@@ -77,60 +74,25 @@ class AttendanceTest < ActiveSupport::TestCase
     )
     other_category = Category.create!(edition: other_edition, name: "Main", position: 1)
     other_selection = Selection.create!(edition: other_edition, film: films(:base), category: other_category)
+    other_native = create_rating(critic: critics(:base), selection: other_selection, score: 4.0)
 
-    other_native = Rating.create!(
-      critic: critics(:base),
-      selection: other_selection,
-      score: 4.0,
-      skip_cache_average_ratings_callback: true,
-    )
+    attendances(:base).destroy
 
-    inherited_at_base = Rating.create!(
-      critic: critics(:without_ratings),
-      selection: selections(:base),
-      score: 3.0,
-      source_edition_id: other_edition.id,
-      skip_cache_average_ratings_callback: true,
-    )
-
-    Attendance.create!(critic: critics(:without_ratings), edition: editions(:base))
-    attendance = Attendance.find_by(critic: critics(:without_ratings), edition: editions(:base))
-
-    assert_difference "Rating.count", -1 do
-      attendance.destroy
-    end
-
-    assert_not Rating.exists?(inherited_at_base.id)
     assert Rating.exists?(other_native.id)
   end
 
-  test "destroying an Attendance enqueues CacheEditionAverageRatingsJob for its edition" do
-    attendance = attendances(:base)
+  test "destroying an Attendance recomputes the averages of the selections it rated" do
+    selection = selections(:base)
+    critic = critics(:without_publication)
+    attendance = Attendance.create!(critic:, edition: selection.edition)
+    selection.cache_average_rating
+    selection.film.cache_overall_average_rating
 
-    CacheEditionAverageRatingsJob.expects(:perform_later).with(attendance.edition).once
+    perform_enqueued_jobs { attendance.destroy }
 
-    attendance.destroy
-  end
-
-  test "destroying an Attendance does not enqueue CacheAverageRatingJob for deleted inherited ratings" do
-    critic = critics(:without_ratings)
-    edition = editions(:base)
-    attendance = Attendance.create!(critic: critic, edition: edition)
-
-    new_film = Film.create!(title: "New Film", director: "New Director", country: "US", year: 2024)
-    category = edition.categories.first
-    new_selection = Selection.create!(edition: edition, film: new_film, category: category)
-
-    Rating.create!(
-      critic: critic,
-      selection: new_selection,
-      score: 3.5,
-      source_edition_id: editions(:with_no_films).id,
-      skip_cache_average_ratings_callback: true,
-    )
-
-    CacheAverageRatingJob.expects(:perform_later).never
-
-    attendance.destroy
+    # critics(:base) is the only remaining attending critic who rated selections(:base)
+    assert_equal 3.5, selection.reload.average_rating
+    # ratings(:without_publication) (2.5) is gone: (3.5 + 1.0 + 1.5) / 3
+    assert_equal 2.0, selection.film.reload.overall_average_rating
   end
 end
