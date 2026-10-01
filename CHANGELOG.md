@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-01
+- Replace Sprockets with Propshaft, fixing deploys that sometimes kept serving the previous release's CSS
+  - Kamal's asset bridging copies the previous release's assets, including its randomly named Sprockets manifest, next to the new ones, and Sprockets loaded whichever manifest sorted first. Propshaft always reads `public/assets/.manifest.json`, which the copy never overwrites
+  - Remove `app/assets/config/manifest.js` and the directive-only `application.css`; the layouts link `actiontext.css` directly
+
 ## 2026-09-30
 - Show the edition grid's "N here + M from earlier festivals" tooltip when hovering or tapping the whole average cell, and remove the clock icon that appeared on nearly every average
 - Let unverified users request a password reset or sign-in link
