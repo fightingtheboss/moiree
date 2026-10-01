@@ -38,4 +38,22 @@ class EditionsControllerTest < ActionDispatch::IntegrationTest
     assert_operator apple_index, :<, banana_index
     assert_operator banana_index, :<, zebra_index
   end
+
+  test "show puts the inherited ratings breakdown on the focusable average cell without an icon" do
+    edition = editions(:base)
+    selection = premiere_selection(edition:, title: "Inherited", director: "Test", num_ratings: 1)
+    Rating.create!(
+      selection:,
+      critic: critics(:without_publication),
+      score: 4.0,
+      source_edition: editions(:with_no_films),
+      skip_cache_average_ratings_callback: true,
+    )
+
+    get edition_url(edition)
+
+    assert_select "td[tabindex='0']", text: /1 here \+ 1 from earlier festivals/ do
+      assert_select "svg", count: 0
+    end
+  end
 end

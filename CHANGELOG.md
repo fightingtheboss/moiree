@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-09-30
+- Show the edition grid's "N here + M from earlier festivals" tooltip when hovering or tapping the whole average cell, and remove the clock icon that appeared on nearly every average
 - Only inherit a critic's rating from editions that ended before the edition being rated ends, so overlapping festivals (e.g. Venice into TIFF) still inherit
   - `Rating.inherit_for` previously took the critic's most recent native rating regardless of date, so a later festival's rating could be inherited into an earlier edition
 - Recompute edition averages when inherited ratings or attendances change
