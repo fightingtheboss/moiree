@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby "4.0.4"
 
 # Use specific branch of Rails
-gem "rails", "8.1.3.1"
+gem "rails", "8.1.4"
 
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
@@ -26,7 +26,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
-gem "tailwindcss-rails", "~> 4.5"
+gem "tailwindcss-rails", "~> 4.6"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
