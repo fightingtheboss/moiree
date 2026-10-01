@@ -15,7 +15,7 @@ class Identity::PasswordResetsTest < ApplicationSystemTestCase
     fill_in "Email", with: @user.email
     click_on "Send password reset email"
 
-    assert_text "Check your email for reset instructions"
+    assert_text "If an account exists for that email, we've sent password reset instructions"
   end
 
   test "updating password" do
