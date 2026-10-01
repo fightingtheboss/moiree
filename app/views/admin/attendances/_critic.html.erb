@@ -1,4 +1,8 @@
-<li id="<%= dom_id(critic) %>" data-critic-id="<%= critic.id %>" <%= "data-attendance-id=#{attendance.id}" if defined?(attendance) %>>
+<li id="<%= dom_id(critic) %>" data-critic-id="<%= critic.id %>"
+  <% if defined?(attendance) %>
+    data-attendance-id="<%= attendance.id %>"
+    data-remove-confirmation="<%= attendance_removal_confirmation(attendance) %>"
+  <% end %>>
   <article class="bg-white mb-2 p-4 flex flex-col justify-between shadow-xs rounded-sm hover:shadow-lg transition-shadow hover:cursor-grab active:cursor-grabbing group">
     <header class="flex justify-between mb-4">
       <div>

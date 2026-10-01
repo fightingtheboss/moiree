@@ -1,6 +1,10 @@
 # Changelog
 
 ## 2026-09-30
+- Destroy a critic's ratings at an edition when they are removed from it
+  - Removing an attendance previously deleted only inherited ratings, leaving native ratings that still counted in summaries but not in the grid or averages
+  - Each destroyed rating recomputes its selection and film averages, so `CacheEditionAverageRatingsJob` is no longer needed and is removed
+  - Dragging a critic with ratings out of the attending list in admin now asks for confirmation, stating how many ratings will be deleted
 - Show the edition grid's "N here + M from earlier festivals" tooltip when hovering or tapping the whole average cell, and remove the clock icon that appeared on nearly every average
 - Let unverified users request a password reset or sign-in link
   - Both forms previously ignored unverified accounts, so a user who changed their email without verifying it could be locked out entirely
