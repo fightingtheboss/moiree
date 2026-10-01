@@ -177,6 +177,24 @@ class Rating::InheritableTest < ActiveSupport::TestCase
     assert_equal 0.0, inherited.score.to_f
   end
 
+  test "Rating.inherit_for ignores ratings from editions that ended after the target edition" do
+    # ratings(:base) is for critics(:base) and films(:base) at editions(:base), which ends 2024-09-19
+    earlier_edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2024,
+      code: "EARLY24",
+      start_date: "2024-05-01",
+      end_date: "2024-05-10",
+      slug: "early24",
+    )
+    category = Category.create!(edition: earlier_edition, name: "Main", position: 1)
+    earlier_selection = Selection.create!(edition: earlier_edition, film: films(:base), category:)
+
+    assert_no_difference "Rating.count" do
+      Rating.inherit_for(critic: critics(:base), selection: earlier_selection)
+    end
+  end
+
   test "Rating.inherit_for picks the most recent native rating when critic has multiple" do
     # ratings(:base) is for critics(:base) at editions(:base) (end_date: 2024-09-19)
     # Create a second native rating for the same critic+film at a later edition
