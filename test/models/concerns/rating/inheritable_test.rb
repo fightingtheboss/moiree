@@ -195,6 +195,24 @@ class Rating::InheritableTest < ActiveSupport::TestCase
     end
   end
 
+  test "Rating.inherit_for inherits from an overlapping edition that ended before the target edition ends" do
+    # editions(:base) runs 2024-09-09 to 2024-09-19, overlapping this edition the way Venice overlaps TIFF
+    overlapping_edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2024,
+      code: "OVERLAP24",
+      start_date: "2024-09-15",
+      end_date: "2024-09-25",
+      slug: "overlap24",
+    )
+    category = Category.create!(edition: overlapping_edition, name: "Main", position: 1)
+    overlapping_selection = Selection.create!(edition: overlapping_edition, film: films(:base), category:)
+
+    assert_difference "Rating.count", 1 do
+      Rating.inherit_for(critic: critics(:base), selection: overlapping_selection)
+    end
+  end
+
   test "Rating.inherit_for picks the most recent native rating when critic has multiple" do
     # ratings(:base) is for critics(:base) at editions(:base) (end_date: 2024-09-19)
     # Create a second native rating for the same critic+film at a later edition
