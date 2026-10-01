@@ -14,6 +14,25 @@ class InheritRatingsForAttendanceJobTest < ActiveSupport::TestCase
     InheritRatingsForAttendanceJob.new.perform(attendance)
   end
 
+  test "recomputes the edition's average ratings after inheriting" do
+    new_edition = Edition.create!(
+      festival: festivals(:with_no_films),
+      year: 2025,
+      code: "AVGATT25",
+      start_date: "2025-06-01",
+      end_date: "2025-06-10",
+      slug: "avgatt25",
+    )
+    category = Category.create!(edition: new_edition, name: "Main", position: 1)
+    new_selection = Selection.create!(edition: new_edition, film: films(:base), category:)
+    new_attendance = Attendance.create!(critic: critics(:base), edition: new_edition)
+
+    InheritRatingsForAttendanceJob.new.perform(new_attendance)
+
+    # critics(:base) inherits their 3.5 from editions(:base)
+    assert_equal 3.5, new_selection.reload.average_rating
+  end
+
   test "creates inherited ratings for films the critic has previously rated" do
     # critics(:base) has ratings(:base) at editions(:base) for films(:base)
     # Create a new edition+selection for the same film

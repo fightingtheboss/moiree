@@ -42,6 +42,10 @@ class Edition < ApplicationRecord
     super || festival.url
   end
 
+  def cache_average_ratings
+    selections.find_each(&:cache_average_rating)
+  end
+
   def current?
     start_date <= Date.current && end_date >= Date.current
   end

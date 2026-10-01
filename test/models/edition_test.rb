@@ -119,4 +119,15 @@ class EditionTest < ActiveSupport::TestCase
 
     assert_equal(edition.selections.order(:id).to_a, edition.summary_selections.order(:id).to_a)
   end
+
+  test "#cache_average_ratings recomputes every selection's average rating" do
+    edition = editions(:base)
+    edition.selections.update_all(average_rating: 0)
+
+    edition.cache_average_ratings
+
+    # Only critics(:base) attends editions(:base): 3.5 for base, 4.5 for with_original_title
+    assert_equal 3.5, selections(:base).reload.average_rating
+    assert_equal 4.5, selections(:with_original_title).reload.average_rating
+  end
 end

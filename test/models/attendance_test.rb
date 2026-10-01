@@ -104,6 +104,14 @@ class AttendanceTest < ActiveSupport::TestCase
     assert Rating.exists?(other_native.id)
   end
 
+  test "destroying an Attendance enqueues CacheEditionAverageRatingsJob for its edition" do
+    attendance = attendances(:base)
+
+    CacheEditionAverageRatingsJob.expects(:perform_later).with(attendance.edition).once
+
+    attendance.destroy
+  end
+
   test "destroying an Attendance does not enqueue CacheAverageRatingJob for deleted inherited ratings" do
     critic = critics(:without_ratings)
     edition = editions(:base)
