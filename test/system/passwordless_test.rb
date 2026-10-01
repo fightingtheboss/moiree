@@ -2,7 +2,9 @@
 
 require "application_system_test_case"
 
-class SessionsTest < ApplicationSystemTestCase
+class PasswordlessTest < ApplicationSystemTestCase
+  include ActiveJob::TestHelper
+
   setup do
     @user = users(:critic)
   end
@@ -11,11 +13,13 @@ class SessionsTest < ApplicationSystemTestCase
     visit magic_url
 
     fill_in "Email", with: @user.email
-    click_on "Send me the sign-in link"
 
-    assert_text "If an account exists for that email, we've sent a sign-in link"
+    perform_enqueued_jobs do
+      click_on "Send me the sign-in link"
 
-    # Simulate email delivery and extract the login link
+      assert_text "If an account exists for that email, we've sent a sign-in link"
+    end
+
     email = ActionMailer::Base.deliveries.last
     assert_not_nil(email)
 
