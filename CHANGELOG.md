@@ -6,6 +6,7 @@
   - Both forms previously ignored unverified accounts, so a user who changed their email without verifying it could be locked out entirely
   - Completing a password reset or signing in with a magic link now marks the user verified, since following the emailed link proves they own the address
   - Both forms now respond "If an account exists for that email…" whether or not the account exists. Previously an unknown email got "You can't … until you verify your email", which was misleading and revealed which emails have accounts
+  - Fix the passwordless sign-in system test, which never saw the email because the mailer job was not performed, and rename its class from `SessionsTest`, which it shared with `sessions_test.rb`
 - Only inherit a critic's rating from editions that ended before the edition being rated ends, so overlapping festivals (e.g. Venice into TIFF) still inherit
   - `Rating.inherit_for` previously took the critic's most recent native rating regardless of date, so a later festival's rating could be inherited into an earlier edition
 - Recompute edition averages when inherited ratings or attendances change
