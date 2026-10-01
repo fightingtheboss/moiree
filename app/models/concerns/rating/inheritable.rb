@@ -11,7 +11,7 @@ module Rating::Inheritable
   class_methods do
     def inherit_for(critic:, selection:)
       return if exists?(critic:, selection:)
-      return unless (source = prior_native_for(critic:, film_id: selection.film_id))
+      return unless (source = prior_native_for(critic:, selection:))
 
       create!(
         critic:,
@@ -27,10 +27,11 @@ module Rating::Inheritable
 
     private
 
-    def prior_native_for(critic:, film_id:)
+    def prior_native_for(critic:, selection:)
       native
         .joins(selection: :edition)
-        .where(critic:, selections: { film_id: })
+        .where(critic:, selections: { film_id: selection.film_id })
+        .where(editions: { end_date: ...selection.edition.end_date })
         .order("editions.end_date DESC, ratings.id DESC")
         .first
     end
