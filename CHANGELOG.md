@@ -1,7 +1,7 @@
 # Changelog
 
 ## 2026-09-30
-- Only inherit a critic's rating from editions that ended before the one being rated
+- Only inherit a critic's rating from editions that ended before the edition being rated ends, so overlapping festivals (e.g. Venice into TIFF) still inherit
   - `Rating.inherit_for` previously took the critic's most recent native rating regardless of date, so a later festival's rating could be inherited into an earlier edition
 - Recompute edition averages when inherited ratings or attendances change
   - Averages include inherited ratings, but inheriting ratings for a new attendance or selection, and removing an attendance, did not recompute them
