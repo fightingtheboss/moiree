@@ -21,6 +21,7 @@ module Sessions
         response.headers["fly-replay"] = "instance=#{primary_instance_id}"
         head(:ok)
       else
+        @user.update!(verified: true)
         start_new_session_for(@user)
 
         revoke_tokens
@@ -31,12 +32,11 @@ module Sessions
     end
 
     def create
-      if (@user = User.find_by(email: params[:email], verified: true))
+      if (@user = User.find_by(email: params[:email]))
         send_passwordless_email
-        redirect_to(root_path, notice: "Check your email for sign in instructions")
-      else
-        redirect_to(magic_path, alert: "You can't sign in until you verify your email")
       end
+
+      redirect_to(root_path, notice: "If an account exists for that email, we've sent a sign-in link")
     end
 
     private

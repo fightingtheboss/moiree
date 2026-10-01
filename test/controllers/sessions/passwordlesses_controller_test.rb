@@ -52,21 +52,33 @@ module Sessions
       end
 
       assert_redirected_to root_path
-      assert_equal "Check your email for sign in instructions", flash[:notice]
+      assert_equal "If an account exists for that email, we've sent a sign-in link", flash[:notice]
     end
 
     test "create action with unverified user" do
-      post sessions_passwordless_path, params: { email: @unverified_user.email }
+      assert_emails 1 do
+        post sessions_passwordless_path, params: { email: @unverified_user.email }
+      end
 
-      assert_redirected_to magic_path
-      assert_equal "You can't sign in until you verify your email", flash[:alert]
+      assert_redirected_to root_path
     end
 
     test "create action with non-existent user" do
-      post sessions_passwordless_path, params: { email: "nonexistent@example.com" }
+      assert_no_emails do
+        post sessions_passwordless_path, params: { email: "nonexistent@example.com" }
+      end
 
-      assert_redirected_to magic_path
-      assert_equal "You can't sign in until you verify your email", flash[:alert]
+      assert_redirected_to root_path
+      assert_equal "If an account exists for that email, we've sent a sign-in link", flash[:notice]
+    end
+
+    test "edit action verifies an unverified user" do
+      Sessions::PasswordlessesController.any_instance.stubs(:litefs_primary_instance_id).returns(nil)
+      token = SignInToken.create!(user: @unverified_user)
+
+      get edit_sessions_passwordless_path(sid: CGI.escape(token.signed_id))
+
+      assert @unverified_user.reload.verified?
     end
 
     test "set_user with invalid token" do

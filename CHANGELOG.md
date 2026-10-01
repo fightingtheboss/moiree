@@ -2,6 +2,10 @@
 
 ## 2026-09-30
 - Show the edition grid's "N here + M from earlier festivals" tooltip when hovering or tapping the whole average cell, and remove the clock icon that appeared on nearly every average
+- Let unverified users request a password reset or sign-in link
+  - Both forms previously ignored unverified accounts, so a user who changed their email without verifying it could be locked out entirely
+  - Completing a password reset or signing in with a magic link now marks the user verified, since following the emailed link proves they own the address
+  - Both forms now respond "If an account exists for that email…" whether or not the account exists. Previously an unknown email got "You can't … until you verify your email", which was misleading and revealed which emails have accounts
 - Only inherit a critic's rating from editions that ended before the edition being rated ends, so overlapping festivals (e.g. Venice into TIFF) still inherit
   - `Rating.inherit_for` previously took the critic's most recent native rating regardless of date, so a later festival's rating could be inherited into an earlier edition
 - Recompute edition averages when inherited ratings or attendances change

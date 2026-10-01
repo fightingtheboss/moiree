@@ -13,7 +13,7 @@ class SessionsTest < ApplicationSystemTestCase
     fill_in "Email", with: @user.email
     click_on "Send me the sign-in link"
 
-    assert_text "Check your email for sign in instructions"
+    assert_text "If an account exists for that email, we've sent a sign-in link"
 
     # Simulate email delivery and extract the login link
     email = ActionMailer::Base.deliveries.last
