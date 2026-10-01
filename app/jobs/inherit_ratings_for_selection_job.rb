@@ -7,5 +7,7 @@ class InheritRatingsForSelectionJob < ApplicationJob
     selection.edition.critics.each do |critic|
       Rating.inherit_for(critic:, selection:)
     end
+
+    selection.cache_average_rating
   end
 end
