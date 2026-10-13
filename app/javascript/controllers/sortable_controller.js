@@ -53,6 +53,13 @@ export default class extends Controller {
 
   onRemove(event) {
     if (this.sourceListValue) {
+      const confirmation = event.item.dataset.removeConfirmation;
+
+      if (confirmation && !confirm(confirmation)) {
+        event.from.insertBefore(event.item, event.from.children[event.oldIndex] || null);
+        return;
+      }
+
       const attendanceId = event.item.dataset.attendanceId;
 
       const body = {
